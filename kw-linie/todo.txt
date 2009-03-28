@@ -1,0 +1,79 @@
+Database
+* Schema
+* Reference Data
+* Security
+* Performance
+** Foreign keys
+** Index
+
+Google Maps
+
+Continuous Integration
+
+Issue Tracker
+
+Unit tests
+
+Flex
+* Security
+* Validation
+* Performance
+* Exception handling
+* Look & Feel
+
+PHP
+* Database connection
+* Security
+
+Joomla
+* Security
+
+Administration & Maintenance
+* Backup/restore
+* Reference data
+* User, role & rights management
+
+Documentation
+* Design
+* Code API
+* User Guide
+
+Oplevering
+* Source Code
+* ...
+
+Omgevingen ???
+* Develop
+* Test
+* CI
+* Acceptance
+* Production
+* Training
+
+Hosting
+* Bandwidth
+* Storage
+* PHP version
+*
+
+Support
+* Functional mailbox -> fwd david/geert
+
+Licensing
+* Google Maps
+* Joomla
+* Eclipse
+* Flex Builder
+* Flex
+* PHP
+* MySQL
+* MySQL Workbench
+* AMFPHP
+* ...
+
+Planning
+* Requirements analysis
+* Feature freeze
+* Bugfixes
+* Release
+* ...

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:maps="com.google.maps.*"
+	initialize="gmk.send();"
+	layout="absolute">
+
+	<mx:Script source="bunkerlist.as" />
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+			
+			public var map:Map;
+			
+			public function sayHelloResultHandler(event:ResultEvent) : void {
+				Alert.show("Result " + event.result);
+			}
+			
+			public function gmkResult(event:ResultEvent):void {
+				var key:String = event.result as String;
+				map = new Map();
+				map.width = 800;
+				map.height = 600;
+            	map.key = key;
+            	map.addEventListener(MapEvent.MAP_READY, onMapReady);
+            	mapsCanvas.addChild(map);
+            }
+
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService
+		id="gmk"
+		url="google-maps-key.php"
+		resultFormat="text"
+		result="gmkResult(event);" />
+
+	<mx:RemoteObject id="helloWorld"
+		source="kwl.HelloWorld" 
+		destination="amfphp" 
+		showBusyCursor="true">
+        <mx:method name="sayHello" result="sayHelloResultHandler(event)" />
+    </mx:RemoteObject>
+
+	<!--    
+	<mx:Button x="10" y="10" label="Button" click="helloWorld.sayHello()"/>
+	-->
+
+	<mx:Script>
+	    <![CDATA[
+	    	import com.google.maps.MapMouseEvent;
+	    	import coo.Lambert72Coo;
+	    	import com.google.maps.InfoWindowOptions;
+	    	import com.google.maps.styles.FillStyle;
+	    	import com.google.maps.styles.StrokeStyle;
+	    	import com.google.maps.overlays.MarkerOptions;
+	    	import com.google.maps.overlays.Marker;
+	    	import com.google.maps.controls.MapTypeControl;
+	    	import com.google.maps.controls.PositionControl;
+	    	import com.google.maps.controls.ZoomControl;
+		    import com.google.maps.LatLng;
+		    import com.google.maps.Map;
+		    import com.google.maps.MapEvent;
+		    import com.google.maps.MapType;
+		
+		    private function onMapReady(event:Event):void {
+		    	var map:Map = this.map;
+		    	map.setCenter(new LatLng(50.865453,4.74472), 14, MapType.NORMAL_MAP_TYPE);
+				map.addControl(new ZoomControl());
+				map.addControl(new PositionControl());
+				map.addControl(new MapTypeControl());
+				
+				var markerA:Marker;
+				var c: coo.Lambert72Coo = new Lambert72Coo();
+				var p:Point;
+				for each (var i:Array in bxy) {
+					p = c.convert(i[0] as Number, i[1] as Number);
+					markerA = new Marker(
+					new LatLng(p.y * 180.0 / Math.PI, p.x * 180.0 / Math.PI),
+					new MarkerOptions({
+						strokeStyle: new StrokeStyle({color: 0x987654}),
+						fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+						radius: 12,
+						hasShadow: true,
+						draggable: true
+					}));
+				markerA.addEventListener(MapMouseEvent.DRAG_START, 
+					function(event:MapMouseEvent):void {
+					});
+				markerA.addEventListener(MapMouseEvent.DRAG_END,
+					function(event:MapMouseEvent):void {
+					}); 
+        			map.addOverlay(markerA);
+				}
+				var bunkerThumb:BunkerThumb = new BunkerThumb();
+				
+				  
+				markerA.openInfoWindow(new InfoWindowOptions({customContent:bunkerThumb, width:170, drawDefaultFrame:true}));
+
+		    }
+	    ]]>
+	</mx:Script>
+	<mx:DataGrid x="10" y="10" width="493">
+		<mx:columns>
+			<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
+			<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
+			<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:Canvas x="10" y="160" id="mapsCanvas" />
+
+</mx:Application>
