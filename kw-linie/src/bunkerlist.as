@@ -1,5 +1,4 @@
 // ActionScript file
-import mx.binding.utils.BindingUtils;
 
 [Bindable]
 public var allbunkers:Array = [
