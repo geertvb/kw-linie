@@ -5,8 +5,10 @@
 	layout="absolute">
 
 	<mx:Script source="bunkerlist.as" />
+	<mx:Script source="typelist.as" />
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
 			
@@ -24,6 +26,21 @@
             	map.key = key;
             	map.addEventListener(MapEvent.MAP_READY, onMapReady);
             	mapsCanvas.addChild(map);
+            }
+            
+            public function typefilter_change() : void {
+            	if (typefilter.selectedLabel == "[ANY]") {
+            		bxy = allbunkers;
+            	} else {
+	            	var result: ArrayCollection = new ArrayCollection();
+	            	for (var i: Object in allbunkers) {
+	            		var bunker: Object = allbunkers[i];
+	            		if (bunker.type == typefilter.selectedLabel) {
+	            			result.addItem(bunker);
+	            		}
+	            	}
+	            	bxy = result.toArray();
+            	}
             }
 
 		]]>
@@ -110,5 +127,6 @@
 		</mx:columns>
 	</mx:DataGrid>
 	<mx:Canvas x="10" y="202" id="mapsCanvas" />
+	<mx:ComboBox id="typefilter" x="520" y="11" dataProvider="{typelist}" selectedIndex="0" change="typefilter_change()"></mx:ComboBox>
 
 </mx:Application>
