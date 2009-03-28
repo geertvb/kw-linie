@@ -73,8 +73,8 @@
 				var markerA:Marker;
 				var c: coo.Lambert72Coo = new Lambert72Coo();
 				var p:Point;
-				for each (var i:Array in bxy) {
-					p = c.convert(i[0] as Number, i[1] as Number);
+				for each (var xy:Object in bxy) {
+					p = c.convert(xy.x as Number, xy.y as Number);
 					markerA = new Marker(
 					new LatLng(p.y * 180.0 / Math.PI, p.x * 180.0 / Math.PI),
 					new MarkerOptions({
@@ -100,13 +100,15 @@
 		    }
 	    ]]>
 	</mx:Script>
-	<mx:DataGrid x="10" y="10" width="493">
+	<mx:DataGrid x="10" y="10" rowCount="8" dataProvider="{bxy}" rowHeight="20">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Column 1" dataField="col1"/>
-			<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
-			<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+			<mx:DataGridColumn headerText="Nummer" dataField="nummer"/>
+			<mx:DataGridColumn headerText="Type" dataField="type"/>
+			<mx:DataGridColumn headerText="Gemeente" dataField="gemeente"/>
+			<mx:DataGridColumn headerText="X" dataField="x"/>
+			<mx:DataGridColumn headerText="Y" dataField="y"/>
 		</mx:columns>
 	</mx:DataGrid>
-	<mx:Canvas x="10" y="160" id="mapsCanvas" />
+	<mx:Canvas x="10" y="202" id="mapsCanvas" />
 
 </mx:Application>
