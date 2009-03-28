@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="170" height="130">
+	<mx:Image x="10" y="36" source="bunker.jpg"/>
+	<mx:Label x="10" y="10" text="Mijn bunkerke"/>
+
+    
+</mx:Canvas>
