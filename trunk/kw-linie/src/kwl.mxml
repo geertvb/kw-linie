@@ -8,11 +8,15 @@
 	<mx:Script source="typelist.as" />
 	<mx:Script>
 		<![CDATA[
+			import com.google.maps.interfaces.IOverlay;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
 			
 			public var map:Map;
+			public var bunkerThumb:BunkerThumb = new BunkerThumb();
+			
+			public var overlays: Array = new Array();
 			
 			public function sayHelloResultHandler(event:ResultEvent) : void {
 				Alert.show("Result " + event.result);
@@ -28,19 +32,33 @@
             	mapsCanvas.addChild(map);
             }
             
+            public function bunkerGrid_onChange(event: Event) : void {
+            	var bunker: Object = bunkerGrid.selectedItem;
+				bunkerThumb.bunker = bunker;
+				var m: Marker = overlays[bunker.nummer];
+				m.openInfoWindow(new InfoWindowOptions({customContent:bunkerThumb, width:170, drawDefaultFrame:true}));
+            }
+            
             public function typefilter_change() : void {
             	if (typefilter.selectedLabel == "[ANY]") {
             		bxy = allbunkers;
+            		for each (var overlay: IOverlay in overlays) {
+            			overlay.visible = true;
+            		}
             	} else {
 	            	var result: ArrayCollection = new ArrayCollection();
 	            	for (var i: Object in allbunkers) {
 	            		var bunker: Object = allbunkers[i];
 	            		if (bunker.type == typefilter.selectedLabel) {
 	            			result.addItem(bunker);
+	            			overlays[bunker.nummer].visible = true;
+	            		} else {
+	            			overlays[bunker.nummer].visible = false;
 	            		}
 	            	}
 	            	bxy = result.toArray();
             	}
+            	map.closeInfoWindow();
             }
 
 		]]>
@@ -82,7 +100,6 @@
 		
 		    private function onMapReady(event:Event):void {
 		    	var map:Map = this.map;
-		    	map.setCenter(new LatLng(50.865453,4.74472), 14, MapType.NORMAL_MAP_TYPE);
 				map.addControl(new ZoomControl());
 				map.addControl(new PositionControl());
 				map.addControl(new MapTypeControl());
@@ -90,8 +107,12 @@
 				var markerA:Marker;
 				var c: coo.Lambert72Coo = new Lambert72Coo();
 				var p:Point;
+				var t_lat: Number = 0.0;
+				var t_lng: Number = 0.0;
 				for each (var xy:Object in bxy) {
 					p = c.convert(xy.x as Number, xy.y as Number);
+					t_lat += p.y * 180.0 / Math.PI;
+					t_lng += p.x * 180.0 / Math.PI;
 					markerA = new Marker(
 					new LatLng(p.y * 180.0 / Math.PI, p.x * 180.0 / Math.PI),
 					new MarkerOptions({
@@ -101,23 +122,40 @@
 						hasShadow: true,
 						draggable: true
 					}));
-				markerA.addEventListener(MapMouseEvent.DRAG_START, 
-					function(event:MapMouseEvent):void {
-					});
-				markerA.addEventListener(MapMouseEvent.DRAG_END,
-					function(event:MapMouseEvent):void {
-					}); 
+					markerA.addEventListener(MapMouseEvent.DRAG_START, 
+						function(event:MapMouseEvent):void {
+						});
+					markerA.addEventListener(MapMouseEvent.DRAG_END,
+						function(event:MapMouseEvent):void {
+						}); 
+					markerA.addEventListener(MapMouseEvent.CLICK,
+						function(event:MapMouseEvent):void {
+							var m: Marker = event.target as Marker;
+							var index: String = "";
+							for (index in overlays) {
+								if (overlays[index] == m) {
+									break;
+								}
+							}
+							for each (var b: Object in bxy) {
+								if (b.nummer == index) {
+									bunkerThumb.bunker = b;
+									m.openInfoWindow(new InfoWindowOptions({customContent:bunkerThumb, width:170, drawDefaultFrame:true}));
+									bunkerGrid.selectedItem = b;
+									break;
+								}
+							}
+						}); 
+					overlays[xy.nummer as String] = markerA;
         			map.addOverlay(markerA);
 				}
-				var bunkerThumb:BunkerThumb = new BunkerThumb();
-				
-				  
-				markerA.openInfoWindow(new InfoWindowOptions({customContent:bunkerThumb, width:170, drawDefaultFrame:true}));
-
+				t_lat /= bxy.length;
+				t_lng /= bxy.length;
+		    	map.setCenter(new LatLng(t_lat,t_lng), 11, MapType.NORMAL_MAP_TYPE);
 		    }
 	    ]]>
 	</mx:Script>
-	<mx:DataGrid x="10" y="10" rowCount="8" dataProvider="{bxy}" rowHeight="20">
+	<mx:DataGrid x="10" y="10" rowCount="8" dataProvider="{bxy}" rowHeight="20" id="bunkerGrid" change="bunkerGrid_onChange(event)">
 		<mx:columns>
 			<mx:DataGridColumn headerText="Nummer" dataField="nummer"/>
 			<mx:DataGridColumn headerText="Type" dataField="type"/>

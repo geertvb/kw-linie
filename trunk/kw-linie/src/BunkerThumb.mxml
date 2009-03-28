@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="170" height="130">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="170" height="168">
+
+	<mx:Script>
+		<![CDATA[
+			
+			[Bindable]
+			public var bunker: Object;
+		]]>
+	</mx:Script>
+
 	<mx:Image x="10" y="36" source="bunker.jpg"/>
-	<mx:Label x="10" y="10" text="Mijn bunkerke"/>
+	<mx:Label x="10" y="10" text="{bunker.nummer} ({bunker.type})"/>
+	<mx:Label x="10" y="125" text="{bunker.gemeente}"/>
+	<mx:Label x="10" y="145" text="{bunker.x} {bunker.y}"/>
 
     
 </mx:Canvas>
