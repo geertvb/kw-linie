@@ -116,9 +116,9 @@
 					markerA = new Marker(
 					new LatLng(p.y * 180.0 / Math.PI, p.x * 180.0 / Math.PI),
 					new MarkerOptions({
-						strokeStyle: new StrokeStyle({color: 0x987654}),
-						fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
-						radius: 12,
+						strokeStyle: new StrokeStyle({color: 0xDDDD88}),
+						fillStyle: new FillStyle({color: 0x880000, alpha: 0.8}),
+						radius: 8,
 						hasShadow: true,
 						draggable: true
 					}));
@@ -165,6 +165,11 @@
 		</mx:columns>
 	</mx:DataGrid>
 	<mx:Canvas x="10" y="202" id="mapsCanvas" />
-	<mx:ComboBox id="typefilter" x="520" y="11" dataProvider="{typelist}" selectedIndex="0" change="typefilter_change()"></mx:ComboBox>
+	<mx:Form x="520" y="10" width="320">
+		<mx:FormHeading label="Filter"/>
+		<mx:FormItem label="Type">
+		<mx:ComboBox id="typefilter" dataProvider="{typelist}" selectedIndex="0" change="typefilter_change()" width="128"></mx:ComboBox>
+		</mx:FormItem>
+	</mx:Form>
 
 </mx:Application>
