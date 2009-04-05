@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			public var fileReference : FileReference;
+
+			public function onUploadProgress(event : ProgressEvent) : void {
+				progressBar.setProgress(event.bytesLoaded, event.bytesTotal);
+			}
+		
+			public function onUploadComplete(event : Event) : void {
+				Alert.show("Upload complete");
+			}
+		
+			public function onSelect(event : Event) : void {
+				var fr:FileReference = FileReference(event.target);
+				
+				var request:URLRequest = new URLRequest();
+                request.url = "upload_file.php";
+                request.method = URLRequestMethod.POST;
+
+            	fr.upload(request, "file");
+
+			}
+		
+			public function onUploadIoError(event : IOErrorEvent) : void {
+				Alert.show(event.text);
+			}
+		
+			public function onUploadSecurityError(event : SecurityErrorEvent) : void {
+				Alert.show(event.text);
+			}
+		
+			public function upload() : void {
+				fileReference = new FileReference();
+                
+				fileReference.addEventListener(Event.SELECT, onSelect);
+                fileReference.addEventListener(ProgressEvent.PROGRESS, onUploadProgress);
+                fileReference.addEventListener(Event.COMPLETE, onUploadComplete);
+                fileReference.addEventListener(IOErrorEvent.IO_ERROR, onUploadIoError);
+                fileReference.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUploadSecurityError);
+
+                fileReference.browse();
+			}
+		]]>
+	</mx:Script>
+	<mx:Button x="10" y="10" label="Button" click="upload()"/>
+	<mx:ProgressBar id="progressBar" x="10" y="40" mode="manual"/>
+	
+</mx:Application>
