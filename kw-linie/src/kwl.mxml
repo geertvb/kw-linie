@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:maps="com.google.maps.*"
-	initialize="gmk.send();"
+	xmlns:xyz="mx.rpc.*"
+	initialize="gmk.send()"
 	layout="absolute">
 
-	<mx:Script source="bunkerlist.as" />
-	<mx:Script source="typelist.as" />
 	<mx:Script>
 		<![CDATA[
 			import com.google.maps.interfaces.IOverlay;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
+			import mx.rpc.CallResponder;
 			import mx.controls.Alert;
 			
 			public var map:Map;
@@ -39,6 +39,7 @@
 				m.openInfoWindow(new InfoWindowOptions({customContent:bunkerThumb, width:170, drawDefaultFrame:true}));
             }
             
+            /*
             public function typefilter_change() : void {
             	if (typefilter.selectedLabel == "[ANY]") {
             		bxy = allbunkers;
@@ -60,9 +61,14 @@
             	}
             	map.closeInfoWindow();
             }
+            */
 
 		]]>
 	</mx:Script>
+	
+	<xyz:CallResponder id="bunkerResponder" />
+	
+	<xyz:CallResponder id="bunkerTypeResponder" />
 	
 	<mx:HTTPService
 		id="gmk"
@@ -70,16 +76,12 @@
 		resultFormat="text"
 		result="gmkResult(event);" />
 
-	<mx:RemoteObject id="helloWorld"
-		source="kwl.HelloWorld" 
-		destination="amfphp" 
-		showBusyCursor="true">
-        <mx:method name="sayHello" result="sayHelloResultHandler(event)" />
+	<mx:RemoteObject id="bunkerService"
+		source="kwl.BunkerService" 
+		destination="amfphp">
+        <mx:method name="findAllTypes" />
+        <mx:method name="findAll" />
     </mx:RemoteObject>
-
-	<!--    
-	<mx:Button x="10" y="10" label="Button" click="helloWorld.sayHello()"/>
-	-->
 
 	<mx:Script>
 	    <![CDATA[
@@ -109,6 +111,7 @@
 				var p:Point;
 				var t_lat: Number = 0.0;
 				var t_lng: Number = 0.0;
+				var bxy : Array = bunkerResponder.lastResult as Array;
 				for each (var xy:Object in bxy) {
 					p = c.convert(xy.x as Number, xy.y as Number);
 					t_lat += p.y * 180.0 / Math.PI;
@@ -155,21 +158,38 @@
 		    }
 	    ]]>
 	</mx:Script>
-	<mx:DataGrid x="10" y="10" rowCount="8" dataProvider="{bxy}" rowHeight="20" id="bunkerGrid" change="bunkerGrid_onChange(event)">
-		<mx:columns>
-			<mx:DataGridColumn headerText="Nummer" dataField="nummer"/>
-			<mx:DataGridColumn headerText="Type" dataField="type"/>
-			<mx:DataGridColumn headerText="Gemeente" dataField="gemeente"/>
-			<mx:DataGridColumn headerText="X" dataField="x"/>
-			<mx:DataGridColumn headerText="Y" dataField="y"/>
-		</mx:columns>
-	</mx:DataGrid>
-	<mx:Canvas x="10" y="202" id="mapsCanvas" />
-	<mx:Form x="520" y="10" width="320">
-		<mx:FormHeading label="Filter"/>
-		<mx:FormItem label="Type">
-		<mx:ComboBox id="typefilter" dataProvider="{typelist}" selectedIndex="0" change="typefilter_change()" width="128"></mx:ComboBox>
-		</mx:FormItem>
-	</mx:Form>
+	<mx:VBox>
+		
+		<mx:HBox>
+			
+			<mx:DataGrid 
+				rowCount="8" 
+				dataProvider="{bunkerResponder.lastResult}" id="bunkerGrid" 
+				creationComplete="bunkerResponder.token = bunkerService.findAll()"
+				change="bunkerGrid_onChange(event)">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Nummer" dataField="nummer"/>
+					<mx:DataGridColumn headerText="Type" dataField="type"/>
+					<mx:DataGridColumn headerText="Gemeente" dataField="gemeente"/>
+					<mx:DataGridColumn headerText="X" dataField="x"/>
+					<mx:DataGridColumn headerText="Y" dataField="y"/>
+				</mx:columns>
+			</mx:DataGrid>
+		
+			<mx:Form>
+				<mx:FormHeading label="Filter"/>
+				<mx:FormItem label="Type">
+					<mx:ComboBox id="typefilter" 
+						dataProvider="{bunkerTypeResponder.lastResult}"
+						selectedIndex="0" 
+						creationComplete="bunkerTypeResponder.token = bunkerService.findAllTypes()"></mx:ComboBox>
+				</mx:FormItem>
+			</mx:Form>
+
+		</mx:HBox>
+
+		<mx:Canvas id="mapsCanvas" />
+
+	</mx:VBox>
 
 </mx:Application>
