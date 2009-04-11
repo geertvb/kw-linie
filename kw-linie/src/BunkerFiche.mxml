@@ -68,6 +68,10 @@
 				}
 			}
 			
+			public function findByIDResult(event : ResultEvent) : void {
+				_bunker = event.result;
+			}
+			
 			[Bindable]
 			public var _bunker: Object;
 			
@@ -99,6 +103,8 @@
 		destination="amfphp">
     </mx:RemoteObject>
 
+	<xyz:CallResponder id="bunkerResponder" result="findByIDResult(event)" />
+	
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService" 
 		destination="amfphp">
@@ -111,16 +117,16 @@
     <mx:NumberValidator 
         source="{ti_x}"
         property="text" 
-        minValue="10000"
-        maxValue="20000"
+        minValue="100000"
+        maxValue="300000"
         required="false"
         domain="int"/>
 
     <mx:NumberValidator 
         source="{ti_y}"
         property="text" 
-        minValue="10000"
-        maxValue="20000"
+        minValue="100000"
+        maxValue="300000"
         required="false"
         domain="int"/>
         
@@ -221,7 +227,7 @@
 			</mx:Canvas>
 		</mx:TabNavigator>
 	</mx:VBox>
-	<mx:Button x="83" y="517" label="Button" click="onClick(event);"/>
+	<mx:Button x="83" y="517" label="findByID" click="bunkerResponder.token = bunkerService.findByID(1)"/>
 	<mx:Button x="83" y="557" label="create" click="asdf(event);"/>
 	<mx:Button x="83" y="597" label="save" click="bunkerService.save(bunker);"/>
 	<mx:Button x="83" y="637" label="findAll" click="bunkerService.findAll(bunker);"/>

@@ -12,7 +12,24 @@ class BunkerService {
 		return findSQL("select `bunker_type_id`, `label` from `kwl_bunker_type`");
 	}
 
-    function findAll() {
+	function findByID($id) {
+		$sql = "select * from `kwl_bunker` where `bunker_id` = ?";
+		
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				if ($stmt->execute()) {
+					$result = getSingleResult($stmt);
+				}
+				$stmt->close();
+			}
+			$mysqli->close();
+		}
+		
+		return $result;		
+	}
+
+	function findAll() {
     	$sql = "SELECT";
     	$sql .= "  `bunker_id`,";
     	$sql .= "  `kwl_bunker_type`.`label` as `type`,";

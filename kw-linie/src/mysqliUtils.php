@@ -1,7 +1,7 @@
 <?php
 
 function newMysqli() {
-	$mysqli = new mysqli("localhost", "j_devit_be", "********", "j_devit_be");
+	$mysqli = new mysqli("localhost", "j_devit_be", "K3DyYQcn", "j_devit_be");
 	
 	return $mysqli;
 }
@@ -45,6 +45,30 @@ function getResult($stmt) {
 		$result[] = $row;
 	}
 	 
+	$metadata->free();
+	 
+	return $result;
+}
+
+function getSingleResult($stmt) {
+	$metadata = $stmt->result_metadata();
+	$fields = $metadata->fetch_fields();
+
+	$pointers = array();
+	$result = new stdClass();
+	 
+	$pointers[] = $stmt;
+	foreach ($fields as $field) {
+		$fieldname = $field->name;
+		$pointers[] = &$result->$fieldname;
+	}
+	 
+	call_user_func_array(mysqli_stmt_bind_result, $pointers);
+	 
+	if (!$stmt->fetch()) {
+		$result = null;
+	}
+
 	$metadata->free();
 	 
 	return $result;
