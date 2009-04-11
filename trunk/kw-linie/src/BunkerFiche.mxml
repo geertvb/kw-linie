@@ -1,67 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:xyz="mx.rpc.*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.controls.Alert;
+			
+			public function onClick(event : Event) : void {
+				Alert.show(bunker.x + " " + getQualifiedClassName(bunker.x));
+			}
+			
+			public function asdf(event : Event) : void {
+				var b : Object = new Object();
+				b.straat = "hbksstr";
+				_bunker = b;
+			}
+			
+			public function onFault(event: FaultEvent) : void {
+				Alert.show(event.message.toString());
+			}
+			
+			public function onResult(event: ResultEvent) : void {
+				Alert.show(event.result.toString());
+			}
+			
+			public function isEmpty(ti: TextInput) : Boolean {
+				return (!ti.enabled) || (ti.text == null) || (ti.text == "");
+			}
+			
+			public function gemeenteLabelFunction(item : Object) : String {
+				return item.naam + " (" + item.postcode + ")";
+			}				
+			
+			public function textinputToString(ti: TextInput) : Object {
+				if (isEmpty(ti)) {
+					return null;
+				} else {
+					return ti.text;
+				}
+			}
+			
+			public function textinputToInteger(ti: TextInput) : Object {
+				if (isEmpty(ti)) {
+					return null;
+				} else {
+					return int(ti.text);
+				}
+			}
+			
+			public function textinputToFloat(ti: TextInput) : Object {
+				if (isEmpty(ti)) {
+					return null;
+				} else {
+					return Number(ti.text);
+				}
+			}
+			
+			public function checkboxToBoolean(cb: CheckBox) : Object {
+				if (cb.enabled) {
+					return cb.selected;
+				} else {
+					return null;
+				}
+			}
+			
+			[Bindable]
+			public var _bunker: Object;
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Model id="bunker">
+		<bunker>
+			<straat>{textinputToString(ti_straat)}</straat>
+			<nr>{textinputToString(ti_nr)}</nr>
+			<toponiem>{textinputToString(ti_toponiem)}</toponiem>
+			<x>{textinputToInteger(ti_x)}</x>
+			<y>{textinputToInteger(ti_y)}</y>
+			<lat>{textinputToFloat(ti_lat)}</lat>
+			<lng>{textinputToFloat(ti_lng)}</lng>
+			<kadaster>{textinputToString(ti_kadaster)}</kadaster>
+			
+			<availGrondplan>{checkboxToBoolean(cb_availGrondplan)}</availGrondplan>
+			<availOnteigeningsdossier>{checkboxToBoolean(cb_availOnteigeningsdossier)}</availOnteigeningsdossier>
+			<availLastenboek>{checkboxToBoolean(cb_availLastenboek)}</availLastenboek>
+			<availMilitairBunkerdossier>{checkboxToBoolean(cb_availMilitairBunkerdossier)}</availMilitairBunkerdossier>
+		</bunker>
+	</mx:Model>
+
+	<xyz:CallResponder id="gemeenteResponder" />
+
+	<mx:RemoteObject id="gemeenteService"
+		source="kwl.GemeenteService" 
+		destination="amfphp">
+    </mx:RemoteObject>
+
+	<mx:RemoteObject id="bunkerService"
+		source="kwl.BunkerService" 
+		destination="amfphp">
+		<mx:method 
+			name="save" 
+			fault="onFault(event)" 
+			result="onResult(event)" />
+    </mx:RemoteObject>
+
+    <mx:NumberValidator 
+        source="{ti_x}"
+        property="text" 
+        minValue="10000"
+        maxValue="20000"
+        required="false"
+        domain="int"/>
+
+    <mx:NumberValidator 
+        source="{ti_y}"
+        property="text" 
+        minValue="10000"
+        maxValue="20000"
+        required="false"
+        domain="int"/>
+        
+   <mx:ArrayCollection id="gemeentes" source="{gemeenteResponder.lastResult}" />
+
 	<mx:VBox>
-		<mx:Form>
+		<mx:HBox>
 			<mx:FormItem label="Nummer" horizontalAlign="left">
-				<mx:ComboBox></mx:ComboBox>
+				<mx:TextInput editable="false" />
 			</mx:FormItem>
 			<mx:FormItem label="Type">
-				<mx:ComboBox></mx:ComboBox>
+				<mx:TextInput editable="false" />
 			</mx:FormItem>
-		</mx:Form>
+		</mx:HBox>
 		<mx:TabNavigator width="668" height="410">
 			<mx:Canvas label="Locatie" width="100%" height="100%">
 				<mx:Form x="10" y="10">
 					<mx:FormItem label="Gemeente">
-						<mx:ComboBox></mx:ComboBox>
-					</mx:FormItem>
+						<hc:AutoComplete id="ac_gemeente"
+							creationComplete="gemeenteResponder.token = gemeenteService.findAll()"
+							dataProvider="{gemeentes}"
+							labelFunction="gemeenteLabelFunction"
+							matchType="anyPart">
+						</hc:AutoComplete>
+   					</mx:FormItem>
 					<mx:FormItem label="Toponiem">
-						<mx:TextInput/>
+						<mx:TextInput id="ti_toponiem" text="{_bunker.toponiem}"/>
 					</mx:FormItem>
-					<mx:FormItem label="Adres">
-						<mx:HBox>
-							<mx:TextInput/>
-							<mx:FormItem label="nr">
-								<mx:TextInput width="64"/>
-							</mx:FormItem>
-						</mx:HBox>
+					<mx:FormItem label="Adres" direction="horizontal">
+						<mx:TextInput id="ti_straat" text="{_bunker.straat}"/>
+						<mx:FormItem label="nr">
+							<mx:TextInput id="ti_nr" width="64" text="{_bunker.nr}"/>
+						</mx:FormItem>
 					</mx:FormItem>
 					<mx:FormItem label="Stafkaart">
-						<mx:TextInput/>
+						<mx:TextInput id="ti_stafkaart" text="{_bunker.stafkaart}" />
 					</mx:FormItem>
-					<mx:FormItem label="Lambert 72 x">
-						<mx:HBox>
-							<mx:TextInput width="128"/>
-							<mx:FormItem label="Lambert 72 y" labelWidth="100">
-								<mx:TextInput width="128"/>
-							</mx:FormItem>
-						</mx:HBox>
+					<mx:FormItem label="Lambert 72 x" direction="horizontal">
+						<mx:TextInput id="ti_x" width="128" text="{_bunker.x}" />
+						<mx:FormItem label="Lambert 72 y" labelWidth="100">
+							<mx:TextInput id="ti_y" width="128" text="{_bunker.y}" />
+						</mx:FormItem>
 					</mx:FormItem>
-					<mx:FormItem label="Google lat">
-						<mx:HBox>
-							<mx:TextInput width="128"/>
-							<mx:FormItem label="Google lng" labelWidth="100">
-								<mx:TextInput width="128"/>
-							</mx:FormItem>
-						</mx:HBox>
+					<mx:FormItem label="Google lat" direction="horizontal">
+						<mx:TextInput id="ti_lat" width="128" text="{_bunker.lat}" />
+						<mx:FormItem label="Google lng" labelWidth="100">
+							<mx:TextInput id="ti_lng" width="128" text="{_bunker.lng}" />
+						</mx:FormItem>
 					</mx:FormItem>
 					<mx:FormItem label="Kadastrale gegevens">
-						<mx:TextInput/>
+						<mx:TextInput id="ti_kadaster" text="{_bunker.kadaster}" />
 					</mx:FormItem>
 				</mx:Form>
 			</mx:Canvas>
 			<mx:Canvas label="Docs" width="100%" height="100%">
 				<mx:Form x="10" y="10">
 					<mx:FormItem label="Voorhanden">
-						<mx:CheckBox label="Grondplan"/>
-						<mx:CheckBox label="Onteigeningsdossier"/>
-						<mx:CheckBox label="Lastenboek"/>
-						<mx:CheckBox label="Militair bunkerdossier"/>
-						<mx:CheckBox label="Overgave landsverdediging aan domeinen"/>
-						<mx:CheckBox label="Verkoop door domeinen"/>
-						<mx:CheckBox label="Oude fotos"/>
-						<mx:CheckBox label="Andere"/>
-						<mx:TextInput/>
+						<mx:CheckBox 
+							id="cb_availGrondplan" 
+							selected="{_bunker.availGrondplan}" 
+							label="Grondplan" />
+						<mx:CheckBox 
+							id="cb_availOnteigeningsdossier" 
+							selected="{_bunker.availOnteigeningsdossier}" 
+							label="Onteigeningsdossier"/>
+						<mx:CheckBox 
+							id="cb_availLastenboek" 
+							selected="{_bunker.availLastenboek}" 
+							label="Lastenboek"/>
+						<mx:CheckBox 
+							id="cb_availMilitairBunkerdossier" 
+							selected="{_bunker.availMilitairBunkerdossier}" 
+							label="Militair bunkerdossier"/>
+						<mx:CheckBox 
+							id="cb_availOvergave" 
+							selected="{_bunker.availOvergave}" 
+							label="Overgave landsverdediging aan domeinen"/>
+						<mx:CheckBox 
+							id="cb_availVerkoopDomeinen" 
+							selected="{_bunker.availVerkoopDomeinen}" 
+							label="Verkoop door domeinen"/>
+						<mx:CheckBox 
+							id="cb_availOudeFotos" 
+							selected="{_bunker.availOudeFotos}" 
+							label="Oude fotos"/>
+						<mx:CheckBox 
+							id="cb_availAndere" 
+							selected="{_bunker.availAndere}" 
+							label="Andere" />
+						<mx:TextInput
+							id="ti_availAndereTekst"
+							enabled="{cb_availAndere.selected}"
+							text="{_bunker.availAndereTekst}"/>
 					</mx:FormItem>
 				</mx:Form>
 			</mx:Canvas>
@@ -69,4 +221,8 @@
 			</mx:Canvas>
 		</mx:TabNavigator>
 	</mx:VBox>
+	<mx:Button x="83" y="517" label="Button" click="onClick(event);"/>
+	<mx:Button x="83" y="557" label="create" click="asdf(event);"/>
+	<mx:Button x="83" y="597" label="save" click="bunkerService.save(bunker);"/>
+	<mx:Button x="83" y="637" label="findAll" click="bunkerService.findAll(bunker);"/>
 </mx:Application>
