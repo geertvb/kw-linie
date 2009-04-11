@@ -13,7 +13,32 @@ class BunkerService {
 	}
 
     function findAll() {
-    	return findSQL("SELECT `bunker_id`, `type`, `nummer`, `gemeente`, `x`, `y` FROM `kwl_bunker`");
+    	$sql = "SELECT";
+    	$sql .= "  `bunker_id`,";
+    	$sql .= "  `kwl_bunker_type`.`label` as `type`,";
+    	$sql .= "  `code`,";
+    	$sql .= "  `nr`,";
+    	$sql .= "  `nummer`,";
+    	$sql .= "  `gemeente`,";
+    	$sql .= "  `x`,";
+    	$sql .= "  `y` ";
+    	$sql .= "FROM";
+    	$sql .= "  `kwl_bunker`";
+    	$sql .= "LEFT OUTER JOIN";
+    	$sql .= "  `kwl_bunker_type`";
+    	$sql .= "ON";
+    	$sql .= "  `kwl_bunker`.`type` = `kwl_bunker_type`.`bunker_type_id` ";
+    	$sql .= "ORDER BY";
+    	$sql .= "  `bunker_id` ASC";
+    	return findSQL($sql);
+    }
+    
+    function save($bunker) {
+    	ob_start();
+    	var_dump($bunker);
+    	$result = ob_get_contents();
+    	ob_end_clean();
+    	return $result;
     }
 
 }
