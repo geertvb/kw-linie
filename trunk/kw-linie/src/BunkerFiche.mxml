@@ -10,16 +10,6 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.controls.Alert;
 			
-			public function onClick(event : Event) : void {
-				Alert.show(bunker.x + " " + getQualifiedClassName(bunker.x));
-			}
-			
-			public function asdf(event : Event) : void {
-				var b : Object = new Object();
-				b.straat = "hbksstr";
-				_bunker = b;
-			}
-			
 			public function onFault(event: FaultEvent) : void {
 				Alert.show(event.message.toString());
 			}
@@ -29,7 +19,7 @@
 			}
 			
 			public function isEmpty(ti: TextInput) : Boolean {
-				return (!ti.enabled) || (ti.text == null) || (ti.text == "");
+				return (ti.text == null) || (ti.text == "");
 			}
 			
 			public function gemeenteLabelFunction(item : Object) : String {
@@ -68,6 +58,14 @@
 				}
 			}
 			
+			public function autocompleteToGemeenteID(ac: AutoComplete) : Object {
+				if (ac.selectedItem != null) {
+					return ac.selectedItem.gemeente_id;
+				} else {
+					return null;
+				}
+			}
+			
 			public function findByIDResult(event : ResultEvent) : void {
 				_bunker = event.result;
 			}
@@ -75,27 +73,30 @@
 			[Bindable]
 			public var _bunker: Object;
 			
+			public function bind() : Object {
+				var bunker : Object = new Object();
+				
+				bunker.gemeente = autocompleteToGemeenteID(ac_gemeente);
+				bunker.straat = textinputToString(ti_straat);
+				bunker.nr = textinputToString(ti_nr);
+				bunker.toponiem = textinputToString(ti_toponiem);
+				bunker.x = textinputToInteger(ti_x);
+				bunker.y = textinputToInteger(ti_y);
+				bunker.lat = textinputToFloat(ti_lat);
+				bunker.lng = textinputToFloat(ti_lng);
+				bunker.kadaster = textinputToString(ti_kadaster);
+				
+				bunker.availGrondplan = checkboxToBoolean(cb_availGrondplan);
+				bunker.availOnteigeningsdossier = checkboxToBoolean(cb_availOnteigeningsdossier);
+				bunker.availLastenboek = checkboxToBoolean(cb_availLastenboek);
+				bunker.availMilitairBunkerdossier = checkboxToBoolean(cb_availMilitairBunkerdossier);
+				
+				return bunker;
+			}
+			
 		]]>
 	</mx:Script>
 	
-	<mx:Model id="bunker">
-		<bunker>
-			<straat>{textinputToString(ti_straat)}</straat>
-			<nr>{textinputToString(ti_nr)}</nr>
-			<toponiem>{textinputToString(ti_toponiem)}</toponiem>
-			<x>{textinputToInteger(ti_x)}</x>
-			<y>{textinputToInteger(ti_y)}</y>
-			<lat>{textinputToFloat(ti_lat)}</lat>
-			<lng>{textinputToFloat(ti_lng)}</lng>
-			<kadaster>{textinputToString(ti_kadaster)}</kadaster>
-			
-			<availGrondplan>{checkboxToBoolean(cb_availGrondplan)}</availGrondplan>
-			<availOnteigeningsdossier>{checkboxToBoolean(cb_availOnteigeningsdossier)}</availOnteigeningsdossier>
-			<availLastenboek>{checkboxToBoolean(cb_availLastenboek)}</availLastenboek>
-			<availMilitairBunkerdossier>{checkboxToBoolean(cb_availMilitairBunkerdossier)}</availMilitairBunkerdossier>
-		</bunker>
-	</mx:Model>
-
 	<xyz:CallResponder id="gemeenteResponder" />
 
 	<mx:RemoteObject id="gemeenteService"
@@ -141,11 +142,12 @@
 				<mx:TextInput editable="false" />
 			</mx:FormItem>
 		</mx:HBox>
-		<mx:TabNavigator width="668" height="410">
+		<mx:TabNavigator width="668" height="410" creationPolicy="all">
 			<mx:Canvas label="Locatie" width="100%" height="100%">
 				<mx:Form x="10" y="10">
 					<mx:FormItem label="Gemeente">
 						<hc:AutoComplete id="ac_gemeente"
+							style="underline"
 							creationComplete="gemeenteResponder.token = gemeenteService.findAll()"
 							dataProvider="{gemeentes}"
 							labelFunction="gemeenteLabelFunction"
@@ -228,7 +230,5 @@
 		</mx:TabNavigator>
 	</mx:VBox>
 	<mx:Button x="83" y="517" label="findByID" click="bunkerResponder.token = bunkerService.findByID(1)"/>
-	<mx:Button x="83" y="557" label="create" click="asdf(event);"/>
-	<mx:Button x="83" y="597" label="save" click="bunkerService.save(bunker);"/>
-	<mx:Button x="83" y="637" label="findAll" click="bunkerService.findAll(bunker);"/>
+	<mx:Button x="83" y="557" label="save" click="bunkerService.save(bind());"/>
 </mx:Application>
