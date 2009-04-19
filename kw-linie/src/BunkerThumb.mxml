@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="160" height="160"
+	width="160" height="170"
 	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off">
 
-	<mx:Script>
-		<![CDATA[
-			
-			[Bindable]
-			public var bunker: Object;
-		]]>
-	</mx:Script>
+	<mx:Object id="bunker" />
 
-	<mx:VBox paddingLeft="5" paddingTop="5" paddingRight="5" paddingBottom="5" verticalGap="5">
-		<mx:Label text="{bunker.nummer}"/>
+	<mx:VBox id="vbox" 
+		paddingLeft="5" paddingTop="0" paddingRight="5" paddingBottom="5" 
+		verticalGap="0">
+		<mx:Label text="{bunker.nummer}" textAlign="center" width="140" fontWeight="bold"/>
 		<mx:Image source="bunker.jpg"/>
-		<mx:Label text="{bunker.type}"/>
-		<mx:Label text="{bunker.x} {bunker.y}"/>
+		<mx:Label text="Type: {bunker.type}"/>
+		<mx:Label text="Gemeente: {bunker.gemeente}"/>
+		<mx:Label text="Deelgemeente: {bunker.deelgemeente}"/>
+		<mx:Label text="x:{bunker.x} y:{bunker.y}"/>
 	</mx:VBox>
 
 </mx:Canvas>
