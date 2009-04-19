@@ -2,18 +2,18 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
 	<mx:Script>
 		<![CDATA[
+			import com.google.maps.LatLng;
 			import coo.Lambert72Coo;
 			import flash.sampler.NewObjectSample;
 			public function convert_click(): void {
 				var c: coo.Lambert72Coo = new Lambert72Coo();
-				var p:Point = c.convert(new Number(ti_x.text), new Number(ti_y.text));
-				ti_o.text = toDegreesMinutesSeconds(p.x);
-				ti_n.text = toDegreesMinutesSeconds(p.y);
+				var latLng:LatLng = c.convert(new Number(ti_x.text), new Number(ti_y.text));
+				ti_o.text = toDegreesMinutesSeconds(latLng.lat());
+				ti_n.text = toDegreesMinutesSeconds(latLng.lng());
 			}
 			
-			public function toDegreesMinutesSeconds(radians:Number) : String {
+			public function toDegreesMinutesSeconds(d:Number) : String {
 				var result: String = "";
-				var d:Number = radians * 180 / Math.PI;
 				var tmp: Number = Math.floor(d);
 				result += tmp + "o";
 				d = (d - tmp) * 60;

@@ -2,20 +2,14 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:maps="com.google.maps.*"
 	xmlns:xyz="mx.rpc.*"
-	initialize="bunkerResponder.token = bunkerService.findAll()"
-	layout="absolute">
-
-	<mx:Script source="GoogleMapKeys.as" />
+	creationComplete="creationComplete()"
+	layout="absolute"
+	backgroundColor="#637449" 
+	themeColor="#637449" 
+	backgroundGradientColors="[#637449,#637449]">
 
 	<mx:Script>
 		<![CDATA[
-	    	import com.google.maps.MapMouseEvent;
-	    	import coo.Lambert72Coo;
-	    	import com.google.maps.InfoWindowOptions;
-	    	import com.google.maps.styles.FillStyle;
-	    	import com.google.maps.styles.StrokeStyle;
-	    	import com.google.maps.overlays.MarkerOptions;
-	    	import com.google.maps.overlays.Marker;
 	    	import com.google.maps.controls.MapTypeControl;
 	    	import com.google.maps.controls.PositionControl;
 	    	import com.google.maps.controls.ZoomControl;
@@ -23,77 +17,31 @@
 		    import com.google.maps.Map;
 		    import com.google.maps.MapEvent;
 		    import com.google.maps.MapType;
-			import com.google.maps.interfaces.IOverlay;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.rpc.CallResponder;
-			import mx.controls.Alert;
 			
-			public var bunkerThumb:BunkerThumb = new BunkerThumb();
+			var bunkerMarkers: ArrayCollection;
 			
-			public var overlays: Array = new Array();
+			public function creationComplete() : void {
+				bunkerResponder.token = bunkerService.findAll();
+
+				typeResponder.token = bunkerService.findTypes();
+				codeResponder.token = bunkerService.findCodes();
+				gemeenteResponder.token = bunkerService.findGemeentes();
+				deelgemeenteResponder.token = bunkerService.findDeelgemeentes();
+			}
 			
-			/*
-            public function bunkerGrid_onChange(event: Event) : void {
-            	var bunker: Object = bunkerGrid.selectedItem;
-				bunkerThumb.bunker = bunker;
-				var m: Marker = overlays[bunker.nummer];
-				m.openInfoWindow(new InfoWindowOptions({customContent:bunkerThumb, width:170, drawDefaultFrame:true}));
-            }
-            */
-            
             public function displaymarkers() : void {
-				var markerA:Marker;
-				var c: coo.Lambert72Coo = new Lambert72Coo();
-				var p:Point;
-				var t_lat: Number = 0.0;
-				var t_lng: Number = 0.0;
-				var bxy : Array = bunkerResponder.lastResult as Array;
-				for each (var xy:Object in bxy) {
-					p = c.convert(xy.x as Number, xy.y as Number);
-					t_lat += p.y * 180.0 / Math.PI;
-					t_lng += p.x * 180.0 / Math.PI;
-					markerA = new Marker(
-					new LatLng(p.y * 180.0 / Math.PI, p.x * 180.0 / Math.PI),
-					new MarkerOptions({
-						strokeStyle: new StrokeStyle({color: 0xDDDD88}),
-						fillStyle: new FillStyle({color: 0x880000, alpha: 0.8}),
-						radius: 8,
-						hasShadow: true,
-						draggable: false
-					}));
-					/*
-					markerA.addEventListener(MapMouseEvent.DRAG_START, 
-						function(event:MapMouseEvent):void {
-						});
-					markerA.addEventListener(MapMouseEvent.DRAG_END,
-						function(event:MapMouseEvent):void {
-						});
-						*/ 
-					markerA.addEventListener(MapMouseEvent.CLICK,
-						function(event:MapMouseEvent):void {
-							var m: Marker = event.target as Marker;
-							var index: String = "";
-							for (index in overlays) {
-								if (overlays[index] == m) {
-									break;
-								}
-							}
-							for each (var b: Object in bxy) {
-								if (b.nummer == index) {
-									bunkerThumb.bunker = b;
-									m.openInfoWindow(new InfoWindowOptions({customContent:bunkerThumb, width:160, drawDefaultFrame:true}));
-									//bunkerGrid.selectedItem = b;
-									break;
-								}
-							}
-						}); 
-					overlays[xy.nummer as String] = markerA;
-        			map.addOverlay(markerA);
+				var bunkers : Array = bunkerResponder.lastResult as Array;
+				bunkerMarkers = new ArrayCollection();
+				for each (var bunker:Object in bunkers) {
+					if (bunker.lat != null  && bunker.lng != null) {
+						var bunkerMarker: BunkerMarker = new BunkerMarker(bunker);
+	        			map.addOverlay(bunkerMarker.marker);
+	        			bunkerMarkers.addItem(bunkerMarker);
+     				}
 				}
-				t_lat /= bxy.length;
-				t_lng /= bxy.length;
-		    	map.setCenter(new LatLng(t_lat,t_lng), 10, MapType.NORMAL_MAP_TYPE);
             }
             
 		    private function onMapReady(event:Event):void {
@@ -101,6 +49,8 @@
 				map.addControl(new ZoomControl());
 				map.addControl(new PositionControl());
 				map.addControl(new MapTypeControl());
+				map.setCenter(new LatLng(50.97652410041966, 4.5602220120386106),
+					10, MapType.NORMAL_MAP_TYPE);
 				
 				if (bunkerResponder.lastResult) {
 					displaymarkers();
@@ -113,83 +63,92 @@
 		    	}
 		    }
 		    
-            /*
-            public function typefilter_change() : void {
-            	if (typefilter.selectedLabel == "[ANY]") {
-            		bxy = allbunkers;
-            		for each (var overlay: IOverlay in overlays) {
-            			overlay.visible = true;
-            		}
-            	} else {
-	            	var result: ArrayCollection = new ArrayCollection();
-	            	for (var i: Object in allbunkers) {
-	            		var bunker: Object = allbunkers[i];
-	            		if (bunker.type == typefilter.selectedLabel) {
-	            			result.addItem(bunker);
-	            			overlays[bunker.nummer].visible = true;
-	            		} else {
-	            			overlays[bunker.nummer].visible = false;
-	            		}
-	            	}
-	            	bxy = result.toArray();
-            	}
-            	map.closeInfoWindow();
-            }
-            */
-
+		    private function filterMarkers() : void {
+		    	for each (var bunkerMarker: BunkerMarker in bunkerMarkers) {
+		    		var bunker: Object = bunkerMarker.bunker;
+		    		var visible: Boolean = true;
+		    		visible &&= typeFilter.selectedIndex<0 || (bunker.type == typeFilter.selectedLabel);
+		    		visible &&= codeFilter.selectedIndex<0 || (bunker.code == codeFilter.selectedLabel);
+		    		visible &&= gemeenteFilter.selectedIndex<0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
+		    		visible &&= deelgemeenteFilter.selectedIndex<0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
+		    		bunkerMarker.marker.visible = visible;
+		    	}
+		    }
+		    
 		]]>
 	</mx:Script>
 	
-	<xyz:CallResponder id="bunkerResponder"
-		result="bunkerResponderResult(event)" />
+	<xyz:CallResponder id="bunkerResponder" result="bunkerResponderResult(event)" />
 	
-	<xyz:CallResponder id="bunkerTypeResponder" />
+	<xyz:CallResponder id="typeResponder" />
 
-	<mx:ArrayCollection id="bunkerTypes" source="{bunkerTypeResponder.lastResult}" />
-	
+	<xyz:CallResponder id="codeResponder" />
+
+	<xyz:CallResponder id="gemeenteResponder" />
+
+	<xyz:CallResponder id="deelgemeenteResponder" />
+
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService"
 		destination="amfphp">
-        <mx:method name="findAllTypes" />
-        <mx:method name="findAll" />
     </mx:RemoteObject>
 
-	<mx:VBox width="480">
-		<!--
-		<mx:Form paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" visible="false">
-			<mx:FormItem label="Type">
-				<mx:ComboBox id="typefilter" 
-					dataProvider="{bunkerTypes}"
-					selectedIndex="0" 
-					creationComplete="bunkerTypeResponder.token = bunkerService.findAllTypes()"></mx:ComboBox>
-			</mx:FormItem>
-		</mx:Form>
-		-->
+	<mx:HBox horizontalGap="10">
 
 		<maps:Map id="map"
-			width="100%" height="640"
-			key="{getKey(application.url)}"
+			width="518" height="640"
+			key="{GoogleMapKeys.getKey(application.url)}"
 			mapevent_mapready="onMapReady(event)">
-			
 		</maps:Map>
 
-		<!--
-		<mx:DataGrid 
-			rowCount="5" width="100%" visible="false"
-			dataProvider="{bunkerResponder.lastResult}" id="bunkerGrid" 
-			change="bunkerGrid_onChange(event)">
-			<mx:columns>
-				<mx:DataGridColumn headerText="Nummer" dataField="nummer" width="64"/>
-				<mx:DataGridColumn headerText="Type" dataField="type" />
-				<mx:DataGridColumn headerText="Code" dataField="code" visible="false"/>
-				<mx:DataGridColumn headerText="nr" dataField="nr" visible="false"/>
-				<mx:DataGridColumn headerText="Gemeente" dataField="gemeente" visible="false"/>
-				<mx:DataGridColumn headerText="X" dataField="x" width="96"/>
-				<mx:DataGridColumn headerText="Y" dataField="y" width="96"/>
-			</mx:columns>
-		</mx:DataGrid>
-		-->
+		<mx:VBox width="186">
 
-	</mx:VBox>
+			<mx:Label text="Type" />			
+			<mx:ComboBox id="typeFilter" 
+				width="186"
+				maxWidth="186"
+				dataProvider="{typeResponder.lastResult}"
+				selectedIndex="-1"
+				prompt="Select" 
+				labelField="type"
+				change="filterMarkers();"
+				rowCount="8"></mx:ComboBox>
+
+			<mx:Label text="Code" />			
+			<mx:ComboBox id="codeFilter" 
+				width="186"
+				maxWidth="186"
+				dataProvider="{codeResponder.lastResult}"
+				selectedIndex="-1"
+				prompt="Select" 
+				labelField="code"
+				change="filterMarkers();"
+				rowCount="8"></mx:ComboBox>
+
+			<mx:Label text="Gemeente" />
+			<mx:ComboBox id="gemeenteFilter"
+				width="186"
+				maxWidth="186"
+				dataProvider="{gemeenteResponder.lastResult}"
+				selectedIndex="-1"
+				prompt="Select" 
+				labelField="gemeente"
+				change="filterMarkers();"
+				rowCount="8"></mx:ComboBox>
+				
+			<mx:Label text="Deelgemeente" />
+			<mx:ComboBox id="deelgemeenteFilter"
+				width="186"
+				maxWidth="186"
+				dataProvider="{deelgemeenteResponder.lastResult}"
+				selectedIndex="-1"
+				prompt="Select" 
+				labelField="deelgemeente"
+				change="filterMarkers();"
+				rowCount="8"></mx:ComboBox>
+				
+		</mx:VBox>
+
+	</mx:HBox>
 
 </mx:Application>
