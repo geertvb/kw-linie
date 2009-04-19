@@ -1,15 +1,25 @@
 <?php
 
-set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__) . "/../../.."));
-
-include_once 'mysqliUtils.php';
-
-restore_include_path();
+include_once '../../../mysqliUtils.php';
 
 class BunkerService {
 	
-	function findAllTypes() {
-		return findSQL("select `bunker_type_id`, `label` from `kwl_bunker_type`");
+	function findTypes() {
+		return findSQL("select distinct `type` from `kwl_bunker` where `type` is not null order by `type` asc");
+	}
+	
+	function findCodes() {
+		return findSQL("select distinct `code` from `kwl_bunker` where `code` is not null order by `code` asc");
+	}
+	
+	function findGemeentes() {
+		$sql = "SELECT distinct `gemeente` FROM `kwl_bunker` WHERE `gemeente` is not null order by `gemeente` asc";
+		return findSQL($sql);
+	}
+	
+	function findDeelgemeentes() {
+		$sql = "SELECT distinct `deelgemeente` FROM `kwl_bunker` WHERE `deelgemeente` is not null order by `deelgemeente` asc";
+		return findSQL($sql);
 	}
 
 	function findByID($id) {
@@ -29,27 +39,51 @@ class BunkerService {
 		return $result;		
 	}
 
+	function save($bunker) {
+		$sql = "update `kwl_bunker` ";
+		$sql .= "set ";
+		$sql .= "`lat` = ?,"; 
+		$sql .= "`lng` = ?,"; 
+		$sql .= "`gewest` = ?,";
+		$sql .= "`provincie` = ?,"; 
+		$sql .= "`gemeente` = ?,"; 
+		$sql .= "`deelgemeente` = ?,"; 
+		$sql .= "`straat` = ?,"; 
+		$sql .= "`postcode` = ? ";
+		$sql .= "where `bunker_id` = ?";
+		
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('ddssssssi', 
+					$bunker["lat"], 
+					$bunker["lng"], 
+					$bunker["gewest"], 
+					$bunker["provincie"], 
+					$bunker["gemeente"], 
+					$bunker["deelgemeente"], 
+					$bunker["straat"], 
+					$bunker["postcode"], 
+					$bunker["bunker_id"]);
+				$stmt->execute();
+				$stmt->close();
+			}
+			$mysqli->close();
+		}
+		
+		return $result;		
+	}
+
 	function findAll() {
     	$sql = "SELECT";
-    	$sql .= "  `bunker_id`,";
-    	$sql .= "  `kwl_bunker_type`.`label` as `type`,";
-    	$sql .= "  `code`,";
-    	$sql .= "  `nr`,";
-    	$sql .= "  `nummer`,";
-    	$sql .= "  `gemeente`,";
-    	$sql .= "  `x`,";
-    	$sql .= "  `y` ";
+    	$sql .= "  *";
     	$sql .= "FROM";
     	$sql .= "  `kwl_bunker`";
-    	$sql .= "LEFT OUTER JOIN";
-    	$sql .= "  `kwl_bunker_type`";
-    	$sql .= "ON";
-    	$sql .= "  `kwl_bunker`.`type` = `kwl_bunker_type`.`bunker_type_id` ";
     	$sql .= "ORDER BY";
     	$sql .= "  `bunker_id` ASC";
     	return findSQL($sql);
     }
     
+    /*
     function save($bunker) {
     	ob_start();
     	var_dump($bunker);
@@ -57,6 +91,7 @@ class BunkerService {
     	ob_end_clean();
     	return $result;
     }
+    */
 
 }
 
