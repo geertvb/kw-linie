@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:maps="com.google.maps.*" title="Kaart" showCloseButton="true">
+	<mx:Script>
+		<![CDATA[
+			import com.google.maps.MapMouseEvent;
+			import com.google.maps.styles.StrokeStyle;
+			import com.google.maps.styles.FillStyle;
+			import com.google.maps.overlays.Marker;
+			import com.google.maps.overlays.MarkerOptions;
+			import com.google.maps.MapType;
+			import com.google.maps.LatLng;
+			import com.google.maps.controls.MapTypeControl;
+			import com.google.maps.controls.PositionControl;
+			import com.google.maps.controls.ZoomControl;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var googleMapsKey: String;
+			
+			public var latLng: LatLng;
+			
+			private var marker: Marker;
+			
+			private function dropped(event: Event) : void {
+				latLng = marker.getLatLng();
+			}
+			
+		    private function onMapReady(event:Event):void {
+		    	var map:Map = this.map;
+				map.addControl(new ZoomControl());
+				map.addControl(new PositionControl());
+				map.addControl(new MapTypeControl());
+				map.setCenter(latLng,13, MapType.NORMAL_MAP_TYPE);
+				marker = new Marker(latLng,
+				new MarkerOptions({
+						strokeStyle: new StrokeStyle({color: 0xDDDD88}),
+						fillStyle: new FillStyle({color: 0x880000}),
+						radius: 8,
+						hasShadow: true,
+						draggable: true
+					}));
+				marker.addEventListener(MapMouseEvent.DRAG_END,dropped);
+				map.addOverlay(marker);
+		    }
+		]]>
+	</mx:Script>
+	<mx:Metadata>
+		[Event(name="ok", type="flash.events.Event")]
+		[Event(name="cancel", type="flash.events.Event")]
+	</mx:Metadata>
+	<maps:Map id="map"
+		width="480" height="320"
+		key="{googleMapsKey}"
+		mapevent_mapready="onMapReady(event)">
+	</maps:Map>
+	<mx:ControlBar>
+		<mx:Button label="ok">
+			<mx:click>
+			<![CDATA[
+				dispatchEvent( new Event("ok") );
+				PopUpManager.removePopUp(this);
+			]]>
+		</mx:click>
+		</mx:Button>
+		<mx:Button label="cancel">
+			<mx:click>
+			<![CDATA[
+				dispatchEvent( new Event("cancel") );
+				PopUpManager.removePopUp(this);
+			]]>
+		</mx:click>
+		</mx:Button>
+	</mx:ControlBar>
+</mx:TitleWindow>
