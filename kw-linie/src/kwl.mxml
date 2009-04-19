@@ -6,7 +6,7 @@
 	layout="absolute"
 	backgroundColor="#637449" 
 	themeColor="#637449" 
-	backgroundGradientColors="[#637449,#637449]">
+	backgroundGradientColors="[#637449,#637449]" xmlns:utils="com.hillelcoren.utils.*">
 
 	<mx:Script>
 		<![CDATA[
@@ -21,7 +21,21 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.rpc.CallResponder;
 			
-			var bunkerMarkers: ArrayCollection;
+			public var bunkerMarkers: ArrayCollection;
+			
+			private const ALLEMAAL: String = "[ALLE]";
+			
+			[Bindable]
+			public var typeLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
+			
+			[Bindable]
+			public var codeLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
+			
+			[Bindable]
+			public var gemeenteLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
+			
+			[Bindable]
+			public var deelgemeenteLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
 			
 			public function creationComplete() : void {
 				bunkerResponder.token = bunkerService.findAll();
@@ -67,12 +81,18 @@
 		    	for each (var bunkerMarker: BunkerMarker in bunkerMarkers) {
 		    		var bunker: Object = bunkerMarker.bunker;
 		    		var visible: Boolean = true;
-		    		visible &&= typeFilter.selectedIndex<0 || (bunker.type == typeFilter.selectedLabel);
-		    		visible &&= codeFilter.selectedIndex<0 || (bunker.code == codeFilter.selectedLabel);
-		    		visible &&= gemeenteFilter.selectedIndex<0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
-		    		visible &&= deelgemeenteFilter.selectedIndex<0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
+		    		visible &&= typeFilter.selectedIndex<=0 || (bunker.type == typeFilter.selectedLabel);
+		    		visible &&= codeFilter.selectedIndex<=0 || (bunker.code == codeFilter.selectedLabel);
+		    		visible &&= gemeenteFilter.selectedIndex<=0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
+		    		visible &&= deelgemeenteFilter.selectedIndex<=0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
 		    		bunkerMarker.marker.visible = visible;
 		    	}
+		    }
+		    
+		    private function filterLijst(source: Array) : ArrayCollection {
+		    	var result : ArrayCollection = new ArrayCollection(source);
+		    	result.addItemAt(ALLEMAAL, 0);
+		    	return result;
 		    }
 		    
 		]]>
@@ -80,13 +100,13 @@
 	
 	<xyz:CallResponder id="bunkerResponder" result="bunkerResponderResult(event)" />
 	
-	<xyz:CallResponder id="typeResponder" />
+	<xyz:CallResponder id="typeResponder" result="typeLijst = filterLijst(typeResponder.lastResult);"/>
 
-	<xyz:CallResponder id="codeResponder" />
+	<xyz:CallResponder id="codeResponder" result="codeLijst = filterLijst(codeResponder.lastResult);"/>
 
-	<xyz:CallResponder id="gemeenteResponder" />
+	<xyz:CallResponder id="gemeenteResponder" result="gemeenteLijst = filterLijst(gemeenteResponder.lastResult);"/>
 
-	<xyz:CallResponder id="deelgemeenteResponder" />
+	<xyz:CallResponder id="deelgemeenteResponder" result="deelgemeenteLijst = filterLijst(deelgemeenteResponder.lastResult);"/>
 
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService"
@@ -103,48 +123,44 @@
 
 		<mx:VBox width="186">
 
-			<mx:Label text="Type" />			
+			<mx:Label text="Type" />
 			<mx:ComboBox id="typeFilter" 
 				width="186"
 				maxWidth="186"
-				dataProvider="{typeResponder.lastResult}"
-				selectedIndex="-1"
-				prompt="Select" 
+				dataProvider="{typeLijst}"
+				selectedIndex="0"
 				labelField="type"
-				change="filterMarkers();"
+				valueCommit="filterMarkers();"
 				rowCount="8"></mx:ComboBox>
 
-			<mx:Label text="Code" />			
+			<mx:Label text="Code" />
 			<mx:ComboBox id="codeFilter" 
 				width="186"
 				maxWidth="186"
-				dataProvider="{codeResponder.lastResult}"
-				selectedIndex="-1"
-				prompt="Select" 
+				dataProvider="{codeLijst}"
+				selectedIndex="0"
 				labelField="code"
-				change="filterMarkers();"
+				valueCommit="filterMarkers();"
 				rowCount="8"></mx:ComboBox>
 
 			<mx:Label text="Gemeente" />
 			<mx:ComboBox id="gemeenteFilter"
 				width="186"
 				maxWidth="186"
-				dataProvider="{gemeenteResponder.lastResult}"
-				selectedIndex="-1"
-				prompt="Select" 
+				dataProvider="{gemeenteLijst}"
+				selectedIndex="0"
 				labelField="gemeente"
-				change="filterMarkers();"
+				valueCommit="filterMarkers();"
 				rowCount="8"></mx:ComboBox>
 				
 			<mx:Label text="Deelgemeente" />
 			<mx:ComboBox id="deelgemeenteFilter"
 				width="186"
 				maxWidth="186"
-				dataProvider="{deelgemeenteResponder.lastResult}"
-				selectedIndex="-1"
-				prompt="Select" 
+				dataProvider="{deelgemeenteLijst}"
+				selectedIndex="0"
 				labelField="deelgemeente"
-				change="filterMarkers();"
+				valueCommit="filterMarkers();"
 				rowCount="8"></mx:ComboBox>
 				
 		</mx:VBox>
