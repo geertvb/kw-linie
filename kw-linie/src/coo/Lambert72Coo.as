@@ -1,5 +1,5 @@
 package coo{
-	import flash.geom.Point;
+	import com.google.maps.LatLng;
 	
 	
 	public class Lambert72Coo {
@@ -38,7 +38,7 @@ package coo{
 			this.r0 = this.a * this.g * Math.pow(this.t0, this.n);			
 		}
 		
-		public function convert(x:Number, y:Number) : Point {
+		public function convert(x:Number, y:Number) : LatLng {
 			var r: Number = Math.sqrt(Math.pow(x - this.x0, 2) + Math.pow(this.r0 - (y - this.y0),2));
 			var t: Number = Math.pow(r / (this.a * this.g), 1 / this.n);
 			var theta: Number = Math.atan((x - x0) / (r0 - (y - y0)));
@@ -48,9 +48,7 @@ package coo{
 				var previousPhi: Number = currentPhi;
 				currentPhi = Math.PI/2 - 2 * Math.atan(t * Math.pow((1 - this.e * Math.sin(previousPhi)) / (1 + this.e * Math.sin(previousPhi)), this.e/2));
 			}
-			trace("lambda " + (lambda * 180 / Math.PI));
-			trace("phi    " + (currentPhi * 180 / Math.PI));
-			return new Point(lambda, currentPhi);
+			return new LatLng(currentPhi * 180 / Math.PI, lambda * 180 / Math.PI);
 		}
 	}
 
