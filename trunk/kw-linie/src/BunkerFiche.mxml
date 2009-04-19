@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	xmlns:hc="com.hillelcoren.components.*"
-	xmlns:xyz="mx.rpc.*">
+	creationComplete="creationComplete();"
+	backgroundColor="#637449" 
+	themeColor="#637449" 
+	backgroundGradientColors="[#637449,#637449]" 
+	xmlns:xyz="mx.rpc.*" xmlns:local="*">
 
 	<mx:Script>
 		<![CDATA[
+			import com.google.maps.LatLng;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var googleMapsKey: String;
+			
+			public function creationComplete() : void {
+				bunkerFindAllResponder.token = bunkerService.findAll();
+				googleMapsKey = GoogleMapKeys.getKey(application.url);
+			}
 			
 			public function onFault(event: FaultEvent) : void {
 				Alert.show(event.message.toString());
@@ -73,12 +88,16 @@
 			[Bindable]
 			public var _bunker: Object;
 			
+			public function bunkerGridChange(event: Event) : void {
+				bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
+			}
+			
 			public function bind() : Object {
 				var bunker : Object = new Object();
 				
 				bunker.gemeente = autocompleteToGemeenteID(ac_gemeente);
 				bunker.straat = textinputToString(ti_straat);
-				bunker.nr = textinputToString(ti_nr);
+				bunker.straatnr = textinputToString(ti_straatnr);
 				bunker.toponiem = textinputToString(ti_toponiem);
 				bunker.x = textinputToInteger(ti_x);
 				bunker.y = textinputToInteger(ti_y);
@@ -96,6 +115,7 @@
 			
 		]]>
 	</mx:Script>
+
 	
 	<xyz:CallResponder id="gemeenteResponder" />
 
@@ -105,6 +125,8 @@
     </mx:RemoteObject>
 
 	<xyz:CallResponder id="bunkerResponder" result="findByIDResult(event)" />
+	
+	<xyz:CallResponder id="bunkerFindAllResponder" />
 	
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService" 
@@ -133,16 +155,28 @@
         
    <mx:ArrayCollection id="gemeentes" source="{gemeenteResponder.lastResult}" />
 
-	<mx:VBox>
+	<mx:VBox width="728">
+		<mx:DataGrid id="bunkerGrid"
+			dataProvider="{bunkerFindAllResponder.lastResult}" 
+			width="100%"
+			change="bunkerGridChange(event)">
+			<mx:columns>
+				<mx:DataGridColumn dataField="bunker_id" headerText="ID" width="40" />
+				<mx:DataGridColumn dataField="nummer" headerText="Nummer" width="64" />
+				<mx:DataGridColumn dataField="type" headerText="Type" width="128" />
+				<mx:DataGridColumn dataField="gemeente" headerText="Gemeente" />
+				<mx:DataGridColumn dataField="deelgemeente" headerText="Deelgemeente" />
+			</mx:columns>
+		</mx:DataGrid>
 		<mx:HBox>
 			<mx:FormItem label="Nummer" horizontalAlign="left">
-				<mx:TextInput editable="false" />
+				<mx:TextInput editable="false" width="64" text="{_bunker.nummer}" />
 			</mx:FormItem>
 			<mx:FormItem label="Type">
-				<mx:TextInput editable="false" />
+				<mx:TextInput editable="false" width="128" text="{_bunker.type}" />
 			</mx:FormItem>
 		</mx:HBox>
-		<mx:TabNavigator width="668" height="410" creationPolicy="all">
+		<mx:TabNavigator width="100%" height="410" creationPolicy="all">
 			<mx:Canvas label="Locatie" width="100%" height="100%">
 				<mx:Form x="10" y="10">
 					<mx:FormItem label="Gemeente">
@@ -160,7 +194,7 @@
 					<mx:FormItem label="Adres" direction="horizontal">
 						<mx:TextInput id="ti_straat" text="{_bunker.straat}"/>
 						<mx:FormItem label="nr">
-							<mx:TextInput id="ti_nr" width="64" text="{_bunker.nr}"/>
+							<mx:TextInput id="ti_straatnr" width="64" text="{_bunker.straatnr}"/>
 						</mx:FormItem>
 					</mx:FormItem>
 					<mx:FormItem label="Stafkaart">
@@ -177,6 +211,23 @@
 						<mx:FormItem label="Google lng" labelWidth="100">
 							<mx:TextInput id="ti_lng" width="128" text="{_bunker.lng}" />
 						</mx:FormItem>
+						<mx:Button label="kaart">
+							<mx:click>
+								<![CDATA[
+								var mapPopup: MapPopup = new MapPopup();
+								mapPopup.googleMapsKey = googleMapsKey;
+									mapPopup.latLng = new LatLng(
+									textinputToFloat(ti_lat) as Number,
+									textinputToFloat(ti_lng) as Number);
+								mapPopup.addEventListener("ok",function () {
+									ti_lat.text = mapPopup.latLng.lat().toString();
+									ti_lng.text = mapPopup.latLng.lng().toString();
+								});
+								PopUpManager.addPopUp(mapPopup,this,true);
+								PopUpManager.centerPopUp(mapPopup);
+												]]>
+							</mx:click>
+						</mx:Button>
 					</mx:FormItem>
 					<mx:FormItem label="Kadastrale gegevens">
 						<mx:TextInput id="ti_kadaster" text="{_bunker.kadaster}" />
@@ -228,7 +279,6 @@
 			<mx:Canvas label="Contacten" width="100%" height="100%">
 			</mx:Canvas>
 		</mx:TabNavigator>
+	<mx:Button label="save" enabled="false" click="bunkerService.save(bind());"/>
 	</mx:VBox>
-	<mx:Button x="83" y="517" label="findByID" click="bunkerResponder.token = bunkerService.findByID(1)"/>
-	<mx:Button x="83" y="557" label="save" click="bunkerService.save(bind());"/>
 </mx:Application>
