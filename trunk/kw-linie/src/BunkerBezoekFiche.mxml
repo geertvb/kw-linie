@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundColor="#637449" 
+	themeColor="#637449" 
+	backgroundGradientColors="[#637449,#637449]" 
+	layout="absolute">
+	
+	<mx:Object id="bunker" />
+
+	<mx:Object id="bunkerbezoek" />
+	
+	<mx:VBox width="718">
+		<mx:HBox>
+			<mx:FormItem label="ID" horizontalAlign="left">
+				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{bunker.bunker_id}" />
+			</mx:FormItem>
+			<mx:FormItem label="Nummer" horizontalAlign="left">
+				<mx:TextInput editable="false" width="64" text="{bunker.nummer}" />
+			</mx:FormItem>
+		</mx:HBox>
+		<mx:TabNavigator width="100%" creationPolicy="all" height="520">
+			<mx:Canvas label="Bezoek" width="100%" height="100%">
+				<mx:Form x="0" y="0">
+					<mx:FormItem label="Datum">
+						<mx:DateField id="df_datum"/>
+					</mx:FormItem>
+					<mx:FormItem label="Invuller" direction="horizontal">
+						<mx:TextInput/>
+						<mx:Button label="..."/>
+					</mx:FormItem>
+					<mx:FormItem label="Bezoekers">
+						<mx:HBox>
+							<mx:List></mx:List>
+							<mx:VBox>
+								<mx:Button label="+"/>
+								<mx:Button label="-"/>
+							</mx:VBox>
+						</mx:HBox>
+					</mx:FormItem>
+					<mx:FormItem label="Aanwezigheid">
+						<mx:ComboBox id="cb_aanwezigheid">
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Ja" />
+									<mx:Object label="Niet zeker" />
+									<mx:Object label="Neen" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem label="Reden" enabled="{cb_aanwezigheid.selectedItem.label == 'Neen'}">
+						<mx:ComboBox id="cb_redenNietAanwezig">
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Afgebroken" />
+									<mx:Object label="Verzonken" />
+									<mx:Object label="Andere" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem>
+						<mx:TextInput enabled="{!(cb_redenNietAanwezig.selectedItem.label != 'Andere' || cb_aanwezigheid.selectedItem.label != 'Neen')}"/>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:Canvas>
+			<mx:Canvas label="Omgeving" width="100%" height="100%">
+				<mx:Form x="0" y="0">
+					<mx:FormItem label="Algemene toestand">
+				<mx:Grid x="10" y="10">
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+							<mx:Label text="10m" fontWeight="bold"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+							<mx:Label text="100m" fontWeight="bold"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Niet bekeken"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+							<mx:CheckBox id="cb_nb_10m"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+							<mx:CheckBox id="cb_nb_100m"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Bos"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_10m.selected}"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_100m.selected}"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Bebouwing"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_10m.selected}"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_100m.selected}"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Weiland"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_10m.selected}"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_100m.selected}"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Park"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_10m.selected}"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_100m.selected}"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Akker"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_10m.selected}"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_100m.selected}"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Water"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_10m.selected}"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:TextInput width="64" enabled="{!cb_nb_100m.selected}"/>
+						</mx:GridItem>
+					</mx:GridRow>
+					<mx:GridRow width="100%" height="100%">
+						<mx:GridItem width="100%" height="100%">
+							<mx:Label text="Totaal"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:Text width="64" enabled="{!cb_nb_10m.selected}"/>
+						</mx:GridItem>
+						<mx:GridItem width="100%" height="100%">
+							<mx:Text width="64" enabled="{!cb_nb_100m.selected}"/>
+						</mx:GridItem>
+					</mx:GridRow>
+				</mx:Grid>
+					</mx:FormItem>
+					<mx:FormItem label="Ligging">
+						<mx:ComboBox>
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Geheel ondergronds" />
+									<mx:Object label="Gedeeltelijk ondergronds" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem label="Expositie">
+						<mx:ComboBox>
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Volledig beschaduwd" />
+									<mx:Object label="Half beschaduwd" />
+									<mx:Object label="In volle zon" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem label="Relief">
+						<mx:ComboBox>
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Vlak" />
+									<mx:Object label="Hellend" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem label="Afstand berijdbare weg">
+						<mx:HBox>
+							<mx:TextInput width="64" enabled="{!nb_afstandTotBerijdbareWeg.selected}"/>
+							<mx:Label text="meter" />
+						</mx:HBox>
+						<mx:CheckBox id="nb_afstandTotBerijdbareWeg" label="Niet bekeken"/>
+					</mx:FormItem>
+					<mx:FormItem label="Recreatieve ontsluiting">
+						<mx:ComboBox id="cb_recreatieveOntsluiting">
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Ligt langs trage weg" />
+									<mx:Object label="Fietspad" />
+									<mx:Object label="Nuttig om informatiebord te plaatsen?" />
+									<mx:Object label="Andere" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+						<mx:TextInput enabled="{cb_recreatieveOntsluiting.selectedItem.label == 'Andere'}"/>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:Canvas>
+			<mx:Canvas label="Toestand buiten" width="100%" height="100%">
+				<mx:Form x="0" y="0">
+					<mx:FormItem label="Algemene toestand">
+						<mx:CheckBox id="cb_nb_algemeneToestandBuiten" label="Niet bekeken"/>
+						<mx:CheckBox label="Goed" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+						<mx:CheckBox label="Betonrot" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+						<mx:CheckBox label="Beschadiging daterend van gevechten" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+						<mx:CheckBox label="Beschadiging van latere datum" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+						<mx:CheckBox label="Natuurlijke beschadiging" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+						<mx:CheckBox id="cb_atb_andere" label="Andere" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+						<mx:TextInput enabled="{!(cb_nb_algemeneToestandBuiten.selected || !cb_atb_andere.selected)}"/>
+					</mx:FormItem>
+					<mx:FormItem label="Toegankelijk">
+						<mx:ComboBox id="cb_toegankelijk">
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Ja" />
+									<mx:Object label="Neen" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+					<mx:FormItem label="Reden">
+						<mx:ComboBox enabled="{cb_toegankelijk.selectedItem.label == 'Neen'}">
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Dichtgemetst" />
+									<mx:Object label="Gesloten deur" />
+									<mx:Object label="Versperring ingang door rommel" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:Canvas>
+			<mx:Canvas label="Toestand binnen" width="100%" height="100%">
+				<mx:Form x="0" y="0">
+					<mx:FormItem label="Intern gebruik">
+						<mx:ComboBox rowCount="9" id="cb_internGebruik">
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Niet geweten (o.w.v. bvb niet toegankelijk)" />
+									<mx:Object label="Geen" />
+									<mx:Object label="Bewoning (dakloze)" />
+									<mx:Object label="Opslagplaats (hout, wijn, aardappelen, ...)" />
+									<mx:Object label="Tuinhuis" />
+									<mx:Object label="Kippenhok" />
+									<mx:Object label="Vleermuiswinterverblijfplaats" />
+									<mx:Object label="Andere" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+						<mx:TextInput enabled="{cb_internGebruik.selectedItem.label == 'Andere'}"/>
+					</mx:FormItem>
+					<mx:FormItem label="Toestand binnen" horizontalAlign="left">
+						<mx:ComboBox rowCount="9" id="cb_toestandBinnen">
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Niet geweten" />
+									<mx:Object label="Proper" />
+									<mx:Object label="Sluikstort" />
+									<mx:Object label="Graffiti" />
+									<mx:Object label="Brandplekken" />
+									<mx:Object label="Andere" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+						<mx:TextInput enabled="{cb_toestandBinnen.selectedItem.label == 'Andere'}"/>
+					</mx:FormItem>
+					<mx:FormItem label="Vochtigheid">
+						<mx:ComboBox>
+							<mx:dataProvider>
+								<mx:ArrayCollection>
+									<mx:Object label="Niet bekeken" />
+									<mx:Object label="Droog" />
+									<mx:Object label="Vochtig (condens aan plafond)" />
+									<mx:Object label="Zeer nat (laagje water op bodem)" />
+								</mx:ArrayCollection>
+							</mx:dataProvider>
+						</mx:ComboBox>
+					</mx:FormItem>
+				</mx:Form>
+			</mx:Canvas>
+			<mx:Canvas label="Elementen" width="100%" height="100%">
+				<mx:HBox x="10" y="10" width="100%" height="100%">
+					<mx:List height="100%" id="list_elementen" selectedIndex="0">
+						<mx:dataProvider>
+							<mx:ArrayCollection>
+								<mx:Object label="Ingang" />
+								<mx:Object label="Buitendeur" />
+								<mx:Object label="Binnendeur" />
+								<mx:Object label="Afsluitluik pistoolkoker" />
+								<mx:Object label="Nooduitgang" />
+								<mx:Object label="Dakplaten" />
+								<mx:Object label="Camouflage" />
+								<mx:Object label="Rooster aan de ingang" />
+								<mx:Object label="Schietgat 1" />
+								<mx:Object label="Schietgat 2" />
+								<mx:Object label="Schietgat 3" />
+							</mx:ArrayCollection>
+						</mx:dataProvider>
+					</mx:List>
+					<mx:ViewStack id="viewstack1" width="100%" height="100%" selectedIndex="{list_elementen.selectedIndex}">
+						<mx:Canvas label="Ingang" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Toegang">
+									<mx:ComboBox id="cb_toegang">
+										<mx:dataProvider>
+											<mx:ArrayCollection>
+												<mx:Object label="Gewoon" />
+												<mx:Object label="Via put" />
+											</mx:ArrayCollection>
+										</mx:dataProvider>
+									</mx:ComboBox>
+									<mx:CheckBox label="Ladder nog aanwezig" enabled="{cb_toegang.selectedItem.label == 'Via put'}"/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Buitendeur" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Origineel">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Replica">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Ander type">
+									<mx:ComboBox>
+										<mx:dataProvider>
+											<mx:ArrayCollection>
+												<mx:Object label="Betonplex" />
+												<mx:Object label="Andere" />
+											</mx:ArrayCollection>
+										</mx:dataProvider>
+									</mx:ComboBox>
+									<mx:TextInput/>
+								</mx:FormItem>
+								<mx:FormItem label="Toestand">
+									<mx:ComboBox>
+										<mx:dataProvider>
+											<mx:ArrayCollection>
+												<mx:Object label="Goed" />
+												<mx:Object label="Slecht" />
+											</mx:ArrayCollection>
+										</mx:dataProvider>
+									</mx:ComboBox>
+								</mx:FormItem>
+								<mx:FormItem label="Scharnieren nog aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Binnendeur" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Origineel">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Replica">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Ander type">
+									<mx:ComboBox>
+										<mx:dataProvider>
+											<mx:ArrayCollection>
+												<mx:Object label="Betonplex" />
+												<mx:Object label="Andere" />
+											</mx:ArrayCollection>
+										</mx:dataProvider>
+									</mx:ComboBox>
+									<mx:TextInput/>
+								</mx:FormItem>
+								<mx:FormItem label="Toestand">
+									<mx:ComboBox>
+										<mx:dataProvider>
+											<mx:ArrayCollection>
+												<mx:Object label="Goed" />
+												<mx:Object label="Slecht" />
+											</mx:ArrayCollection>
+										</mx:dataProvider>
+									</mx:ComboBox>
+								</mx:FormItem>
+								<mx:FormItem label="Scharnieren nog aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Afsluitluik pistoolkoker" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Met ketting">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Nooduitgang" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Toestand">
+									<mx:ComboBox>
+										<mx:dataProvider>
+											<mx:ArrayCollection>
+												<mx:Object label="Open" />
+												<mx:Object label="Dichtgemetst" />
+											</mx:ArrayCollection>
+										</mx:dataProvider>
+									</mx:ComboBox>
+								</mx:FormItem>
+								<mx:FormItem label="Schotbalken aanwezig">
+									<mx:CheckBox label="Binnenkant"/>
+									<mx:CheckBox label="Buitenkant"/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Dakplaten" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Bunkernummer leesbaar">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Camouflage" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Type">
+									<mx:CheckBox label="Baksteen"/>
+									<mx:CheckBox label="Pannendak"/>
+									<mx:CheckBox label="'eitjes'-bepleistering"/>
+									<mx:CheckBox label="Beschildering"/>
+								</mx:FormItem>
+								<mx:FormItem label="Haken voor netten">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Rooster aan de ingang" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Schietgat 1" width="100%" height="100%">
+							<mx:Form x="0" y="0">
+								<mx:FormItem label="Niet bekeken">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Aanwezig">
+									<mx:CheckBox/>
+								</mx:FormItem>
+								<mx:FormItem label="Toestand">
+									<mx:ComboBox></mx:ComboBox>
+								</mx:FormItem>
+								<mx:FormItem label="Schootsveld">
+									<mx:HBox width="100%">
+										<mx:TextInput width="64"/>
+										<mx:Label text="graden"/>
+									</mx:HBox>
+								</mx:FormItem>
+								<mx:FormItem label="Afsluitluik">
+									<mx:CheckBox label="Buitenzijde aanwezig"/>
+									<mx:CheckBox label="Bedieningsketting"/>
+									<mx:CheckBox label="Binnenzijde aanwezig"/>
+								</mx:FormItem>
+								<mx:FormItem label="Affuit">
+									<mx:Form paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0">
+										<mx:FormItem label="Aanwezig">
+											<mx:CheckBox/>
+										</mx:FormItem>
+										<mx:FormItem label="Type">
+											<mx:ComboBox></mx:ComboBox>
+										</mx:FormItem>
+										<mx:FormItem label="Toestand">
+											<mx:ComboBox></mx:ComboBox>
+										</mx:FormItem>
+									</mx:Form>
+								</mx:FormItem>
+								<mx:FormItem label="Opmerkingen">
+									<mx:TextArea/>
+								</mx:FormItem>
+							</mx:Form>
+						</mx:Canvas>
+						<mx:Canvas label="Schietgat 2" width="100%" height="100%">
+						</mx:Canvas>
+						<mx:Canvas label="Schietgat 3" width="100%" height="100%">
+						</mx:Canvas>
+					</mx:ViewStack>
+				</mx:HBox>
+			</mx:Canvas>
+			<mx:Canvas label="Fotos" width="100%" height="100%">
+				<mx:VBox bottom="10" top="0" right="10" left="10">
+					<mx:TileList height="100%" width="100%" rowCount="3" itemRenderer="FotoTile">
+						<mx:dataProvider>
+							<mx:Array>
+			                    <mx:Object
+			                    	omschrijving="Grondplan"
+			                    	filename="grondplan.jpg"
+			                    	size="320K"
+			                    	width="320"
+			                    	height="240"
+			                    	type="jpg" />
+			                    <mx:Object
+			                    	omschrijving="Luchtfoto"
+			                    	filename="areal.jpg"
+			                    	size="423K"
+			                    	width="1024"
+			                    	height="768"
+			                    	type="jpg" />
+			                </mx:Array>
+						</mx:dataProvider>
+					</mx:TileList>
+					<mx:HBox width="100%" horizontalAlign="center">
+						<mx:Button label="Voeg toe"/>
+						<mx:Button label="Bekijk"/>
+						<mx:Button label="Verwijder"/>
+					</mx:HBox>
+				</mx:VBox>
+			</mx:Canvas>
+		</mx:TabNavigator>
+	</mx:VBox>
+
+</mx:Application>
