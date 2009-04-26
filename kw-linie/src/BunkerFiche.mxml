@@ -169,7 +169,7 @@
 
    <mx:ArrayCollection id="deelgemeentes" source="{deelgemeenteResponder.lastResult}" />
 
-	<mx:VBox width="728">
+	<mx:VBox width="718">
 		<mx:DataGrid id="bunkerGrid"
 			dataProvider="{bunkerFindAllResponder.lastResult}" 
 			width="100%"
