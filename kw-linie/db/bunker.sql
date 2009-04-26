@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `kwl_bunker` (
   KEY `code` (`code`),
   KEY `nr` (`nr`),
   KEY `gemeente` (`gemeente`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=372 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=372 ;
 
 --
 -- Dumping data for table `kwl_bunker`
