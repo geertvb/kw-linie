@@ -1,7 +1,7 @@
 <?php
 
 function newMysqli() {
-	$mysqli = new mysqli("localhost", "j_devit_be", "K3DyYQcn", "j_devit_be");
+	$mysqli = new mysqli("localhost", "kwlinie_be", "Tmg9EQs2", "kwlinie_be");
 	
 	return $mysqli;
 }

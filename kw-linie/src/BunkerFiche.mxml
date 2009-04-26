@@ -80,6 +80,14 @@
 				}
 			}
 			
+			public function comboboxToString(cb: ComboBox) : Object {
+				if (cb.enabled && cb.selectedIndex>=0) {
+					return cb.selectedLabel;
+				} else {
+					return null;
+				}
+			}
+			
 			public function bunkerGridChange(event: Event) : void {
 				bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
 			}
@@ -87,8 +95,10 @@
 			public function bind() : Object {
 				var bunker : Object = new Object();
 				
-				//bunker.gemeente = textinputToString(ti_gemeente);
-				//bunker.deelgemeente = textinputToString(ti_deelgemeente);
+				bunker.bunker_id = textinputToInteger(ti_bunker_id);
+				
+				bunker.gemeente = comboboxToString(cb_gemeente);
+				bunker.deelgemeente = comboboxToString(cb_deelgemeente);
 				bunker.straat = textinputToString(ti_straat);
 				bunker.toponiem = textinputToString(ti_toponiem);
 				bunker.x = textinputToInteger(ti_x);
@@ -185,7 +195,7 @@
 		</mx:DataGrid>
 		<mx:HBox>
 			<mx:FormItem label="ID" horizontalAlign="left">
-				<mx:TextInput editable="false" width="64" text="{_bunker.bunker_id}" />
+				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{_bunker.bunker_id}" />
 			</mx:FormItem>
 			<mx:FormItem label="Nummer" horizontalAlign="left">
 				<mx:TextInput editable="false" width="64" text="{_bunker.nummer}" />
@@ -198,13 +208,13 @@
 			<mx:Canvas label="Locatie" width="100%" height="100%">
 				<mx:Form x="0" y="0" width="100%" height="100%">
 					<mx:FormItem label="Gemeente">
-						<mx:ComboBox
+						<mx:ComboBox id="cb_gemeente"
 							selectedIndex="{gemeenteIndex}" 
 							dataProvider="{gemeentes}" 
 							labelField="gemeente"  width="200"/>
    					</mx:FormItem>
 					<mx:FormItem label="Deelgemeente">
-						<mx:ComboBox
+						<mx:ComboBox id="cb_deelgemeente"
 							selectedIndex="{deelgemeenteIndex}" 
 							dataProvider="{deelgemeentes}" 
 							labelField="deelgemeente"  width="200"/>
@@ -437,6 +447,6 @@
 				</mx:VBox>
 			</mx:Canvas>
 		</mx:TabNavigator>
-	<mx:Button label="save" enabled="false" click="bunkerService.save(bind());"/>
+	<mx:Button label="save" click="bunkerService.save(bind());"/>
 	</mx:VBox>
 </mx:Application>

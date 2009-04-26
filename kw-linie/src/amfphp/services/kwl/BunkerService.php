@@ -44,33 +44,25 @@ class BunkerService {
 		$sql .= "set ";
 		$sql .= "`lat` = ?,"; 
 		$sql .= "`lng` = ?,"; 
-		$sql .= "`gewest` = ?,";
-		$sql .= "`provincie` = ?,"; 
 		$sql .= "`gemeente` = ?,"; 
 		$sql .= "`deelgemeente` = ?,"; 
-		$sql .= "`straat` = ?,"; 
-		$sql .= "`postcode` = ? ";
+		$sql .= "`straat` = ? "; 
 		$sql .= "where `bunker_id` = ?";
 		
 		if ($mysqli = newMysqli()) {
 			if ($stmt = $mysqli->prepare($sql)) {
-				$stmt->bind_param('ddssssssi', 
+				$stmt->bind_param('ddsssi', 
 					$bunker["lat"], 
 					$bunker["lng"], 
-					$bunker["gewest"], 
-					$bunker["provincie"], 
 					$bunker["gemeente"], 
 					$bunker["deelgemeente"], 
 					$bunker["straat"], 
-					$bunker["postcode"], 
 					$bunker["bunker_id"]);
 				$stmt->execute();
 				$stmt->close();
 			}
 			$mysqli->close();
 		}
-		
-		return $result;		
 	}
 
 	function findAll() {
