@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Form x="0" y="0"
+			paddingBottom="0"
+			paddingLeft="0"
+			paddingRight="0"
+			paddingTop="0">
+			
+		<mx:FormItem label="Niet bekeken">
+			<mx:CheckBox/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Aanwezig">
+			<mx:CheckBox/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Type">
+			<mx:CheckBox label="Baksteen"/>
+			<mx:CheckBox label="Pannendak"/>
+			<mx:CheckBox label="'eitjes'-bepleistering"/>
+			<mx:CheckBox label="Beschildering"/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Haken voor netten">
+			<mx:CheckBox/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Opmerkingen">
+			<mx:TextArea width="320"/>
+		</mx:FormItem>
+
+	</mx:Form>
+
+</mx:Canvas>

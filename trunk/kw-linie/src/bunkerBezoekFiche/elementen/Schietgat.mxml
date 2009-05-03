@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Form x="0" y="0"
+			paddingBottom="0"
+			paddingLeft="0"
+			paddingRight="0"
+			paddingTop="0">
+			
+		<mx:FormItem label="Niet bekeken">
+			<mx:CheckBox/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Aanwezig">
+			<mx:CheckBox/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Toestand">
+			<mx:ComboBox></mx:ComboBox>
+		</mx:FormItem>
+
+		<mx:FormItem label="Schootsveld">
+			<mx:HBox width="100%">
+				<mx:TextInput width="64"/>
+				<mx:Label text="graden"/>
+			</mx:HBox>
+		</mx:FormItem>
+
+		<mx:FormItem label="Afsluitluik">
+			<mx:CheckBox label="Buitenzijde aanwezig"/>
+			<mx:CheckBox label="Bedieningsketting"/>
+			<mx:CheckBox label="Binnenzijde aanwezig"/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Affuit">
+			<mx:Form paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0">
+				<mx:FormItem label="Aanwezig">
+					<mx:CheckBox/>
+				</mx:FormItem>
+				<mx:FormItem label="Type">
+					<mx:ComboBox></mx:ComboBox>
+				</mx:FormItem>
+				<mx:FormItem label="Toestand">
+					<mx:ComboBox></mx:ComboBox>
+				</mx:FormItem>
+				<mx:FormItem label="Verankeringspunten">
+					<mx:CheckBox label="Aanwezig in vloer"/>
+				</mx:FormItem>
+				<mx:FormItem label="Nummer inscripties">
+					<mx:CheckBox label="Aanwezig"/>
+				</mx:FormItem>
+			</mx:Form>
+		</mx:FormItem>
+
+		<mx:FormItem label="Witte lijn">
+			<mx:CheckBox label="Aanwezig"/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Observatiesleuf">
+			<mx:ComboBox></mx:ComboBox>
+			<mx:CheckBox label="Luikje aanwezig"/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Haken petroleumlampen">
+			<mx:CheckBox label="Aanwezig"/>
+			<mx:TextInput width="64"/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Houten schapje">
+			<mx:CheckBox label="Aanwezig"/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Zitbankje">
+			<mx:CheckBox label="Aanwezig"/>
+		</mx:FormItem>
+
+		<mx:FormItem label="Metalen schap">
+			<mx:CheckBox label="Aanwezig"/>
+			<mx:HBox width="100%">
+				<mx:TextInput width="64"/>
+				<mx:Label text="Aantal haken"/>
+			</mx:HBox>
+		</mx:FormItem>
+
+		<mx:FormItem label="Opmerkingen">
+			<mx:TextArea width="320"/>
+		</mx:FormItem>
+
+	</mx:Form>
+
+</mx:Canvas>

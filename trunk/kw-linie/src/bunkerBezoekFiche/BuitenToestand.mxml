@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Form x="0" y="0">
+		<mx:FormItem label="Algemene toestand">
+			<mx:CheckBox id="cb_nb_algemeneToestandBuiten" label="Niet bekeken"/>
+			<mx:CheckBox label="Goed" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox label="Betonrot" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox label="Beschadiging daterend van gevechten" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox label="Beschadiging van latere datum" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox label="Natuurlijke beschadiging" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox id="cb_atb_andere" label="Andere" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:TextInput enabled="{!(cb_nb_algemeneToestandBuiten.selected || !cb_atb_andere.selected)}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Toegankelijk">
+			<mx:ComboBox id="cb_toegankelijk">
+				<mx:dataProvider>
+					<mx:ArrayCollection>
+						<mx:Object label="Niet bekeken" />
+						<mx:Object label="Ja" />
+						<mx:Object label="Neen" />
+					</mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+		</mx:FormItem>
+		<mx:FormItem label="Reden">
+			<mx:ComboBox enabled="{cb_toegankelijk.selectedItem.label == 'Neen'}">
+				<mx:dataProvider>
+					<mx:ArrayCollection>
+						<mx:Object label="Niet bekeken" />
+						<mx:Object label="Dichtgemetst" />
+						<mx:Object label="Gesloten deur" />
+						<mx:Object label="Versperring ingang door rommel" />
+					</mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+		</mx:FormItem>
+	</mx:Form>
+</mx:Canvas>

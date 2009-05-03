@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Form x="0" y="0"
+			paddingBottom="0"
+			paddingLeft="0"
+			paddingRight="0"
+			paddingTop="0">
+			
+		<mx:FormItem label="Niet bekeken">
+			<mx:CheckBox/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Toegang">
+			<mx:ComboBox id="cb_toegang">
+				<mx:dataProvider>
+					<mx:ArrayCollection>
+						<mx:Object label="Gewoon" />
+						<mx:Object label="Via put" />
+					</mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:CheckBox label="Ladder nog aanwezig" enabled="{cb_toegang.selectedItem.label == 'Via put'}"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Opmerkingen">
+			<mx:TextArea width="320"/>
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+</mx:Canvas>

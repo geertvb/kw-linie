@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:VBox bottom="10" top="0" right="10" left="10">
+		<mx:TileList height="100%" width="100%" rowCount="3" itemRenderer="FotoTile">
+			<mx:dataProvider>
+				<mx:Array>
+                    <mx:Object
+                    	omschrijving="Grondplan"
+                    	filename="grondplan.jpg"
+                    	size="320K"
+                    	width="320"
+                    	height="240"
+                    	type="jpg" />
+                    <mx:Object
+                    	omschrijving="Luchtfoto"
+                    	filename="areal.jpg"
+                    	size="423K"
+                    	width="1024"
+                    	height="768"
+                    	type="jpg" />
+                </mx:Array>
+			</mx:dataProvider>
+		</mx:TileList>
+		<mx:HBox width="100%" horizontalAlign="center">
+			<mx:Button label="Voeg toe"/>
+			<mx:Button label="Bekijk"/>
+			<mx:Button label="Verwijder"/>
+		</mx:HBox>
+	</mx:VBox>
+	
+</mx:Canvas>

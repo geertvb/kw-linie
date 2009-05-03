@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:elementen="bunkerBezoekFiche.elementen.*">
+
+	<mx:HBox x="10" y="10" width="100%" height="100%">
+	
+		<mx:List id="list_elementen" 
+				height="100%" 
+				selectedIndex="0">
+				
+			<mx:dataProvider>
+				<mx:ArrayCollection>
+					<mx:Object label="Ingang" />
+					<mx:Object label="Buitendeur" />
+					<mx:Object label="Binnendeur" />
+					<mx:Object label="Afsluitluik pistoolkoker" />
+					<mx:Object label="Nooduitgang" />
+					<mx:Object label="Dakplaten" />
+					<mx:Object label="Camouflage" />
+					<mx:Object label="Rooster aan de ingang" />
+					<mx:Object label="Schietgat 1" />
+					<mx:Object label="Schietgat 2" />
+					<mx:Object label="Schietgat 3" />
+					<mx:Object label="Afsluitluik granaatwerper" />
+					<mx:Object label="Verluchtingspijpen" />
+				</mx:ArrayCollection>
+			</mx:dataProvider>
+			
+		</mx:List>
+		
+		<mx:LinkBar />
+		
+		<mx:ViewStack id="viewstack1" 
+				width="100%" height="100%"
+				selectedIndex="{list_elementen.selectedIndex}">
+				
+			<elementen:Ingang label="Ingang" />
+			<elementen:Buitendeur label="Buitendeur" />
+			<elementen:Binnendeur label="Binnendeur" />
+			<elementen:PistoolkokerAfsluitluik label="Afsluitluik pistoolkoker" />
+			<elementen:Nooduitgang label="Nooduitgang" />
+			<elementen:Dakplaten label="Dakplaten" />
+			<elementen:Camouflage label="Camouflage" />
+			<elementen:IngangRooster label="Rooster aan de ingang" />
+			<elementen:Schietgat label="Schietgat 1" />
+			<elementen:Schietgat label="Schietgat 2" />
+			<elementen:Schietgat label="Schietgat 3" />
+			<elementen:GranaatwerperAfsluitluik label="Afsluitluik granaatwerper" />
+			<elementen:Verluchtingspijpen label="Verluchtingspijpen" />
+			
+		</mx:ViewStack>
+		
+	</mx:HBox>
+	
+</mx:Canvas>
