@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Form x="0" y="0" height="100%">
+		<mx:FormItem label="Voorhanden">
+			<mx:CheckBox 
+				id="cb_availGrondplan" 
+				selected="{data.vh_grondplan}" 
+				label="Grondplan" />
+			<mx:CheckBox 
+				id="cb_availOnteigeningsdossier" 
+				selected="{data.vh_onteigeningsdossier}" 
+				label="Onteigeningsdossier"/>
+			<mx:CheckBox 
+				id="cb_availLastenboek" 
+				selected="{data.vh_lastenboek}" 
+				label="Lastenboek"/>
+			<mx:CheckBox 
+				id="cb_availMilitairBunkerdossier" 
+				selected="{data.vh_militair_bunkerdossier}" 
+				label="Militair bunkerdossier"/>
+			<mx:CheckBox 
+				id="cb_availOvergave" 
+				selected="{data.vh_overgave_aan_domeinen}" 
+				label="Overgave landsverdediging aan domeinen"/>
+			<mx:CheckBox 
+				id="cb_availVerkoopDomeinen" 
+				selected="{data.vh_verkoop_door_domeinen}" 
+				label="Verkoop door domeinen"/>
+			<mx:CheckBox 
+				id="cb_availOudeFotos" 
+				selected="{data.vh_oude_fotos}" 
+				label="Oude fotos"/>
+			<mx:CheckBox 
+				id="cb_availAndere" 
+				selected="{data.vh_andere}" 
+				label="Andere (omschrijving + bron)" />
+			<mx:TextArea
+				id="ti_availAndereTekst"
+				enabled="{cb_availAndere.selected}"
+				text="{data.vh_andere_tekst}" width="100%"/>
+		</mx:FormItem>
+	</mx:Form>
+	<mx:VBox width="328" bottom="10" right="10" top="0">
+		<mx:List width="100%" height="100%" itemRenderer="DocumentRenderer">
+			<mx:dataProvider>
+				<mx:Array>
+                    <mx:Object
+                    	omschrijving="Grondplan"
+                    	filename="grondplan.pdf"
+                    	size="320K"
+                    	icon="icon/pdf.gif" />
+                    <mx:Object
+                    	omschrijving="Statistieken"
+                    	filename="stat.xls"
+                    	size="47K"
+                    	icon="icon/xls.gif" />
+                </mx:Array>
+			</mx:dataProvider>
+		</mx:List>
+		<mx:HBox width="100%" horizontalAlign="center">
+			<mx:Button label="Voeg toe"/>
+			<mx:Button label="Bekijk"/>
+			<mx:Button label="Verwijder"/>
+		</mx:HBox>
+	</mx:VBox>
+
+</mx:Canvas>
