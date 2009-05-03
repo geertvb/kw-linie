@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Form x="0" y="0">
+		<mx:FormItem label="Datum">
+			<mx:DateField id="df_datum"/>
+		</mx:FormItem>
+		<mx:FormItem label="Invuller" direction="horizontal">
+			<mx:TextInput/>
+			<mx:Button label="..."/>
+		</mx:FormItem>
+		<mx:FormItem label="Bezoekers">
+			<mx:HBox>
+				<mx:List></mx:List>
+				<mx:VBox>
+					<mx:Button label="+"/>
+					<mx:Button label="-"/>
+				</mx:VBox>
+			</mx:HBox>
+		</mx:FormItem>
+		<mx:FormItem label="Aanwezigheid">
+			<mx:ComboBox id="cb_aanwezigheid">
+				<mx:dataProvider>
+					<mx:ArrayCollection>
+						<mx:Object label="Ja" />
+						<mx:Object label="Niet zeker" />
+						<mx:Object label="Neen" />
+					</mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+		</mx:FormItem>
+		<mx:FormItem label="Reden" enabled="{cb_aanwezigheid.selectedItem.label == 'Neen'}">
+			<mx:ComboBox id="cb_redenNietAanwezig">
+				<mx:dataProvider>
+					<mx:ArrayCollection>
+						<mx:Object label="Afgebroken" />
+						<mx:Object label="Verzonken" />
+						<mx:Object label="Andere" />
+					</mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+		</mx:FormItem>
+		<mx:FormItem>
+			<mx:TextInput enabled="{!(cb_redenNietAanwezig.selectedItem.label != 'Andere' || cb_aanwezigheid.selectedItem.label != 'Neen')}"/>
+		</mx:FormItem>
+	</mx:Form>
+</mx:Canvas>
