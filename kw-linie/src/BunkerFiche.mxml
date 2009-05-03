@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
-	xmlns:hc="com.hillelcoren.components.*"
 	creationComplete="creationComplete();"
 	backgroundColor="#637449" 
 	themeColor="#637449" 
 	backgroundGradientColors="[#637449,#637449]" 
-	xmlns:xyz="mx.rpc.*" xmlns:local="*">
+	xmlns:xyz="mx.rpc.*" xmlns:local="*" xmlns:bunkerFiche="bunkerFiche.*">
 
 	<mx:Script>
 		<![CDATA[
+			import util.BindingUtils;
+			import mx.controls.ComboBox;
 			import com.google.maps.LatLng;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
@@ -27,8 +28,6 @@
 			
 			public function creationComplete() : void {
 				bunkerFindAllResponder.token = bunkerService.findAll();
-				gemeenteResponder.token = bunkerService.findGemeentes();
-				deelgemeenteResponder.token = bunkerService.findDeelgemeentes();
 				googleMapsKey = GoogleMapKeys.getKey(application.url);
 			}
 			
@@ -40,77 +39,37 @@
 				Alert.show(event.result.toString());
 			}
 			
-			public function isEmpty(ti: TextInput) : Boolean {
-				return (ti.text == null) || (ti.text == "");
-			}
-			
 			public function gemeenteLabelFunction(item : Object) : String {
 				return item.naam + " (" + item.postcode + ")";
 			}				
-			
-			public function textinputToString(ti: TextInput) : Object {
-				if (isEmpty(ti)) {
-					return null;
-				} else {
-					return ti.text;
-				}
-			}
-			
-			public function textinputToInteger(ti: TextInput) : Object {
-				if (isEmpty(ti)) {
-					return null;
-				} else {
-					return int(ti.text);
-				}
-			}
-			
-			public function textinputToFloat(ti: TextInput) : Object {
-				if (isEmpty(ti)) {
-					return null;
-				} else {
-					return Number(ti.text);
-				}
-			}
-			
-			public function checkboxToBoolean(cb: CheckBox) : Object {
-				if (cb.enabled) {
-					return cb.selected;
-				} else {
-					return null;
-				}
-			}
-			
-			public function comboboxToString(cb: ComboBox) : Object {
-				if (cb.enabled && cb.selectedIndex>=0) {
-					return cb.selectedLabel;
-				} else {
-					return null;
-				}
-			}
 			
 			public function bunkerGridChange(event: Event) : void {
 				bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
 			}
 			
+			public function bindLocatie(bunker: Object, locatie: Locatie) {
+				bunker.gemeente = BindingUtils.comboboxToString(locatie.cb_gemeente);
+				bunker.deelgemeente = BindingUtils.comboboxToString(locatie.cb_deelgemeente);
+				bunker.straat = BindingUtils.textinputToString(locatie.ti_straat);
+				bunker.toponiem = BindingUtils.textinputToString(locatie.ti_toponiem);
+				bunker.x = BindingUtils.textinputToInteger(locatie.ti_x);
+				bunker.y = BindingUtils.textinputToInteger(locatie.ti_y);
+				bunker.lat = BindingUtils.textinputToFloat(locatie.ti_lat);
+				bunker.lng = BindingUtils.textinputToFloat(locatie.ti_lng);
+				bunker.kadaster = BindingUtils.textinputToString(locatie.ti_kadaster);
+			}
+			
 			public function bind() : Object {
 				var bunker : Object = new Object();
 				
-				bunker.bunker_id = textinputToInteger(ti_bunker_id);
+				bunker.bunker_id = BindingUtils.textinputToInteger(ti_bunker_id);
 				
-				bunker.gemeente = comboboxToString(cb_gemeente);
-				bunker.deelgemeente = comboboxToString(cb_deelgemeente);
-				bunker.straat = textinputToString(ti_straat);
-				bunker.toponiem = textinputToString(ti_toponiem);
-				bunker.x = textinputToInteger(ti_x);
-				bunker.y = textinputToInteger(ti_y);
-				bunker.lat = textinputToFloat(ti_lat);
-				bunker.lng = textinputToFloat(ti_lng);
-				bunker.kadaster = textinputToString(ti_kadaster);
+				bindLocatie(bunker, locatie);
 				
-				bunker.availGrondplan = checkboxToBoolean(cb_availGrondplan);
-				bunker.availOnteigeningsdossier = checkboxToBoolean(cb_availOnteigeningsdossier);
-				bunker.availLastenboek = checkboxToBoolean(cb_availLastenboek);
-				bunker.availMilitairBunkerdossier = checkboxToBoolean(cb_availMilitairBunkerdossier);
+				bunker.availGrondplan = BindingUtils.checkboxToBoolean(cb_availGrondplan);
+				bunker.availOnteigeningsdossier = BindingUtils.checkboxToBoolean(cb_availOnteigeningsdossier);
+				bunker.availLastenboek = BindingUtils.checkboxToBoolean(cb_availLastenboek);
+				bunker.availMilitairBunkerdossier = BindingUtils.checkboxToBoolean(cb_availMilitairBunkerdossier);
 				
 				return bunker;
 			}
@@ -120,14 +79,11 @@
 	
 	<mx:Object id="_bunker" />
 
-	<xyz:CallResponder id="gemeenteResponder" />
-
-	<xyz:CallResponder id="deelgemeenteResponder" />
-
 	<xyz:CallResponder id="bunkerResponder">
 		<xyz:result>
 			<![CDATA[
 			_bunker = event.result;
+			/*
 			var i: int = 0;
 			for each(var g: Object in gemeentes) {
 				if (g.gemeente == _bunker.gemeente) {
@@ -144,6 +100,7 @@
 				}
 				i++;
 			}
+			*/
 			]]>
 		</xyz:result>
 	</xyz:CallResponder>
@@ -158,26 +115,6 @@
 			fault="onFault(event)" 
 			result="onResult(event)" />
     </mx:RemoteObject>
-
-    <mx:NumberValidator 
-        source="{ti_x}"
-        property="text" 
-        minValue="100000"
-        maxValue="300000"
-        required="false"
-        domain="int"/>
-
-    <mx:NumberValidator 
-        source="{ti_y}"
-        property="text" 
-        minValue="100000"
-        maxValue="300000"
-        required="false"
-        domain="int"/>
-        
-   <mx:ArrayCollection id="gemeentes" source="{gemeenteResponder.lastResult}" />
-
-   <mx:ArrayCollection id="deelgemeentes" source="{deelgemeenteResponder.lastResult}" />
 
 	<mx:VBox width="718">
 		<mx:DataGrid id="bunkerGrid"
@@ -205,63 +142,7 @@
 			</mx:FormItem>
 		</mx:HBox>
 		<mx:TabNavigator width="100%" height="360" creationPolicy="all">
-			<mx:Canvas label="Locatie" width="100%" height="100%">
-				<mx:Form x="0" y="0" width="100%" height="100%">
-					<mx:FormItem label="Gemeente">
-						<mx:ComboBox id="cb_gemeente"
-							selectedIndex="{gemeenteIndex}" 
-							dataProvider="{gemeentes}" 
-							labelField="gemeente"  width="200"/>
-   					</mx:FormItem>
-					<mx:FormItem label="Deelgemeente">
-						<mx:ComboBox id="cb_deelgemeente"
-							selectedIndex="{deelgemeenteIndex}" 
-							dataProvider="{deelgemeentes}" 
-							labelField="deelgemeente"  width="200"/>
-					</mx:FormItem>
-					<mx:FormItem label="Toponiem">
-						<mx:TextInput id="ti_toponiem" text="{_bunker.toponiem}" width="320"/>
-					</mx:FormItem>
-					<mx:FormItem label="Straat + nr" direction="horizontal">
-						<mx:TextInput id="ti_straat" text="{_bunker.straat}" width="320"/>
-					</mx:FormItem>
-					<mx:FormItem label="Stafkaart">
-						<mx:TextInput id="ti_stafkaart" text="{_bunker.stafkaart}" />
-					</mx:FormItem>
-					<mx:FormItem label="Lambert 72 x" direction="horizontal">
-						<mx:TextInput id="ti_x" width="128" text="{_bunker.x}" />
-						<mx:FormItem label="Lambert 72 y" labelWidth="100">
-							<mx:TextInput id="ti_y" width="128" text="{_bunker.y}" />
-						</mx:FormItem>
-					</mx:FormItem>
-					<mx:FormItem label="Google lat" direction="horizontal">
-						<mx:TextInput id="ti_lat" width="128" text="{_bunker.lat}" />
-						<mx:FormItem label="Google lng" labelWidth="100">
-							<mx:TextInput id="ti_lng" width="128" text="{_bunker.lng}" />
-						</mx:FormItem>
-						<mx:Button label="kaart">
-							<mx:click>
-								<![CDATA[
-								var mapPopup: MapPopup = new MapPopup();
-								mapPopup.googleMapsKey = googleMapsKey;
-									mapPopup.latLng = new LatLng(
-									textinputToFloat(ti_lat) as Number,
-									textinputToFloat(ti_lng) as Number);
-								mapPopup.addEventListener("ok",function () {
-									ti_lat.text = mapPopup.latLng.lat().toString();
-									ti_lng.text = mapPopup.latLng.lng().toString();
-								});
-								PopUpManager.addPopUp(mapPopup,this,true);
-								PopUpManager.centerPopUp(mapPopup);
-												]]>
-							</mx:click>
-						</mx:Button>
-					</mx:FormItem>
-					<mx:FormItem label="Kadastrale gegevens">
-						<mx:TextInput id="ti_kadaster" text="{_bunker.kadaster}"  width="320"/>
-					</mx:FormItem>
-				</mx:Form>
-			</mx:Canvas>
+			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
 			<mx:Canvas label="Documenten" width="100%" height="100%">
 				<mx:Form x="0" y="0" height="100%">
 					<mx:FormItem label="Voorhanden">
