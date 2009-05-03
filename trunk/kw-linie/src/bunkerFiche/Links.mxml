@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:VBox x="10" width="480" bottom="10" top="0">
+		<mx:DataGrid height="100%" width="100%">
+			<mx:dataProvider>
+				<mx:Array>
+	                <mx:Object
+	                	omschrijving="fansite"
+	                	url="http://www.bunkerfans.be" />
+	            </mx:Array>
+			</mx:dataProvider>
+		</mx:DataGrid>
+		<mx:HBox width="100%" horizontalAlign="center">
+			<mx:Button label="Voeg toe"/>
+			<mx:Button label="Bekijk"/>
+			<mx:Button label="Verwijder"/>
+		</mx:HBox>
+	</mx:VBox>
+
+</mx:Canvas>

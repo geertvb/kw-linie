@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:VBox x="10" width="480" bottom="10" top="0">
+		<mx:List height="100%" width="100%" itemRenderer="ContactRenderer">
+			<mx:dataProvider>
+				<mx:Array>
+                    <mx:Object
+                    	naam="Van Bastelaere"
+                    	voornaam="Geert"
+                    	straat="Vlinderlaan"
+                    	nummer="6 bus 2"
+                    	postcode="3000"
+                    	gemeente="Leuven"
+                    	telefoon="016 407 022"
+                    	gsm="0495 271 454"
+                    	email="geert@j-devit.be"
+                    	affiliatie=""
+                    	medewerking="prospectie, getuigenis"
+                    	opmerkingen="" />
+                    <mx:Object
+                    	naam="Smeyers"
+                    	voornaam="Evi"
+                    	telefoon="016 407 022"
+                    	gsm="0496 239 954"
+                    	email="evi.smeyers@telenet.be"
+                    	affiliatie=""
+                    	medewerking="prospectie, getuigenis"
+                    	opmerkingen="" />
+                </mx:Array>
+			</mx:dataProvider>
+		</mx:List>
+		<mx:HBox width="100%" horizontalAlign="center">
+			<mx:Button label="Voeg toe"/>
+			<mx:Button label="Bekijk"/>
+			<mx:Button label="Verwijder"/>
+		</mx:HBox>
+	</mx:VBox>
+
+</mx:Canvas>

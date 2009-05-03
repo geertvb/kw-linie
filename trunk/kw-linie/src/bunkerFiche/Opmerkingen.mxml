@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:TextArea right="10" bottom="10" left="10" top="36"/>
+	<mx:Label x="10" y="10" text="Vrije opmerking"/>
+
+</mx:Canvas>

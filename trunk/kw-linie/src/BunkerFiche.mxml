@@ -4,31 +4,23 @@
 	backgroundColor="#637449" 
 	themeColor="#637449" 
 	backgroundGradientColors="[#637449,#637449]" 
-	xmlns:xyz="mx.rpc.*" xmlns:local="*" xmlns:bunkerFiche="bunkerFiche.*">
+	xmlns:xyz="mx.rpc.*"
+	xmlns:local="*"
+	xmlns:bunkerFiche="bunkerFiche.*">
 
 	<mx:Script>
 		<![CDATA[
+			import bunkerFiche.Documenten;
 			import util.BindingUtils;
 			import mx.controls.ComboBox;
-			import com.google.maps.LatLng;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.controls.Alert;
-			import mx.core.IFlexDisplayObject;
-			import mx.managers.PopUpManager;
-			
-			[Bindable]
-			public var gemeenteIndex: int;
-			[Bindable]
-			public var deelgemeenteIndex: int;
-			
-			[Bindable]
-			public var googleMapsKey: String;
 			
 			public function creationComplete() : void {
 				bunkerFindAllResponder.token = bunkerService.findAll();
-				googleMapsKey = GoogleMapKeys.getKey(application.url);
+				//googleMapsKey = GoogleMapKeys.getKey(application.url);
 			}
 			
 			public function onFault(event: FaultEvent) : void {
@@ -39,15 +31,13 @@
 				Alert.show(event.result.toString());
 			}
 			
-			public function gemeenteLabelFunction(item : Object) : String {
-				return item.naam + " (" + item.postcode + ")";
-			}				
-			
 			public function bunkerGridChange(event: Event) : void {
-				bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
+				if (bunkerGrid.selectedItem != null) {
+					bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
+				}
 			}
 			
-			public function bindLocatie(bunker: Object, locatie: Locatie) {
+			public function bindLocatie(bunker: Object, locatie: Locatie) : void {
 				bunker.gemeente = BindingUtils.comboboxToString(locatie.cb_gemeente);
 				bunker.deelgemeente = BindingUtils.comboboxToString(locatie.cb_deelgemeente);
 				bunker.straat = BindingUtils.textinputToString(locatie.ti_straat);
@@ -59,17 +49,20 @@
 				bunker.kadaster = BindingUtils.textinputToString(locatie.ti_kadaster);
 			}
 			
+			public function bindDocumenten(bunker: Object, documenten: Documenten) : void {
+				bunker.availGrondplan = BindingUtils.checkboxToBoolean(documenten.cb_availGrondplan);
+				bunker.availOnteigeningsdossier = BindingUtils.checkboxToBoolean(documenten.cb_availOnteigeningsdossier);
+				bunker.availLastenboek = BindingUtils.checkboxToBoolean(documenten.cb_availLastenboek);
+				bunker.availMilitairBunkerdossier = BindingUtils.checkboxToBoolean(documenten.cb_availMilitairBunkerdossier);
+			}
+			
 			public function bind() : Object {
 				var bunker : Object = new Object();
 				
 				bunker.bunker_id = BindingUtils.textinputToInteger(ti_bunker_id);
 				
 				bindLocatie(bunker, locatie);
-				
-				bunker.availGrondplan = BindingUtils.checkboxToBoolean(cb_availGrondplan);
-				bunker.availOnteigeningsdossier = BindingUtils.checkboxToBoolean(cb_availOnteigeningsdossier);
-				bunker.availLastenboek = BindingUtils.checkboxToBoolean(cb_availLastenboek);
-				bunker.availMilitairBunkerdossier = BindingUtils.checkboxToBoolean(cb_availMilitairBunkerdossier);
+				bindDocumenten(bunker, documenten);
 				
 				return bunker;
 			}
@@ -79,31 +72,7 @@
 	
 	<mx:Object id="_bunker" />
 
-	<xyz:CallResponder id="bunkerResponder">
-		<xyz:result>
-			<![CDATA[
-			_bunker = event.result;
-			/*
-			var i: int = 0;
-			for each(var g: Object in gemeentes) {
-				if (g.gemeente == _bunker.gemeente) {
-					gemeenteIndex = i;
-					break;
-				}
-				i++;
-			}
-			var i: int = 0;
-			for each(var d: Object in deelgemeentes) {
-				if (d.deelgemeente == _bunker.deelgemeente) {
-					deelgemeenteIndex = i;
-					break;
-				}
-				i++;
-			}
-			*/
-			]]>
-		</xyz:result>
-	</xyz:CallResponder>
+	<xyz:CallResponder id="bunkerResponder" result="_bunker = event.result" />
 	
 	<xyz:CallResponder id="bunkerFindAllResponder" />
 	
@@ -120,6 +89,8 @@
 		<mx:DataGrid id="bunkerGrid"
 			dataProvider="{bunkerFindAllResponder.lastResult}" 
 			width="100%"
+			selectedIndex="0"
+			valueCommit="bunkerGridChange(event)"
 			change="bunkerGridChange(event)">
 			<mx:columns>
 				<mx:DataGridColumn dataField="bunker_id" headerText="ID" width="40" />
@@ -143,191 +114,15 @@
 		</mx:HBox>
 		<mx:TabNavigator width="100%" height="360" creationPolicy="all">
 			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
-			<mx:Canvas label="Documenten" width="100%" height="100%">
-				<mx:Form x="0" y="0" height="100%">
-					<mx:FormItem label="Voorhanden">
-						<mx:CheckBox 
-							id="cb_availGrondplan" 
-							selected="{_bunker.vh_grondplan}" 
-							label="Grondplan" />
-						<mx:CheckBox 
-							id="cb_availOnteigeningsdossier" 
-							selected="{_bunker.vh_onteigeningsdossier}" 
-							label="Onteigeningsdossier"/>
-						<mx:CheckBox 
-							id="cb_availLastenboek" 
-							selected="{_bunker.vh_lastenboek}" 
-							label="Lastenboek"/>
-						<mx:CheckBox 
-							id="cb_availMilitairBunkerdossier" 
-							selected="{_bunker.vh_militair_bunkerdossier}" 
-							label="Militair bunkerdossier"/>
-						<mx:CheckBox 
-							id="cb_availOvergave" 
-							selected="{_bunker.vh_overgave_aan_domeinen}" 
-							label="Overgave landsverdediging aan domeinen"/>
-						<mx:CheckBox 
-							id="cb_availVerkoopDomeinen" 
-							selected="{_bunker.vh_verkoop_door_domeinen}" 
-							label="Verkoop door domeinen"/>
-						<mx:CheckBox 
-							id="cb_availOudeFotos" 
-							selected="{_bunker.vh_oude_fotos}" 
-							label="Oude fotos"/>
-						<mx:CheckBox 
-							id="cb_availAndere" 
-							selected="{_bunker.vh_andere}" 
-							label="Andere (omschrijving + bron)" />
-						<mx:TextArea
-							id="ti_availAndereTekst"
-							enabled="{cb_availAndere.selected}"
-							text="{_bunker.vh_andere_tekst}" width="100%"/>
-					</mx:FormItem>
-				</mx:Form>
-				<mx:VBox width="328" bottom="10" right="10" top="0">
-					<mx:List width="100%" height="100%" itemRenderer="DocumentRenderer">
-						<mx:dataProvider>
-							<mx:Array>
-			                    <mx:Object
-			                    	omschrijving="Grondplan"
-			                    	filename="grondplan.pdf"
-			                    	size="320K"
-			                    	icon="icon/pdf.gif" />
-			                    <mx:Object
-			                    	omschrijving="Statistieken"
-			                    	filename="stat.xls"
-			                    	size="47K"
-			                    	icon="icon/xls.gif" />
-			                </mx:Array>
-						</mx:dataProvider>
-					</mx:List>
-					<mx:HBox width="100%" horizontalAlign="center">
-						<mx:Button label="Voeg toe"/>
-						<mx:Button label="Bekijk"/>
-						<mx:Button label="Verwijder"/>
-					</mx:HBox>
-				</mx:VBox>
-			</mx:Canvas>
-			<mx:Canvas label="Fotos" width="100%" height="100%">
-				<mx:VBox bottom="10" top="0" right="10" left="10">
-					<mx:TileList height="100%" width="100%" rowCount="2" itemRenderer="FotoTile">
-						<mx:dataProvider>
-							<mx:Array>
-			                    <mx:Object
-			                    	omschrijving="Grondplan"
-			                    	filename="grondplan.jpg"
-			                    	size="320K"
-			                    	width="320"
-			                    	height="240"
-			                    	type="jpg" />
-			                    <mx:Object
-			                    	omschrijving="Luchtfoto"
-			                    	filename="areal.jpg"
-			                    	size="423K"
-			                    	width="1024"
-			                    	height="768"
-			                    	type="jpg" />
-			                </mx:Array>
-						</mx:dataProvider>
-					</mx:TileList>
-					<mx:HBox width="100%" horizontalAlign="center">
-						<mx:Button label="Voeg toe"/>
-						<mx:Button label="Bekijk"/>
-						<mx:Button label="Verwijder"/>
-					</mx:HBox>
-				</mx:VBox>
-			</mx:Canvas>
-			<mx:Canvas label="Contacten" width="100%" height="100%">
-				<mx:VBox x="10" width="480" bottom="10" top="0">
-					<mx:List height="100%" width="100%" itemRenderer="ContactRenderer">
-						<mx:dataProvider>
-							<mx:Array>
-			                    <mx:Object
-			                    	naam="Van Bastelaere"
-			                    	voornaam="Geert"
-			                    	straat="Vlinderlaan"
-			                    	nummer="6 bus 2"
-			                    	postcode="3000"
-			                    	gemeente="Leuven"
-			                    	telefoon="016 407 022"
-			                    	gsm="0495 271 454"
-			                    	email="geert@j-devit.be"
-			                    	affiliatie=""
-			                    	medewerking="prospectie, getuigenis"
-			                    	opmerkingen="" />
-			                    <mx:Object
-			                    	naam="Smeyers"
-			                    	voornaam="Evi"
-			                    	telefoon="016 407 022"
-			                    	gsm="0496 239 954"
-			                    	email="evi.smeyers@telenet.be"
-			                    	affiliatie=""
-			                    	medewerking="prospectie, getuigenis"
-			                    	opmerkingen="" />
-			                </mx:Array>
-						</mx:dataProvider>
-					</mx:List>
-					<mx:HBox width="100%" horizontalAlign="center">
-						<mx:Button label="Voeg toe"/>
-						<mx:Button label="Bekijk"/>
-						<mx:Button label="Verwijder"/>
-					</mx:HBox>
-				</mx:VBox>
-			</mx:Canvas>
-			<mx:Canvas label="Links" width="100%" height="100%">
-					<mx:VBox x="10" width="480" bottom="10" top="0">
-						<mx:DataGrid height="100%" width="100%">
-							<mx:dataProvider>
-								<mx:Array>
-					                <mx:Object
-					                	omschrijving="fansite"
-					                	url="http://www.bunkerfans.be" />
-					            </mx:Array>
-							</mx:dataProvider>
-						</mx:DataGrid>
-						<mx:HBox width="100%" horizontalAlign="center">
-							<mx:Button label="Voeg toe"/>
-							<mx:Button label="Bekijk"/>
-							<mx:Button label="Verwijder"/>
-						</mx:HBox>
-					</mx:VBox>
-			</mx:Canvas>
-			<mx:Canvas label="Bescherming" width="100%" height="100%">
-				<mx:Form x="0" y="0" width="100%" height="100%">
-					<mx:FormItem label="Volgens" width="67%">
-						<mx:CheckBox label="Gewestplan"/>
-						<mx:CheckBox label="Landschapsatlas (relictzone/ankerplaats)"/>
-						<mx:CheckBox label="VEN/IVON"/>
-						<mx:CheckBox label="Beschermd (monument/stad-dorp/landscahp)"/>
-						<mx:CheckBox label="RUP"/>
-						<mx:CheckBox label="Andere (omschrijving + bron)" />
-						<mx:TextArea width="100%"/>
-					</mx:FormItem>
-				</mx:Form>
-			</mx:Canvas>
-			<mx:Canvas label="Opmerkingen" width="100%" height="100%">
-				<mx:TextArea right="10" bottom="10" left="10" top="36"/>
-				<mx:Label x="10" y="10" text="Vrije opmerking"/>
-			</mx:Canvas>
-			<mx:Canvas label="Bezoeken" width="100%" height="100%">
-				<mx:VBox x="10" width="480" bottom="10" top="0">
-					<mx:DataGrid height="100%" width="100%">
-						<mx:dataProvider>
-							<mx:Array>
-					             <mx:Object
-					             	datum="13/03/2009"
-					             	bezoekers="Geert Van Bastelaere, Evi Smeyers" />
-					         </mx:Array>
-						</mx:dataProvider>
-					</mx:DataGrid>
-					<mx:HBox width="100%" horizontalAlign="center">
-						<mx:Button label="Voeg toe"/>
-						<mx:Button label="Bekijk"/>
-						<mx:Button label="Verwijder"/>
-					</mx:HBox>
-				</mx:VBox>
-			</mx:Canvas>
+			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" />
+			<bunkerFiche:Fotos label="Fotos" data="{_bunker}" />
+			<bunkerFiche:Contacten label="Contacten" data="{_bunker}" />
+			<bunkerFiche:Links label="Links" data="{_bunker}" />
+			<bunkerFiche:Bescherming label="Bescherming" data="{_bunker}" />
+			<bunkerFiche:Opmerkingen label="Opmerkingen" data="{_bunker}" />
+			<bunkerFiche:Bezoeken label="Bezoeken" data="{_bunker}" />
 		</mx:TabNavigator>
-	<mx:Button label="save" click="bunkerService.save(bind());"/>
+		<mx:Button label="save" click="bunkerService.save(bind());"/>
 	</mx:VBox>
+	
 </mx:Application>
