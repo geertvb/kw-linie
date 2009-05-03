@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="creationComplete()"
+	xmlns:rpc="mx.rpc.*"
+	xmlns:components="components.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.google.maps.LatLng;
+			import util.BindingUtils;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+		
+			public function creationComplete() : void {
+				gemeenteResponder.token = bunkerService.findGemeentes();
+				deelgemeenteResponder.token = bunkerService.findDeelgemeentes();
+			}
+
+			public function kaart_click() : void {			
+				var mapPopup: MapPopup = new MapPopup();
+				mapPopup.latLng = new LatLng(
+					BindingUtils.textinputToFloat(ti_lat) as Number,
+					BindingUtils.textinputToFloat(ti_lng) as Number);
+				mapPopup.addEventListener("ok", function () : void {
+					ti_lat.text = mapPopup.latLng.lat().toString();
+					ti_lng.text = mapPopup.latLng.lng().toString();
+				});
+				PopUpManager.addPopUp(mapPopup,this,true);
+				PopUpManager.centerPopUp(mapPopup);
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:RemoteObject id="bunkerService" source="kwl.BunkerService" destination="amfphp" />
+    
+	<rpc:CallResponder id="gemeenteResponder" />
+
+	<rpc:CallResponder id="deelgemeenteResponder" />
+
+    <mx:ArrayCollection id="gemeentes" source="{gemeenteResponder.lastResult}" />
+
+    <mx:ArrayCollection id="deelgemeentes" source="{deelgemeenteResponder.lastResult}" />
+
+    <mx:NumberValidator 
+        source="{ti_x}"
+        property="text" 
+        minValue="100000"
+        maxValue="300000"
+        required="false"
+        domain="int"/>
+
+    <mx:NumberValidator 
+        source="{ti_y}"
+        property="text" 
+        minValue="100000"
+        maxValue="300000"
+        required="false"
+        domain="int"/>
+
+	<mx:Form x="0" y="0" width="100%" height="100%">
+	
+		<mx:FormItem label="Gemeente">
+			<components:ComboBoxEx id="cb_gemeente"
+				dataProvider="{gemeentes}" 
+				labelField="gemeente"
+				valueField="gemeente"
+				selectedValue="{data.gemeente}"
+				width="200"/>
+   		</mx:FormItem>
+   		
+		<mx:FormItem label="Deelgemeente">
+			<components:ComboBoxEx id="cb_deelgemeente"
+				dataProvider="{deelgemeentes}" 
+				labelField="deelgemeente"
+				valueField="deelgemeente"
+				selectedValue="{data.deelgemeente}"
+				width="200"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Toponiem">
+			<mx:TextInput id="ti_toponiem" text="{data.toponiem}" width="320"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Straat + nr" direction="horizontal">
+			<mx:TextInput id="ti_straat" text="{data.straat}" width="320"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Stafkaart">
+			<mx:TextInput id="ti_stafkaart" text="{data.stafkaart}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Lambert 72 x" direction="horizontal">
+			<mx:TextInput id="ti_x" width="128" text="{data.x}" />
+			<mx:FormItem label="Lambert 72 y" labelWidth="100">
+				<mx:TextInput id="ti_y" width="128" text="{data.y}" />
+			</mx:FormItem>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Google lat" direction="horizontal">
+			<mx:TextInput id="ti_lat" width="128" text="{data.lat}" />
+			<mx:FormItem label="Google lng" labelWidth="100">
+				<mx:TextInput id="ti_lng" width="128" text="{data.lng}" />
+			</mx:FormItem>
+			<mx:Button label="kaart" click="kaart_click()" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Kadastrale gegevens">
+			<mx:TextInput id="ti_kadaster" text="{data.kadaster}"  width="320"/>
+		</mx:FormItem>
+		
+	</mx:Form>
+
+</mx:Canvas>

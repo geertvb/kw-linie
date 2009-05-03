@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:maps="com.google.maps.*" title="Kaart">
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:maps="com.google.maps.*"
+	initialize="initMapPopup()"
+	title="Kaart">
+
 	<mx:Script>
 		<![CDATA[
 			import com.google.maps.MapMouseEvent;
@@ -20,6 +25,10 @@
 			public var latLng: LatLng;
 			
 			private var marker: Marker;
+			
+			private function initMapPopup() : void {
+				googleMapsKey = "ABQIAAAARHlxm1tnIyh53Qky1yRvaxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRSxc4qL8cIlXY1g_19AWODs4-61Q";
+			}
 			
 			private function dropped(event: Event) : void {
 				latLng = marker.getLatLng();
