@@ -2,6 +2,7 @@ package util
 {
 	import mx.controls.CheckBox;
 	import mx.controls.ComboBox;
+	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	
 
@@ -11,8 +12,20 @@ package util
 			return (ti.text == null) || (ti.text == "");
 		}
 		
+		public static function isEmptyTextArea(ti: TextArea) : Boolean {
+			return (ti.text == null) || (ti.text == "");
+		}
+		
 		public static function textinputToString(ti: TextInput) : Object {
 			if (isEmpty(ti)) {
+				return null;
+			} else {
+				return ti.text;
+			}
+		}
+		
+		public static function textAreaToString(ti: TextArea) : Object {
+			if (isEmptyTextArea(ti)) {
 				return null;
 			} else {
 				return ti.text;

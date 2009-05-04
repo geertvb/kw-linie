@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" title="Upload File">
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
 			
-			public var fileReference : FileReference;
+			public var fileReference : FileReference = new FileReference();
+			public var request:URLRequest;
+
+			private function removeMe():void {
+                PopUpManager.removePopUp(this);
+            }
 
 			public function onUploadProgress(event : ProgressEvent) : void {
 				progressBar.setProgress(event.bytesLoaded, event.bytesTotal);
@@ -16,14 +22,8 @@
 			}
 		
 			public function onSelect(event : Event) : void {
-				var fr:FileReference = FileReference(event.target);
-				
-				var request:URLRequest = new URLRequest();
-                request.url = "upload_file.php";
-                request.method = URLRequestMethod.POST;
-
-            	fr.upload(request, "file");
-
+	            var fileReference: FileReference = FileReference(event.target);
+            	fileReference.upload(request, "file");
 			}
 		
 			public function onUploadIoError(event : IOErrorEvent) : void {
@@ -35,19 +35,29 @@
 			}
 		
 			public function upload() : void {
+				request = new URLRequest();
+                request.url = "upload_file.php";
+                request.method = URLRequestMethod.POST;
+
 				fileReference = new FileReference();
-                
+
 				fileReference.addEventListener(Event.SELECT, onSelect);
                 fileReference.addEventListener(ProgressEvent.PROGRESS, onUploadProgress);
                 fileReference.addEventListener(Event.COMPLETE, onUploadComplete);
                 fileReference.addEventListener(IOErrorEvent.IO_ERROR, onUploadIoError);
                 fileReference.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUploadSecurityError);
-
+                
                 fileReference.browse();
 			}
 		]]>
 	</mx:Script>
-	<mx:Button x="10" y="10" label="Button" click="upload()"/>
-	<mx:ProgressBar id="progressBar" x="10" y="40" mode="manual"/>
-	
-</mx:Application>
+
+	<mx:VBox paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<mx:ProgressBar labelPlacement="left" id="progressBar" mode="manual"/>
+	</mx:VBox>
+	<mx:ControlBar horizontalAlign="center">
+		<mx:Button label="Cancel" click="removeMe()"/>
+		<mx:Button label="Button" click="upload()"/>
+	</mx:ControlBar>
+
+</mx:TitleWindow>
