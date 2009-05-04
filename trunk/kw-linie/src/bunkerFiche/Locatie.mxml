@@ -30,6 +30,20 @@
 				PopUpManager.addPopUp(mapPopup,this,true);
 				PopUpManager.centerPopUp(mapPopup);
 			}
+
+			public function bind(bunker: Object) : void {
+				bunker.gemeente = BindingUtils.comboboxToString(cb_gemeente);
+				bunker.deelgemeente = BindingUtils.comboboxToString(cb_deelgemeente);
+				bunker.straat = BindingUtils.textinputToString(ti_straat);
+				bunker.toponiem = BindingUtils.textinputToString(ti_toponiem);
+				bunker.x = BindingUtils.textinputToInteger(ti_x);
+				bunker.y = BindingUtils.textinputToInteger(ti_y);
+				bunker.lat = BindingUtils.textinputToFloat(ti_lat);
+				bunker.lng = BindingUtils.textinputToFloat(ti_lng);
+				bunker.kadaster = BindingUtils.textinputToString(ti_kadaster);
+			}
+			
+
 			
 		]]>
 	</mx:Script>

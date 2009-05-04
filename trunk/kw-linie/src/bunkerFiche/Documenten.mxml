@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+
+			public function bind(bunker: Object) : void {
+				bunker.vh_grondplan = BindingUtils.checkboxToBoolean(cb_availGrondplan);
+				bunker.vh_onteigeningsdossier = BindingUtils.checkboxToBoolean(cb_availOnteigeningsdossier);
+				bunker.vh_lastenboek = BindingUtils.checkboxToBoolean(cb_availLastenboek);
+				bunker.vh_militair_bunkerdossier = BindingUtils.checkboxToBoolean(cb_availMilitairBunkerdossier);
+				bunker.vh_overgave_aan_domeinen = BindingUtils.checkboxToBoolean(cb_availOvergave);
+				bunker.vh_verkoop_door_domeinen = BindingUtils.checkboxToBoolean(cb_availVerkoopDomeinen);
+				bunker.vh_oude_fotos = BindingUtils.checkboxToBoolean(cb_availOudeFotos);
+				bunker.vh_andere = BindingUtils.checkboxToBoolean(cb_availAndere);
+				bunker.vh_andere_tekst = BindingUtils.textAreaToString(ti_availAndereTekst);
+			}
+		]]>
+	</mx:Script>
+
 	<mx:Form x="0" y="0" height="100%">
 		<mx:FormItem label="Voorhanden">
 			<mx:CheckBox 

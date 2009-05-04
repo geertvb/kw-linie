@@ -37,32 +37,14 @@
 				}
 			}
 			
-			public function bindLocatie(bunker: Object, locatie: Locatie) : void {
-				bunker.gemeente = BindingUtils.comboboxToString(locatie.cb_gemeente);
-				bunker.deelgemeente = BindingUtils.comboboxToString(locatie.cb_deelgemeente);
-				bunker.straat = BindingUtils.textinputToString(locatie.ti_straat);
-				bunker.toponiem = BindingUtils.textinputToString(locatie.ti_toponiem);
-				bunker.x = BindingUtils.textinputToInteger(locatie.ti_x);
-				bunker.y = BindingUtils.textinputToInteger(locatie.ti_y);
-				bunker.lat = BindingUtils.textinputToFloat(locatie.ti_lat);
-				bunker.lng = BindingUtils.textinputToFloat(locatie.ti_lng);
-				bunker.kadaster = BindingUtils.textinputToString(locatie.ti_kadaster);
-			}
-			
-			public function bindDocumenten(bunker: Object, documenten: Documenten) : void {
-				bunker.availGrondplan = BindingUtils.checkboxToBoolean(documenten.cb_availGrondplan);
-				bunker.availOnteigeningsdossier = BindingUtils.checkboxToBoolean(documenten.cb_availOnteigeningsdossier);
-				bunker.availLastenboek = BindingUtils.checkboxToBoolean(documenten.cb_availLastenboek);
-				bunker.availMilitairBunkerdossier = BindingUtils.checkboxToBoolean(documenten.cb_availMilitairBunkerdossier);
-			}
-			
 			public function bind() : Object {
 				var bunker : Object = new Object();
 				
 				bunker.bunker_id = BindingUtils.textinputToInteger(ti_bunker_id);
 				
-				bindLocatie(bunker, locatie);
-				bindDocumenten(bunker, documenten);
+				locatie.bind(bunker);
+				documenten.bind(bunker);
+				bescherming.bind(bunker);
 				
 				return bunker;
 			}
@@ -115,12 +97,12 @@
 		<mx:TabNavigator width="100%" height="360" creationPolicy="all">
 			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
 			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" />
-			<bunkerFiche:Fotos label="Fotos" data="{_bunker}" />
-			<bunkerFiche:Contacten label="Contacten" data="{_bunker}" />
-			<bunkerFiche:Links label="Links" data="{_bunker}" />
-			<bunkerFiche:Bescherming label="Bescherming" data="{_bunker}" />
-			<bunkerFiche:Opmerkingen label="Opmerkingen" data="{_bunker}" />
-			<bunkerFiche:Bezoeken label="Bezoeken" data="{_bunker}" />
+			<bunkerFiche:Fotos id="fotos" label="Fotos" data="{_bunker}" />
+			<bunkerFiche:Contacten id="contacten" label="Contacten" data="{_bunker}" />
+			<bunkerFiche:Links id="links" label="Links" data="{_bunker}" />
+			<bunkerFiche:Bescherming id="bescherming" label="Bescherming" data="{_bunker}" />
+			<bunkerFiche:Opmerkingen id="opmerkingen" label="Opmerkingen" data="{_bunker}" />
+			<bunkerFiche:Bezoeken id="bezoeken" label="Bezoeken" data="{_bunker}" />
 		</mx:TabNavigator>
 		<mx:Button label="save" click="bunkerService.save(bind());"/>
 	</mx:VBox>
