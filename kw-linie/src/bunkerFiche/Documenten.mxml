@@ -3,7 +3,14 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
 			import util.BindingUtils;
+			
+			public function uploadDocument() : void {
+				var helpWindow:IFlexDisplayObject =
+                    PopUpManager.createPopUp(this, UploadFile, true);
+			}
 
 			public function bind(bunker: Object) : void {
 				bunker.vh_grondplan = BindingUtils.checkboxToBoolean(cb_availGrondplan);
@@ -77,7 +84,7 @@
 			</mx:dataProvider>
 		</mx:List>
 		<mx:HBox width="100%" horizontalAlign="center">
-			<mx:Button label="Voeg toe"/>
+			<mx:Button label="Voeg toe" click="uploadDocument()"/>
 			<mx:Button label="Bekijk"/>
 			<mx:Button label="Verwijder"/>
 		</mx:HBox>

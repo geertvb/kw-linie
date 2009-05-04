@@ -1,8 +1,10 @@
 <?php
 
-header('Location:upload.html');
+//header('Location:upload.html');
 
-include 'mysql_connect.php';
+include 'mysqliUtils.php';
+
+$mysqli = newMysqli();
 
 $stmt = $mysqli->prepare("INSERT INTO kwl_blob (`filename`, `mimetype`, `size`, `content`) VALUES (?, ?, ?, ?)");
 
@@ -25,4 +27,5 @@ $stmt->close();
 
 $mysqli->close();
 
+echo "OK"
 ?>
