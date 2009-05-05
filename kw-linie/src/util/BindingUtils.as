@@ -26,7 +26,7 @@ package util
 		
 		public static function textAreaToString(ti: TextArea) : Object {
 			if (isEmptyTextArea(ti)) {
-				return null;
+				return "";
 			} else {
 				return ti.text;
 			}
@@ -42,7 +42,7 @@ package util
 		
 		public static function textinputToFloat(ti: TextInput) : Object {
 			if (isEmpty(ti)) {
-				return null;
+				return "";
 			} else {
 				return Number(ti.text);
 			}

@@ -34,6 +34,7 @@
 			public function bunkerGridChange(event: Event) : void {
 				if (bunkerGrid.selectedItem != null) {
 					bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
+					bunkerFindDocumentenResponder.token = bunkerService.findDocumenten(bunkerGrid.selectedItem.bunker_id);
 				}
 			}
 			
@@ -53,8 +54,16 @@
 	</mx:Script>
 	
 	<mx:Object id="_bunker" />
+	<mx:Object id="_documenten" />
 
 	<xyz:CallResponder id="bunkerResponder" result="_bunker = event.result" />
+	<xyz:CallResponder id="bunkerFindDocumentenResponder">
+		<xyz:result>
+			<![CDATA[
+				_documenten = event.result;
+			]]>
+		</xyz:result>
+	</xyz:CallResponder>
 	
 	<xyz:CallResponder id="bunkerFindAllResponder" />
 	
@@ -96,7 +105,7 @@
 		</mx:HBox>
 		<mx:TabNavigator width="100%" height="360" creationPolicy="all">
 			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
-			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" />
+			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" docs="{_documenten}" />
 			<bunkerFiche:Fotos id="fotos" label="Fotos" data="{_bunker}" />
 			<bunkerFiche:Contacten id="contacten" label="Contacten" data="{_bunker}" />
 			<bunkerFiche:Links id="links" label="Links" data="{_bunker}" />
@@ -104,7 +113,7 @@
 			<bunkerFiche:Opmerkingen id="opmerkingen" label="Opmerkingen" data="{_bunker}" />
 			<bunkerFiche:Bezoeken id="bezoeken" label="Bezoeken" data="{_bunker}" />
 		</mx:TabNavigator>
-		<mx:Button label="save" click="bunkerService.save(bind());"/>
+		<mx:Button label="Bewaar" click="bunkerService.save(bind());"/>
 	</mx:VBox>
 	
 </mx:Application>

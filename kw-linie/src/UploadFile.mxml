@@ -6,11 +6,18 @@
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
 			
-			public var fileReference : FileReference = new FileReference();
-			public var request:URLRequest;
-
+			private var fileReference : FileReference = new FileReference();
+			private var request:URLRequest;
+			private var popupParent: DisplayObject;
+			public var requestUrl: String = "upload_file.php";
+			
 			private function removeMe():void {
                 PopUpManager.removePopUp(this);
+            }
+            
+            private function cancel_click() : void {
+            	fileReference.cancel();
+            	removeMe();
             }
 
 			public function onUploadProgress(event : ProgressEvent) : void {
@@ -18,26 +25,34 @@
 			}
 		
 			public function onUploadComplete(event : Event) : void {
+				removeMe();
 				Alert.show("Upload complete");
 			}
 		
 			public function onSelect(event : Event) : void {
+				PopUpManager.addPopUp(this, popupParent, true);
+
 	            var fileReference: FileReference = FileReference(event.target);
+	            
+				request = new URLRequest();
+                request.url = requestUrl;
+                request.method = URLRequestMethod.POST;
+
             	fileReference.upload(request, "file");
 			}
 		
 			public function onUploadIoError(event : IOErrorEvent) : void {
+				removeMe();
 				Alert.show(event.text);
 			}
 		
 			public function onUploadSecurityError(event : SecurityErrorEvent) : void {
+				removeMe();
 				Alert.show(event.text);
 			}
 		
-			public function upload() : void {
-				request = new URLRequest();
-                request.url = "upload_file.php";
-                request.method = URLRequestMethod.POST;
+			public function upload(popupParent: DisplayObject) : void {
+				this.popupParent = popupParent;
 
 				fileReference = new FileReference();
 
@@ -55,9 +70,9 @@
 	<mx:VBox paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
 		<mx:ProgressBar labelPlacement="left" id="progressBar" mode="manual"/>
 	</mx:VBox>
+
 	<mx:ControlBar horizontalAlign="center">
-		<mx:Button label="Cancel" click="removeMe()"/>
-		<mx:Button label="Button" click="upload()"/>
+		<mx:Button label="Cancel" click="cancel_click()"/>
 	</mx:ControlBar>
 
 </mx:TitleWindow>
