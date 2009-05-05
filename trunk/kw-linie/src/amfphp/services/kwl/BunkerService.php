@@ -17,6 +17,23 @@ class BunkerService {
 		return findSQL($sql);
 	}
 	
+	function findDocumenten($id) {
+		$sql = "SELECT `blob_id`, `bunker_id`, `filename`, `mimetype`, `size` FROM `kwl_blob` WHERE `bunker_id` = ? order by `blob_id` asc";
+
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				if ($stmt->execute()) {
+					$result = getresult($stmt);
+				}
+				$stmt->close();
+			}
+			$mysqli->close();
+		}
+		
+		return $result;		
+	}
+	
 	function findDeelgemeentes() {
 		$sql = "SELECT distinct `deelgemeente` FROM `kwl_bunker` WHERE `deelgemeente` is not null order by `deelgemeente` asc";
 		return findSQL($sql);
@@ -40,6 +57,17 @@ class BunkerService {
 	}
 
 	function save($bunker) {
+		if ($mysqli = newMysqli()) {
+
+			//$this->saveLocatie($bunker, $mysqli);
+			$result = $this->saveDocumenten($bunker, $mysqli);
+			
+			$mysqli->close();
+		}
+		return $result;
+	}
+	
+	function saveLocatie($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
 		$sql .= "set ";
 		$sql .= "`lat` = ?,"; 
@@ -49,20 +77,49 @@ class BunkerService {
 		$sql .= "`straat` = ? "; 
 		$sql .= "where `bunker_id` = ?";
 		
-		if ($mysqli = newMysqli()) {
-			if ($stmt = $mysqli->prepare($sql)) {
-				$stmt->bind_param('ddsssi', 
-					$bunker["lat"], 
-					$bunker["lng"], 
-					$bunker["gemeente"], 
-					$bunker["deelgemeente"], 
-					$bunker["straat"], 
-					$bunker["bunker_id"]);
-				$stmt->execute();
-				$stmt->close();
-			}
-			$mysqli->close();
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('ddsssi', 
+				$bunker["lat"], 
+				$bunker["lng"], 
+				$bunker["gemeente"], 
+				$bunker["deelgemeente"], 
+				$bunker["straat"], 
+				$bunker["bunker_id"]);
+			$stmt->execute();
+			$stmt->close();
 		}
+	}
+
+	function saveDocumenten($bunker, $mysqli) {
+		$sql = "update `kwl_bunker` ";
+		$sql .= "set ";
+		$sql .= "`vh_grondplan` = ?,"; 
+		$sql .= "`vh_onteigeningsdossier` = ?,"; 
+		$sql .= "`vh_lastenboek` = ?,"; 
+		$sql .= "`vh_militair_bunkerdossier` = ?,"; 
+		$sql .= "`vh_overgave_aan_domeinen` = ?,"; 
+		$sql .= "`vh_verkoop_door_domeinen` = ?,"; 
+		$sql .= "`vh_oude_fotos` = ?,"; 
+		$sql .= "`vh_andere` = ?,"; 
+		$sql .= "`vh_andere_tekst` = ? "; 
+		$sql .= "where `bunker_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiiiiiisi', 
+				$bunker["vh_grondplan"], 
+				$bunker["vh_onteigeningsdossier"], 
+				$bunker["vh_lastenboek"], 
+				$bunker["vh_militair_bunkerdossier"], 
+				$bunker["vh_overgave_aan_domeinen"], 
+				$bunker["vh_verkoop_door_domeinen"], 
+				$bunker["vh_oude_fotos"], 
+				$bunker["vh_andere"], 
+				$bunker["vh_andere_tekst"], 
+				$bunker["bunker_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
 	}
 
 	function findAll() {
