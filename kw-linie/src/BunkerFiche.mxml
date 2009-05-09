@@ -20,7 +20,6 @@
 			
 			public function creationComplete() : void {
 				bunkerFindAllResponder.token = bunkerService.findAll();
-				//googleMapsKey = GoogleMapKeys.getKey(application.url);
 			}
 			
 			public function onFault(event: FaultEvent) : void {

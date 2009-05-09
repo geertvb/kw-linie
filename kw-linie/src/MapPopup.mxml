@@ -2,7 +2,6 @@
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:maps="com.google.maps.*"
-	initialize="initMapPopup()"
 	title="Kaart">
 
 	<mx:Script>
@@ -19,16 +18,9 @@
 			import com.google.maps.controls.ZoomControl;
 			import mx.managers.PopUpManager;
 			
-			[Bindable]
-			public var googleMapsKey: String;
-			
 			public var latLng: LatLng;
 			
 			private var marker: Marker;
-			
-			private function initMapPopup() : void {
-				googleMapsKey = "ABQIAAAARHlxm1tnIyh53Qky1yRvaxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRSxc4qL8cIlXY1g_19AWODs4-61Q";
-			}
 			
 			private function dropped(event: Event) : void {
 				latLng = marker.getLatLng();
@@ -51,33 +43,33 @@
 				marker.addEventListener(MapMouseEvent.DRAG_END,dropped);
 				map.addOverlay(marker);
 		    }
+		    
+		    private function ok_click(event: Event) : void {
+				dispatchEvent( new Event("ok") );
+				PopUpManager.removePopUp(this);
+		    }
+		    
+		    private function cancel_click(event: Event) : void {
+				dispatchEvent( new Event("cancel") );
+				PopUpManager.removePopUp(this);
+		    }
 		]]>
 	</mx:Script>
+
 	<mx:Metadata>
 		[Event(name="ok", type="flash.events.Event")]
 		[Event(name="cancel", type="flash.events.Event")]
 	</mx:Metadata>
+
 	<maps:Map id="map"
 		width="480" height="320"
-		key="{googleMapsKey}"
+		key="ABQIAAAAL4gDNG8jsapnfnIxxSbmXBQgfeSkNN7qNgPfoxJaK42Uxer2KxS2iBxqn9eykR2TxIcr6N3_pEWP1A"
 		mapevent_mapready="onMapReady(event)">
 	</maps:Map>
+
 	<mx:ControlBar>
-		<mx:Button label="ok">
-			<mx:click>
-			<![CDATA[
-				dispatchEvent( new Event("ok") );
-				PopUpManager.removePopUp(this);
-			]]>
-		</mx:click>
-		</mx:Button>
-		<mx:Button label="cancel">
-			<mx:click>
-			<![CDATA[
-				dispatchEvent( new Event("cancel") );
-				PopUpManager.removePopUp(this);
-			]]>
-		</mx:click>
-		</mx:Button>
+		<mx:Button label="ok" click="ok_click(event)" />
+		<mx:Button label="cancel" click="cancel_click(event)" />
 	</mx:ControlBar>
+
 </mx:TitleWindow>
