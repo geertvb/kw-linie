@@ -18,7 +18,7 @@ class BunkerService {
 	}
 	
 	function findDocumenten($id) {
-		$sql = "SELECT `blob_id`, `bunker_id`, `filename`, `mimetype`, `size` FROM `kwl_blob` WHERE `bunker_id` = ? order by `blob_id` asc";
+		$sql = "SELECT `document_id`, `bunker_id`, `omschrijving`, `filename`, `mimetype`, `size` FROM `kwl_document` WHERE `bunker_id` = ? order by `document_id` asc";
 
 		if ($mysqli = newMysqli()) {
 			if ($stmt = $mysqli->prepare($sql)) {
@@ -32,6 +32,21 @@ class BunkerService {
 		}
 		
 		return $result;		
+	}
+	
+	function deleteDocument($id) {
+		$sql = "DELETE FROM `kwl_document` WHERE `document_id` = ?";
+
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				if ($stmt->execute()) {
+					$result = getresult($stmt);
+				}
+				$stmt->close();
+			}
+			$mysqli->close();
+		}
 	}
 	
 	function findDeelgemeentes() {
