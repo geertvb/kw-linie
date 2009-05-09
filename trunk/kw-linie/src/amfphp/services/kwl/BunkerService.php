@@ -34,6 +34,23 @@ class BunkerService {
 		return $result;		
 	}
 	
+	function findFotos($id) {
+		$sql = "SELECT `foto_id`, `bunker_id`, `omschrijving`, `filename`, `mimetype`, `width`, `height`, `size` FROM `kwl_foto` WHERE `bunker_id` = ? order by `foto_id` asc";
+
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				if ($stmt->execute()) {
+					$result = getresult($stmt);
+				}
+				$stmt->close();
+			}
+			$mysqli->close();
+		}
+		
+		return $result;		
+	}
+	
 	function deleteDocument($id) {
 		$sql = "DELETE FROM `kwl_document` WHERE `document_id` = ?";
 

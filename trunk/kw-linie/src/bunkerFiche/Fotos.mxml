@@ -1,29 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:rpc="mx.rpc.*" 
+	initialize="init()">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.binding.utils.ChangeWatcher;
+		
+			public function init() : void {
+				ChangeWatcher.watch(this, ["data","bunker_id"],change_bunker_id);
+			}
+			
+			public function change_bunker_id(event: Event) : void {
+				refreshFotos();
+			}
+			
+			public function refreshFotos() : void {
+				bunkerFindFotosResponder.token = bunkerService.findFotos(data.bunker_id);
+			}
+			
+			public function click_voeg_toe(event: Event) : void {
+				var parameters: URLVariables = new URLVariables();
+				parameters.bunker_id = data.bunker_id;
+				
+				var request: URLRequest = new URLRequest();
+				request.url = "upload_foto.php";
+				request.method = URLRequestMethod.POST;
+				request.data = parameters;
 
+				var uploadFile : UploadFile = new UploadFile();
+				uploadFile.request = request;
+				uploadFile.upload(this);
+				uploadFile.addEventListener(FlexEvent.UPDATE_COMPLETE,fotoUploaded,false,0,true);
+			}
+			
+			public function fotoUploaded(event: Event) : void {
+				refreshFotos();
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:Object id="_fotos" />
+
+	<rpc:CallResponder id="bunkerFindFotosResponder" result="_fotos = event.result" />
+
+	<mx:RemoteObject id="bunkerService"
+		source="kwl.BunkerService" 
+		destination="amfphp">
+    </mx:RemoteObject>
+	
 	<mx:VBox bottom="10" top="0" right="10" left="10">
-		<mx:TileList height="100%" width="100%" rowCount="2" itemRenderer="FotoTile">
-			<mx:dataProvider>
-				<mx:Array>
-                    <mx:Object
-                    	omschrijving="Grondplan"
-                    	filename="grondplan.jpg"
-                    	size="320K"
-                    	width="320"
-                    	height="240"
-                    	type="jpg" />
-                    <mx:Object
-                    	omschrijving="Luchtfoto"
-                    	filename="areal.jpg"
-                    	size="423K"
-                    	width="1024"
-                    	height="768"
-                    	type="jpg" />
-                </mx:Array>
-			</mx:dataProvider>
+		<mx:TileList
+			height="100%" width="100%" 
+			rowCount="2"
+			dataProvider="{_fotos}" 
+			itemRenderer="FotoTile">
 		</mx:TileList>
 		<mx:HBox width="100%" horizontalAlign="center">
-			<mx:Button label="Voeg toe"/>
+			<mx:Button
+				label="Voeg toe"
+				click="click_voeg_toe(event)"/>
 			<mx:Button label="Bekijk"/>
 			<mx:Button label="Verwijder"/>
 		</mx:HBox>
