@@ -82,13 +82,13 @@
 			</mx:columns>
 		</mx:DataGrid>
 		<mx:HBox>
-			<mx:FormItem label="ID" horizontalAlign="left">
+			<mx:FormItem label="ID" horizontalAlign="left" color="#FFFFFF">
 				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{_bunker.bunker_id}" />
 			</mx:FormItem>
-			<mx:FormItem label="Nummer" horizontalAlign="left">
+			<mx:FormItem label="Nummer" horizontalAlign="left" color="#FFFFFF">
 				<mx:TextInput editable="false" width="64" text="{_bunker.nummer}" />
 			</mx:FormItem>
-			<mx:FormItem label="Type">
+			<mx:FormItem label="Type" color="#FFFFFF">
 				<mx:TextInput editable="false" width="128" text="{_bunker.type}" />
 			</mx:FormItem>
 		</mx:HBox>
