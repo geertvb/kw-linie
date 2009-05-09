@@ -10,7 +10,9 @@
   </compiler>
   <applications>
     <application path="kwl.mxml"/>
+    <application path="BunkerFiche.mxml"/>
     <application path="Lambert72.mxml"/>
+    <application path="BunkerBezoekFiche.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>
