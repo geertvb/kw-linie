@@ -77,11 +77,21 @@
 		    	}
 		    }
 		    
+		    private function filterTypeMarkers(type: String) : Boolean {
+		    	var result : Boolean = false;
+		    	result ||= (type == "commandobunker") && cb_commandobunker.selected;
+		    	result ||= (type == "kanaalbunker") && cb_kanaalbunker.selected;
+		    	result ||= (type == "verdediging 1e lijn") && cb_verdediging_1e_lijn.selected;
+		    	result ||= (type == "verdediging 2e lijn") && cb_verdediging_2e_lijn.selected;
+		    	result ||= (type == "verdediging antitankcentrum") && cb_verdediging_antitankcentrum.selected;
+		    	return result;
+		    }
+		    
 		    private function filterMarkers() : void {
 		    	for each (var bunkerMarker: BunkerMarker in bunkerMarkers) {
 		    		var bunker: Object = bunkerMarker.bunker;
 		    		var visible: Boolean = true;
-		    		visible &&= typeFilter.selectedIndex<=0 || (bunker.type == typeFilter.selectedLabel);
+		    		visible &&= filterTypeMarkers(bunker.type);
 		    		visible &&= codeFilter.selectedIndex<=0 || (bunker.code == codeFilter.selectedLabel);
 		    		visible &&= gemeenteFilter.selectedIndex<=0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
 		    		visible &&= deelgemeenteFilter.selectedIndex<=0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
@@ -123,17 +133,34 @@
 
 		<mx:VBox width="186">
 
-			<mx:Label text="Type" />
-			<mx:ComboBox id="typeFilter" 
-				width="186"
-				maxWidth="186"
-				dataProvider="{typeLijst}"
-				selectedIndex="0"
-				labelField="type"
+			<mx:Label text="Type"  color="#FFFFFF" fontWeight="bold"/>
+			<mx:CheckBox 
+				label="commandobunker" 
+				id="cb_commandobunker" 
 				valueCommit="filterMarkers();"
-				rowCount="8"></mx:ComboBox>
+				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+			<mx:CheckBox 
+				label="kanaalbunker" 
+				id="cb_kanaalbunker" 
+				valueCommit="filterMarkers();"
+				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+			<mx:CheckBox 
+				label="verdediging 1e lijn" 
+				id="cb_verdediging_1e_lijn" 
+				valueCommit="filterMarkers();"
+				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+			<mx:CheckBox 
+				label="verdediging 2e lijn" 
+				id="cb_verdediging_2e_lijn" 
+				valueCommit="filterMarkers();"
+				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+			<mx:CheckBox 
+				label="verdediging antitankcentrum" 
+				id="cb_verdediging_antitankcentrum" 
+				valueCommit="filterMarkers();"
+				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 
-			<mx:Label text="Code" />
+			<mx:Label text="Code"  color="#FFFFFF" fontWeight="bold"/>
 			<mx:ComboBox id="codeFilter" 
 				width="186"
 				maxWidth="186"
@@ -143,7 +170,7 @@
 				valueCommit="filterMarkers();"
 				rowCount="8"></mx:ComboBox>
 
-			<mx:Label text="Gemeente" />
+			<mx:Label text="Gemeente"  color="#FFFFFF" fontWeight="bold"/>
 			<mx:ComboBox id="gemeenteFilter"
 				width="186"
 				maxWidth="186"
@@ -153,7 +180,7 @@
 				valueCommit="filterMarkers();"
 				rowCount="8"></mx:ComboBox>
 				
-			<mx:Label text="Deelgemeente" />
+			<mx:Label text="Deelgemeente"  color="#FFFFFF" fontWeight="bold"/>
 			<mx:ComboBox id="deelgemeenteFilter"
 				width="186"
 				maxWidth="186"
