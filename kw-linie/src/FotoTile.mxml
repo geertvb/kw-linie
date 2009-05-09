@@ -3,7 +3,8 @@
 	<mx:Image x="5" y="10" source="bunker.jpg" themeColor="#000000"/>
 	<mx:VBox bottom="0" left="0" right="0" verticalGap="0">
 		<mx:Label text="{data.omschrijving}" textAlign="center" fontStyle="normal" fontWeight="bold" fontSize="12" width="160"/>
-		<mx:Label text="{data.width} x {data.height} - {data.size} - {data.type}" textAlign="center" width="160"/>
+		<mx:Label text="{data.filename}" textAlign="center" width="160"/>
+		<mx:Label text="{data.width} x {data.height} - {data.size}" textAlign="center" width="160"/>
 	</mx:VBox>
 	
 </mx:Canvas>
