@@ -56,14 +56,7 @@
 	<mx:Object id="_documenten" />
 
 	<xyz:CallResponder id="bunkerResponder" result="_bunker = event.result" />
-	<xyz:CallResponder id="bunkerFindDocumentenResponder">
-		<xyz:result>
-			<![CDATA[
-				_documenten = event.result;
-			]]>
-		</xyz:result>
-	</xyz:CallResponder>
-	
+	<xyz:CallResponder id="bunkerFindDocumentenResponder" result="_documenten = event.result" />
 	<xyz:CallResponder id="bunkerFindAllResponder" />
 	
 	<mx:RemoteObject id="bunkerService"

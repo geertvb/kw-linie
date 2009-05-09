@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*">
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:local="*">
 
 	<mx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.controls.Alert;
 			import mx.core.IFlexDisplayObject;
 			import mx.managers.PopUpManager;
 			import util.BindingUtils;
@@ -11,7 +15,16 @@
 			public var docs: *;
 			
 			public function uploadDocument() : void {
+				var parameters: URLVariables = new URLVariables();
+				parameters.bunker_id = data.bunker_id;
+				
+				var request: URLRequest = new URLRequest();
+				request.url = "upload_document.php";
+				request.method = URLRequestMethod.POST;
+				request.data = parameters;
+
 				var uploadFile : UploadFile = new UploadFile();
+				uploadFile.request = request;
 				uploadFile.upload(this);
 			}
 
@@ -26,8 +39,34 @@
 				bunker.vh_andere = BindingUtils.checkboxToBoolean(cb_availAndere);
 				bunker.vh_andere_tekst = BindingUtils.textAreaToString(ti_availAndereTekst);
 			}
+			
+			public function click_bekijk(event: Event) : void {
+				
+			}
+			
+			public function close_verwijder_alert(event: CloseEvent) : void {
+				if (event.detail==Alert.YES) {
+                    bunkerService.deleteDocument(list_documenten.selectedItem.document_id);
+    			}
+			}
+			
+			public function click_verwijder(event: Event) : void {
+				Alert.yesLabel = "Ja";
+				Alert.noLabel = "Nee";
+				Alert.show(
+					"Ben je zeker dat je het document wil wissen?",
+					"Verwijderen",
+					Alert.YES | Alert.NO,
+					null,
+					close_verwijder_alert);
+			}
 		]]>
 	</mx:Script>
+
+	<mx:RemoteObject id="bunkerService"
+		source="kwl.BunkerService" 
+		destination="amfphp">
+    </mx:RemoteObject>
 	
 	<mx:Form x="0" y="0" height="100%">
 		<mx:FormItem label="Voorhanden">
@@ -70,28 +109,23 @@
 		</mx:FormItem>
 	</mx:Form>
 	<mx:VBox width="328" bottom="10" right="10" top="0">
-		<mx:List width="100%" height="100%" itemRenderer="DocumentRenderer" dataProvider="{docs}">
-		<!--
-			<mx:dataProvider>
-				<mx:Array>
-                    <mx:Object
-                    	omschrijving="Grondplan"
-                    	filename="grondplan.pdf"
-                    	size="320K"
-                    	icon="icon/pdf.gif" />
-                    <mx:Object
-                    	omschrijving="Statistieken"
-                    	filename="stat.xls"
-                    	size="47K"
-                    	icon="icon/xls.gif" />
-                </mx:Array>
-			</mx:dataProvider>
-		-->
-		</mx:List>
+		<mx:List 
+			id="list_documenten"
+			width="100%" height="100%"
+			itemRenderer="DocumentRenderer"
+			dataProvider="{docs}" />
 		<mx:HBox width="100%" horizontalAlign="center">
-			<mx:Button label="Voeg toe" click="uploadDocument()"/>
-			<mx:Button label="Bekijk"/>
-			<mx:Button label="Verwijder"/>
+			<mx:Button 
+				label="Voeg toe" 
+				click="uploadDocument()"/>
+			<mx:Button 
+				label="Bekijk"
+				click="click_bekijk(event)"
+				enabled="{list_documenten.selectedIndex >= 0}"/>
+			<mx:Button 
+				label="Verwijder"
+				click="click_verwijder(event)"
+				enabled="{list_documenten.selectedIndex >= 0}"/>
 		</mx:HBox>
 	</mx:VBox>
 

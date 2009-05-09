@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" title="Upload File">
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	title="Voeg document toe" 
+	xmlns:net="flash.net.*">
 	
 	<mx:Script>
 		<![CDATA[
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
 			
-			private var fileReference : FileReference = new FileReference();
-			private var request:URLRequest;
 			private var popupParent: DisplayObject;
-			public var requestUrl: String = "upload_file.php";
+			
+			public var request: URLRequest;
 			
 			private function removeMe():void {
                 PopUpManager.removePopUp(this);
             }
             
-            private function cancel_click() : void {
+            private function click_annuleer(event : Event) : void {
             	fileReference.cancel();
             	removeMe();
             }
@@ -29,15 +32,9 @@
 				Alert.show("Upload complete");
 			}
 		
-			public function onSelect(event : Event) : void {
-				PopUpManager.addPopUp(this, popupParent, true);
-
-	            var fileReference: FileReference = FileReference(event.target);
-	            
-				request = new URLRequest();
-                request.url = requestUrl;
-                request.method = URLRequestMethod.POST;
-
+			public function click_voeg_toe(event : Event) : void {
+	            //var fileReference: FileReference = FileReference(event.target);
+	            request.data.omschrijving = ti_omschrijving.text;
             	fileReference.upload(request, "file");
 			}
 		
@@ -50,29 +47,62 @@
 				removeMe();
 				Alert.show(event.text);
 			}
+			
+			public function onSelect(event: Event) : void {
+				ti_bestandsnaam.text = fileReference.name;
+				ti_grootte.text = fileReference.size.toString();
+			}
+			
+			public function click_select_file() : void {
+                fileReference.browse();
+			}
 		
 			public function upload(popupParent: DisplayObject) : void {
 				this.popupParent = popupParent;
-
-				fileReference = new FileReference();
-
-				fileReference.addEventListener(Event.SELECT, onSelect);
-                fileReference.addEventListener(ProgressEvent.PROGRESS, onUploadProgress);
-                fileReference.addEventListener(Event.COMPLETE, onUploadComplete);
-                fileReference.addEventListener(IOErrorEvent.IO_ERROR, onUploadIoError);
-                fileReference.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onUploadSecurityError);
-                
-                fileReference.browse();
+				PopUpManager.addPopUp(this, popupParent, true);
+				PopUpManager.centerPopUp(this);
 			}
 		]]>
 	</mx:Script>
-
+	
+	<net:FileReference id="fileReference"
+		select="onSelect(event)"
+		progress="onUploadProgress(event)"
+		complete="onUploadComplete(event)"
+		ioError="onUploadIoError(event)"
+		securityError="onUploadSecurityError(event)">
+	</net:FileReference>
+	
 	<mx:VBox paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
-		<mx:ProgressBar labelPlacement="left" id="progressBar" mode="manual"/>
+
+		<mx:Form paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+			<mx:FormItem label="Omschrijving">
+				<mx:TextInput width="256" id="ti_omschrijving"/>
+			</mx:FormItem>
+			<mx:FormItem label="Bestandsnaam" direction="horizontal">
+				<mx:TextInput width="256" id="ti_bestandsnaam" editable="false"/>
+				<mx:Button click="click_select_file()" label="..."/>
+			</mx:FormItem>
+			<mx:FormItem label="Grootte">
+				<mx:TextInput width="96" id="ti_grootte" editable="false"/>
+			</mx:FormItem>
+		</mx:Form>
+
+		<mx:ProgressBar 
+			labelPlacement="left" 
+			id="progressBar" 
+			mode="manual" 
+			width="100%"/>
 	</mx:VBox>
 
 	<mx:ControlBar horizontalAlign="center">
-		<mx:Button label="Cancel" click="cancel_click()"/>
+		<mx:Button 
+			label="Voeg toe" 
+			click="click_voeg_toe(event)" 
+			enabled="{ti_omschrijving.text.length>0 &amp;&amp; ti_bestandsnaam.text.length>0}"/>
+		<mx:Button 
+			label="Annuleer" 
+			click="click_annuleer(event)"/>
 	</mx:ControlBar>
 
 </mx:TitleWindow>
