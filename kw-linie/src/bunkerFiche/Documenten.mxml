@@ -52,7 +52,15 @@
 			}
 			
 			public function click_bekijk(event: Event) : void {
-				
+				var parameters: URLVariables = new URLVariables();
+				parameters.document_id = list_documenten.selectedItem.document_id;
+
+				var request: URLRequest = new URLRequest();
+				request.url = "download_document.php";
+				request.method = URLRequestMethod.GET;
+				request.data = parameters;
+
+				navigateToURL(request, "_blank");
 			}
 			
 			public function close_verwijder_alert(event: CloseEvent) : void {
