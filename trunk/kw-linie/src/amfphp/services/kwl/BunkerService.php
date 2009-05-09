@@ -40,13 +40,13 @@ class BunkerService {
 		if ($mysqli = newMysqli()) {
 			if ($stmt = $mysqli->prepare($sql)) {
 				$stmt->bind_param('i', $id);
-				if ($stmt->execute()) {
-					$result = getresult($stmt);
-				}
+				$result = $stmt->execute();
 				$stmt->close();
 			}
 			$mysqli->close();
 		}
+		
+		return $result;
 	}
 	
 	function findDeelgemeentes() {
