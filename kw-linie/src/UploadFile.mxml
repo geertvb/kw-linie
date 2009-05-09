@@ -5,6 +5,10 @@
 	title="Voeg document toe" 
 	xmlns:net="flash.net.*">
 	
+    <mx:Metadata>
+        [Event(name="uploadComplete")]
+    </mx:Metadata>
+
 	<mx:Script>
 		<![CDATA[
 			import mx.managers.PopUpManager;
@@ -29,7 +33,7 @@
 		
 			public function onUploadComplete(event : Event) : void {
 				removeMe();
-				Alert.show("Upload complete");
+                dispatchEvent(new Event("uploadComplete"));
 			}
 		
 			public function click_voeg_toe(event : Event) : void {

@@ -33,7 +33,6 @@
 			public function bunkerGridChange(event: Event) : void {
 				if (bunkerGrid.selectedItem != null) {
 					bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
-					bunkerFindDocumentenResponder.token = bunkerService.findDocumenten(bunkerGrid.selectedItem.bunker_id);
 				}
 			}
 			
@@ -53,10 +52,8 @@
 	</mx:Script>
 	
 	<mx:Object id="_bunker" />
-	<mx:Object id="_documenten" />
 
 	<xyz:CallResponder id="bunkerResponder" result="_bunker = event.result" />
-	<xyz:CallResponder id="bunkerFindDocumentenResponder" result="_documenten = event.result" />
 	<xyz:CallResponder id="bunkerFindAllResponder" />
 	
 	<mx:RemoteObject id="bunkerService"
@@ -97,7 +94,7 @@
 		</mx:HBox>
 		<mx:TabNavigator width="100%" height="360" creationPolicy="all">
 			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
-			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" docs="{_documenten}" />
+			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" />
 			<bunkerFiche:Fotos id="fotos" label="Fotos" data="{_bunker}" />
 			<bunkerFiche:Contacten id="contacten" label="Contacten" data="{_bunker}" />
 			<bunkerFiche:Links id="links" label="Links" data="{_bunker}" />
