@@ -1,7 +1,5 @@
 <?php
 
-createthumb("/temp/Audi-R8.jpg", "/temp/thumb.jpg");
-
 function createthumb($image_file, $thumb_file, $thumb_width = 128, $thumb_height = 96) {
 
 	list($width, $height, $type) = getimagesize($image_file);
@@ -41,6 +39,7 @@ function createthumb($image_file, $thumb_file, $thumb_width = 128, $thumb_height
 	ImageDestroy ($thumb);
 	ImageDestroy ($image);
 	
+	return array($new_width, $new_height, $width, $height);
 }
 
 ?>
