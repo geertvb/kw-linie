@@ -127,7 +127,7 @@
 
 		<maps:Map id="map"
 			width="518" height="640"
-			key="{GoogleMapKeys.getKey(application.url)}"
+			key="ABQIAAAAL4gDNG8jsapnfnIxxSbmXBQgfeSkNN7qNgPfoxJaK42Uxer2KxS2iBxqn9eykR2TxIcr6N3_pEWP1A"
 			mapevent_mapready="onMapReady(event)">
 		</maps:Map>
 
