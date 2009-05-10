@@ -91,7 +91,7 @@ class BunkerService {
 	function save($bunker) {
 		if ($mysqli = newMysqli()) {
 
-			//$this->saveLocatie($bunker, $mysqli);
+			$this->saveLocatie($bunker, $mysqli);
 			$result = $this->saveDocumenten($bunker, $mysqli);
 			
 			$mysqli->close();
@@ -102,20 +102,30 @@ class BunkerService {
 	function saveLocatie($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
 		$sql .= "set ";
+		$sql .= "`x` = ?,"; 
+		$sql .= "`y` = ?,"; 
 		$sql .= "`lat` = ?,"; 
 		$sql .= "`lng` = ?,"; 
 		$sql .= "`gemeente` = ?,"; 
 		$sql .= "`deelgemeente` = ?,"; 
-		$sql .= "`straat` = ? "; 
+		$sql .= "`toponiem` = ?,"; 
+		$sql .= "`straat` = ?,"; 
+		$sql .= "`stafkaart` = ?,"; 
+		$sql .= "`kadaster` = ? "; 
 		$sql .= "where `bunker_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('ddsssi', 
+			$stmt->bind_param('iiddssssssi', 
+				$bunker["x"], 
+				$bunker["y"], 
 				$bunker["lat"], 
 				$bunker["lng"], 
 				$bunker["gemeente"], 
 				$bunker["deelgemeente"], 
+				$bunker["toponiem"], 
 				$bunker["straat"], 
+				$bunker["stafkaart"], 
+				$bunker["kadaster"], 
 				$bunker["bunker_id"]);
 			$stmt->execute();
 			$stmt->close();
