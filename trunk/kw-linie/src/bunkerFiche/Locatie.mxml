@@ -36,11 +36,12 @@
 				bunker.deelgemeente = BindingUtils.comboboxToString(cb_deelgemeente);
 				bunker.straat = BindingUtils.textinputToString(ti_straat);
 				bunker.toponiem = BindingUtils.textinputToString(ti_toponiem);
+				bunker.stafkaart = BindingUtils.textinputToString(ti_stafkaart);
 				bunker.x = BindingUtils.textinputToInteger(ti_x);
 				bunker.y = BindingUtils.textinputToInteger(ti_y);
 				bunker.lat = BindingUtils.textinputToFloat(ti_lat);
 				bunker.lng = BindingUtils.textinputToFloat(ti_lng);
-				bunker.kadaster = BindingUtils.textinputToString(ti_kadaster);
+				bunker.kadaster = BindingUtils.textAreaToString(ti_kadaster);
 			}
 			
 
@@ -98,7 +99,7 @@
 			<mx:TextInput id="ti_toponiem" text="{data.toponiem}" width="320"/>
 		</mx:FormItem>
 		
-		<mx:FormItem label="Straat + nr" direction="horizontal">
+		<mx:FormItem label="Adres: straat + nr" direction="horizontal">
 			<mx:TextInput id="ti_straat" text="{data.straat}" width="320"/>
 		</mx:FormItem>
 		
@@ -122,7 +123,7 @@
 		</mx:FormItem>
 		
 		<mx:FormItem label="Kadastrale gegevens">
-			<mx:TextInput id="ti_kadaster" text="{data.kadaster}"  width="320"/>
+			<mx:TextArea id="ti_kadaster" text="{data.kadaster}"  width="320"/>
 		</mx:FormItem>
 		
 	</mx:Form>
