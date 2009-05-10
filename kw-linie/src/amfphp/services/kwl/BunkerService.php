@@ -92,11 +92,12 @@ class BunkerService {
 		if ($mysqli = newMysqli()) {
 
 			$this->saveLocatie($bunker, $mysqli);
-			$result = $this->saveDocumenten($bunker, $mysqli);
+			$this->saveDocumenten($bunker, $mysqli);
+			$this->saveBescherming($bunker, $mysqli);
 			
 			$mysqli->close();
 		}
-		return $result;
+		return true;
 	}
 	
 	function saveLocatie($bunker, $mysqli) {
@@ -157,6 +158,36 @@ class BunkerService {
 				$bunker["vh_oude_fotos"], 
 				$bunker["vh_andere"], 
 				$bunker["vh_andere_tekst"], 
+				$bunker["bunker_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveBescherming($bunker, $mysqli) {
+		$sql = "update `kwl_bunker` ";
+		$sql .= "set ";
+		$sql .= "`bescherming_gewestplan` = ?,"; 
+		$sql .= "`bescherming_landschapsatlas` = ?,"; 
+		$sql .= "`bescherming_ven_ivon` = ?,"; 
+		$sql .= "`bescherming_sbz` = ?,"; 
+		$sql .= "`bescherming_beschermd` = ?,"; 
+		$sql .= "`bescherming_rup` = ?,"; 
+		$sql .= "`bescherming_andere` = ?,"; 
+		$sql .= "`bescherming_andere_tekst` = ? "; 
+		$sql .= "where `bunker_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiiiiisi', 
+				$bunker["bescherming_gewestplan"], 
+				$bunker["bescherming_landschapsatlas"], 
+				$bunker["bescherming_ven_ivon"], 
+				$bunker["bescherming_sbz"], 
+				$bunker["bescherming_beschermd"], 
+				$bunker["bescherming_rup"], 
+				$bunker["bescherming_andere"], 
+				$bunker["bescherming_andere_tekst"], 
 				$bunker["bunker_id"]);
 			$stmt->execute();
 			$stmt->close();

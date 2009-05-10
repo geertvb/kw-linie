@@ -9,6 +9,7 @@
 				bunker.bescherming_gewestplan = BindingUtils.checkboxToBoolean(cb_bescherming_gewestplan);
 				bunker.bescherming_landschapsatlas = BindingUtils.checkboxToBoolean(cb_bescherming_landschapsatlas);
 				bunker.bescherming_ven_ivon = BindingUtils.checkboxToBoolean(cb_bescherming_ven_ivon);
+				bunker.bescherming_sbz = BindingUtils.checkboxToBoolean(cb_bescherming_sbz);
 				bunker.bescherming_beschermd = BindingUtils.checkboxToBoolean(cb_bescherming_beschermd);
 				bunker.bescherming_rup = BindingUtils.checkboxToBoolean(cb_bescherming_rup);
 				bunker.bescherming_andere = BindingUtils.checkboxToBoolean(cb_bescherming_andere);
@@ -31,10 +32,14 @@
 				id="cb_bescherming_ven_ivon"
 				selected="{data.bescherming_ven_ivon}" 
 				label="VEN/IVON"/>
+			<mx:CheckBox 
+				id="cb_bescherming_sbz"
+				selected="{data.bescherming_sbz}" 
+				label="SBZ"/>
 			<mx:CheckBox
 				id="cb_bescherming_beschermd"
 				selected="{data.bescherming_beschermd}" 
-				label="Beschermd (monument/stad-dorp/landscahp)"/>
+				label="Beschermd (monument/stad-dorp/landschap)"/>
 			<mx:CheckBox
 				id="cb_bescherming_rup"
 				selected="{data.bescherming_rup}" 
@@ -45,8 +50,9 @@
 				label="Andere (omschrijving + bron)" />
 			<mx:TextArea
 				id="ta_bescherming_andere_tekst"
+				enabled="{cb_bescherming_andere.selected}"
 				text="{data.bescherming_andere_tekst}" 
-				width="100%"/>
+				width="320"/>
 		</mx:FormItem>
 	</mx:Form>
 
