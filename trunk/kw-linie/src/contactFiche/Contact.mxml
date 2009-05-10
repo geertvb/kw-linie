@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Form x="0" y="0">
+		<mx:FormItem label="Naam">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="Voornaam">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="Straat" direction="horizontal">
+			<mx:TextInput/>
+			<mx:FormItem label="Nummer">
+				<mx:TextInput width="64"/>
+			</mx:FormItem>
+		</mx:FormItem>
+		<mx:FormItem label="Postcode" direction="horizontal">
+			<mx:TextInput width="64"/>
+			<mx:FormItem label="Gemeente">
+				<mx:ComboBox></mx:ComboBox>
+			</mx:FormItem>
+		</mx:FormItem>
+		<mx:FormItem label="Telefoon">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="GSM">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="E-mail">
+			<mx:TextInput/>
+		</mx:FormItem>
+	</mx:Form>
+</mx:Canvas>
