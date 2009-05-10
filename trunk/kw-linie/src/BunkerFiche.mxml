@@ -39,8 +39,7 @@
 			public function bind() : Object {
 				var bunker : Object = new Object();
 				
-				bunker.bunker_id = BindingUtils.textinputToInteger(ti_bunker_id);
-				
+				type.bind(bunker);
 				locatie.bind(bunker);
 				documenten.bind(bunker);
 				bescherming.bind(bunker);
@@ -94,6 +93,7 @@
 			</mx:FormItem>
 		</mx:HBox>
 		<mx:TabNavigator width="100%" height="360" creationPolicy="all">
+			<bunkerFiche:Type id="type" label="Type" data="{_bunker}" />
 			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
 			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" />
 			<bunkerFiche:Fotos id="fotos" label="Fotos" data="{_bunker}" />
