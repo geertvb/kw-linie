@@ -48,8 +48,8 @@
 				bunker.vh_verkoop_door_domeinen = BindingUtils.checkboxToBoolean(cb_availVerkoopDomeinen);
 				bunker.vh_oude_fotos = BindingUtils.checkboxToBoolean(cb_availOudeFotos);
 				bunker.vh_andere = BindingUtils.checkboxToBoolean(cb_availAndere);
-				bunker.vh_andere_tekst = BindingUtils.textinputToString(ti_availAndereTekst);
-				bunker.vh_andere_bron = BindingUtils.textinputToString(ti_availAndereBron);
+				bunker.vh_andere_tekst = BindingUtils.textAreaToString(ti_availAndereTekst);
+				//bunker.vh_andere_bron = BindingUtils.textinputToString(ti_availAndereBron);
 			}
 			
 			public function click_bekijk(event: Event) : void {
@@ -146,14 +146,17 @@
 				id="cb_availAndere" 
 				selected="{data.vh_andere}" 
 				label="Andere (omschrijving + bron)" />
-			<mx:TextInput
+			<mx:TextArea
 				id="ti_availAndereTekst"
 				enabled="{cb_availAndere.selected}"
-				text="{data.vh_andere_tekst}" width="100%"/>
+				text="{data.vh_andere_tekst}"
+				width="100%"/>
+			<!--
 			<mx:TextInput
 				id="ti_availAndereBron"
 				enabled="{cb_availAndere.selected}"
 				text="{data.vh_andere_bron}" width="100%"/>
+			-->
 		</mx:FormItem>
 	</mx:Form>
 	<mx:VBox width="328" bottom="10" right="10" top="0">
