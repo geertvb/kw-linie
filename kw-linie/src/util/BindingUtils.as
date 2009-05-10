@@ -2,6 +2,7 @@ package util
 {
 	import mx.controls.CheckBox;
 	import mx.controls.ComboBox;
+	import mx.controls.NumericStepper;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	
@@ -38,6 +39,10 @@ package util
 			} else {
 				return int(ti.text);
 			}
+		}
+		
+		public static function numericStepperToInteger(ns: NumericStepper) : Object {
+			return ns.value;
 		}
 		
 		public static function textinputToFloat(ti: TextInput) : Object {

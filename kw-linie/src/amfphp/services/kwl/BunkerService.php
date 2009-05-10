@@ -91,6 +91,7 @@ class BunkerService {
 	function save($bunker) {
 		if ($mysqli = newMysqli()) {
 
+			$this->saveType($bunker, $mysqli);
 			$this->saveLocatie($bunker, $mysqli);
 			$this->saveDocumenten($bunker, $mysqli);
 			$this->saveBescherming($bunker, $mysqli);
@@ -128,6 +129,33 @@ class BunkerService {
 				$bunker["straat"], 
 				$bunker["stafkaart"], 
 				$bunker["kadaster"], 
+				$bunker["bunker_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+	}
+
+	function saveType($bunker, $mysqli) {
+		$sql = "update `kwl_bunker` ";
+		$sql .= "set ";
+		$sql .= "`type` = ?,"; 
+		$sql .= "`code` = ?,"; 
+		$sql .= "`nr` = ?,"; 
+		$sql .= "`ext` = ?,"; 
+		$sql .= "`nummer` = ?,"; 
+		$sql .= "`schietgaten` = ?,"; 
+		$sql .= "`aanwezig` = ? "; 
+		$sql .= "where `bunker_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('ssisssii', 
+				$bunker["type"], 
+				$bunker["code"], 
+				$bunker["nr"], 
+				$bunker["ext"], 
+				$bunker["nummer"], 
+				$bunker["schietgaten"], 
+				$bunker["aanwezig"], 
 				$bunker["bunker_id"]);
 			$stmt->execute();
 			$stmt->close();
