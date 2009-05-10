@@ -143,11 +143,12 @@ class BunkerService {
 		$sql .= "`vh_verkoop_door_domeinen` = ?,"; 
 		$sql .= "`vh_oude_fotos` = ?,"; 
 		$sql .= "`vh_andere` = ?,"; 
-		$sql .= "`vh_andere_tekst` = ? "; 
+		$sql .= "`vh_andere_tekst` = ?,"; 
+		$sql .= "`vh_andere_bron` = ? "; 
 		$sql .= "where `bunker_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiiiiiisi', 
+			$stmt->bind_param('iiiiiiiissi', 
 				$bunker["vh_grondplan"], 
 				$bunker["vh_onteigeningsdossier"], 
 				$bunker["vh_lastenboek"], 
@@ -157,6 +158,7 @@ class BunkerService {
 				$bunker["vh_oude_fotos"], 
 				$bunker["vh_andere"], 
 				$bunker["vh_andere_tekst"], 
+				$bunker["vh_andere_bron"], 
 				$bunker["bunker_id"]);
 			$stmt->execute();
 			$stmt->close();
