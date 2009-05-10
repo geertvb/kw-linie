@@ -66,6 +66,21 @@ class BunkerService {
 		return $result;
 	}
 	
+	function deleteFoto($id) {
+		$sql = "DELETE FROM `kwl_foto` WHERE `foto_id` = ?";
+
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				$result = $stmt->execute();
+				$stmt->close();
+			}
+			$mysqli->close();
+		}
+		
+		return $result;
+	}
+	
 	function findDeelgemeentes() {
 		$sql = "SELECT distinct `deelgemeente` FROM `kwl_bunker` WHERE `deelgemeente` is not null order by `deelgemeente` asc";
 		return findSQL($sql);
