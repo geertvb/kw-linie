@@ -1,32 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			
+			public function bind(contact: Object) : void {
+				contact.contact_id = BindingUtils.textinputToString(ti_contact_id);
+				contact.naam = BindingUtils.textinputToString(ti_naam);
+				contact.voornaam = BindingUtils.textinputToString(ti_voornaam);
+				contact.straat = BindingUtils.textinputToString(ti_straat);
+				contact.nummer = BindingUtils.textinputToString(ti_nummer);
+				contact.postcode = BindingUtils.textinputToString(ti_postcode);
+				contact.gemeente = BindingUtils.comboboxToString(cb_gemeente);
+				contact.telefoon = BindingUtils.textinputToString(ti_telefoon);
+				contact.gsm = BindingUtils.textinputToString(ti_gsm);
+				contact.email = BindingUtils.textinputToString(ti_email);				
+			}
+			
+
+		]]>
+	</mx:Script>
+
+
 	<mx:Form x="0" y="0">
+		<mx:FormItem label="ID">
+			<mx:TextInput width="64" id="ti_contact_id" text="{data.contact_id}" editable="false"/>
+		</mx:FormItem>
 		<mx:FormItem label="Naam">
-			<mx:TextInput/>
+			<mx:TextInput
+				id="ti_naam"
+				text="{data.naam}"/>
 		</mx:FormItem>
 		<mx:FormItem label="Voornaam">
-			<mx:TextInput/>
+			<mx:TextInput
+				id="ti_voornaam"
+				text="{data.voornaam}"/>
 		</mx:FormItem>
-		<mx:FormItem label="Straat" direction="horizontal">
-			<mx:TextInput/>
+		<mx:FormItem
+			label="Straat"
+			direction="horizontal">
+			<mx:TextInput
+				id="ti_straat"
+				text="{data.straat}"/>
 			<mx:FormItem label="Nummer">
-				<mx:TextInput width="64"/>
+				<mx:TextInput
+					id="ti_nummer"
+					text="{data.nummer}"
+					width="64"/>
 			</mx:FormItem>
 		</mx:FormItem>
-		<mx:FormItem label="Postcode" direction="horizontal">
-			<mx:TextInput width="64"/>
+		<mx:FormItem
+			label="Postcode"
+			direction="horizontal">
+			<mx:TextInput
+				id="ti_postcode"
+				text="{data.postcode}"
+				width="64"/>
 			<mx:FormItem label="Gemeente">
-				<mx:ComboBox></mx:ComboBox>
+				<mx:ComboBox
+					id="cb_gemeente"/>
 			</mx:FormItem>
 		</mx:FormItem>
 		<mx:FormItem label="Telefoon">
-			<mx:TextInput/>
+			<mx:TextInput
+				id="ti_telefoon"
+				text="{data.telefoon}"/>
 		</mx:FormItem>
 		<mx:FormItem label="GSM">
-			<mx:TextInput/>
+			<mx:TextInput
+				id="ti_gsm"
+				text="{data.gsm}"/>
 		</mx:FormItem>
 		<mx:FormItem label="E-mail">
-			<mx:TextInput/>
+			<mx:TextInput
+				id="ti_email"
+				text="{data.email}"/>
 		</mx:FormItem>
 	</mx:Form>
 </mx:Canvas>
