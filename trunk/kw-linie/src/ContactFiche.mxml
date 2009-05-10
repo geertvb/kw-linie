@@ -1,14 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:contactFiche="contactFiche.*">
-
-	<mx:VBox>
-		<mx:DataGrid>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	xmlns:rpc="mx.rpc.*"
+	xmlns:contactFiche="contactFiche.*"
+	creationComplete="creationComplete()"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+		
+			private function creationComplete() : void {
+				contactServiceFindAllResponder.token = contactService.findAll(); 
+			}
 			
+			private function click_bewaar(event: Event) : void {
+				var contactVO: Object = new Object();
+				bind(contactVO);
+				contactService.save(contactVO);
+			}
+			
+			private function bind(contactVO: Object) : void {
+				contactView.bind(contactVO);
+			}
+			
+		]]>
+	</mx:Script>
+
+	<rpc:CallResponder id="contactServiceFindAllResponder" />
+	
+	<mx:RemoteObject id="contactService"
+		source="kwl.ContactService" 
+		destination="amfphp">
+    </mx:RemoteObject>
+    
+	<mx:VBox>
+		<mx:DataGrid
+			id="contactGrid"
+			dataProvider="{contactServiceFindAllResponder.lastResult}"
+			selectedIndex="0">
+			<mx:columns>
+				<mx:DataGridColumn
+					headerText="Naam"
+					dataField="naam"/>
+				<mx:DataGridColumn
+					headerText="Voornaam"
+					dataField="voornaam"/>
+				<mx:DataGridColumn
+					headerText="Straat"
+					dataField="straat"/>
+				<mx:DataGridColumn
+					headerText="Nummer"
+					dataField="nummer"/>
+				<mx:DataGridColumn
+					headerText="Postcode"
+					dataField="postcode"/>
+				<mx:DataGridColumn
+					headerText="Gemeente"
+					dataField="gemeente"/>
+			</mx:columns>
 		</mx:DataGrid>
+		<mx:HBox width="100%" horizontalAlign="center">
+			<mx:Button label="Voeg toe"/>
+			<mx:Button label="Verwijder"/>
+		</mx:HBox>
 		<mx:TabNavigator>
-			<contactFiche:Contact label="Contact" />
-			<contactFiche:Opmerkingen label="Opmerkingen" />
+			<contactFiche:Contact id="contactView" label="Contact" data="{contactGrid.selectedItem}" />
+			<contactFiche:Opmerkingen label="Opmerkingen" data="{contactGrid.selectedItem}" />
 		</mx:TabNavigator>
+		<mx:Button label="Bewaar"
+			click="click_bewaar(event)"/>
 		
 	</mx:VBox>
 		
