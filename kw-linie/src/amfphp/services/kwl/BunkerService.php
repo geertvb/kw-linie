@@ -94,6 +94,7 @@ class BunkerService {
 			$this->saveLocatie($bunker, $mysqli);
 			$this->saveDocumenten($bunker, $mysqli);
 			$this->saveBescherming($bunker, $mysqli);
+			$this->saveOpmerkingen($bunker, $mysqli);
 			
 			$mysqli->close();
 		}
@@ -188,6 +189,19 @@ class BunkerService {
 				$bunker["bescherming_rup"], 
 				$bunker["bescherming_andere"], 
 				$bunker["bescherming_andere_tekst"], 
+				$bunker["bunker_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveOpmerkingen($bunker, $mysqli) {
+		$sql = "update `kwl_bunker` set `opmerkingen` = ? where `bunker_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('si', 
+				$bunker["opmerkingen"], 
 				$bunker["bunker_id"]);
 			$stmt->execute();
 			$stmt->close();
