@@ -19,6 +19,7 @@
 			import mx.controls.Alert;
 			
 			public function creationComplete() : void {
+				joomlaUser.send();
 				refreshBunkerGrid();
 			}
 			
@@ -31,8 +32,7 @@
 			}
 			
 			public function onResult(event: ResultEvent) : void {
-				//Alert.show(event.result.toString());
-				refreshBunkerGrid();
+				Alert.show(event.result.toString());
 			}
 			
 			public function bunkerGridChange(event: Event) : void {
@@ -60,6 +60,12 @@
 
 	<xyz:CallResponder id="bunkerResponder" result="_bunker = event.result" />
 	<xyz:CallResponder id="bunkerFindAllResponder" />
+	
+	<mx:HTTPService 
+		id="joomlaUser" 
+		url="joomla-user.php" 
+		method="GET" 
+		resultFormat="e4x" />
 	
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService" 
