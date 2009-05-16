@@ -9,8 +9,14 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
 		
 			private function creationComplete() : void {
+				refreshContactGrid(); 
+			}
+			
+			private function refreshContactGrid() : void {
 				contactServiceFindAllResponder.token = contactService.findAll(); 
 			}
 			
@@ -20,8 +26,39 @@
 				contactService.save(contactVO);
 			}
 			
+			private function click_voeg_toe(event: Event) : void {
+				contactService.create();
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				contactService.deleteContact(contactGrid.selectedItem.contact_id);
+			}
+			
 			private function bind(contactVO: Object) : void {
 				contactView.bind(contactVO);
+			}
+			
+			private function result_save(event: ResultEvent) : void {
+				refreshContactGrid(); 
+			}
+			
+			private function result_create(event: ResultEvent) : void {
+				var contactID: int = event.result as int;
+				refreshContactGrid(); 
+			}
+			
+			private function result_delete(event: ResultEvent) : void {
+				refreshContactGrid(); 
+			}
+			
+			private function selectContactID(contactID: int) : void {
+				var items = contactServiceFindAllResponder.lastResult;
+				for (var i=items.length -1 ; i>=0; i--) {
+					if (items[i].contact_id == contactID) {
+						contactGrid.selectedIndex = i;
+						return;
+					}
+				}
 			}
 			
 		]]>
@@ -29,9 +66,19 @@
 
 	<rpc:CallResponder id="contactServiceFindAllResponder" />
 	
-	<mx:RemoteObject id="contactService"
+	<mx:RemoteObject
+		id="contactService"
 		source="kwl.ContactService" 
 		destination="amfphp">
+		<mx:method
+			name="save"
+			result="result_save(event)" />
+		<mx:method
+			name="create"
+			result="result_create(event)" />
+		<mx:method
+			name="deleteContact"
+			result="result_delete(event)" />
     </mx:RemoteObject>
     
 	<mx:VBox>
@@ -61,14 +108,19 @@
 			</mx:columns>
 		</mx:DataGrid>
 		<mx:HBox width="100%" horizontalAlign="center">
-			<mx:Button label="Voeg toe"/>
-			<mx:Button label="Verwijder"/>
+			<mx:Button
+				label="Voeg toe"
+				click="click_voeg_toe(event)"/>
+			<mx:Button
+				label="Verwijder"
+				click="click_verwijder(event)"/>
 		</mx:HBox>
 		<mx:TabNavigator>
 			<contactFiche:Contact id="contactView" label="Contact" data="{contactGrid.selectedItem}" />
 			<contactFiche:Opmerkingen label="Opmerkingen" data="{contactGrid.selectedItem}" />
 		</mx:TabNavigator>
-		<mx:Button label="Bewaar"
+		<mx:Button
+			label="Bewaar"
 			click="click_bewaar(event)"/>
 		
 	</mx:VBox>
