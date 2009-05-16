@@ -26,6 +26,16 @@ package components
             invalidateProperties();
 		}
 
+		[Bindable("change")]
+		[Bindable("valueCommit")]
+		public function get selectedValue() : Object {
+			if (this.selectedItem && this._valueField) {
+				return this.selectedItem[this._valueField];
+			} else {
+				return null;
+			}
+		}
+
 		override public function set dataProvider(o: Object) : void {
 			super.dataProvider = o;
 			
