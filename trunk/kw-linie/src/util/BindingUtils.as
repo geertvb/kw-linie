@@ -2,6 +2,7 @@ package util
 {
 	import mx.controls.CheckBox;
 	import mx.controls.ComboBox;
+	import mx.controls.DateField;
 	import mx.controls.NumericStepper;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
@@ -64,6 +65,14 @@ package util
 		public static function comboboxToString(cb: ComboBox) : Object {
 			if (cb.enabled && cb.selectedIndex>=0) {
 				return cb.selectedLabel;
+			} else {
+				return null;
+			}
+		}
+		
+		public static function dateFieldToDate(df: DateField) : Object {
+			if (df.enabled) {
+				return df.selectedDate;
 			} else {
 				return null;
 			}
