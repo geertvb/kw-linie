@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*" xmlns:local="*">
 
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
 			import referenceData.RedenNietAanwezigHolder;
 			import referenceData.AanwezigheidHolder;
 			import util.BindingUtils;
@@ -12,16 +14,45 @@
 			
 			[Bindable]
 			private var redenNietAanwezigList: Object = RedenNietAanwezigHolder.getInstance();
+			
+			[Bindable]
+			private var invuller: Object;
+			
+			[Bindable]
+			private var bezoekers: ArrayCollection = new ArrayCollection();
+			
+			private var _selectContactPopup: SelectContactPopup;
+			
+			public function get selectContactPopup() : SelectContactPopup {
+				if (_selectContactPopup == null) {
+					_selectContactPopup = new SelectContactPopup();
+				}
+				return _selectContactPopup;
+			}
 
 			public function bind(bunkerbezoek: Object) : void {
 				bunkerbezoek.datum = BindingUtils.dateFieldToDate(df_datum);
-				bunkerbezoek.invuller_id = BindingUtils.textinputToInteger(ti_invuller_id);
+				bunkerbezoek.invuller_id = invuller.contact_id;
 				//bunkerbezoek.bezoeker_ids = BindingUtils.listToArray(list_bezoekers, "bezoeker_id");
 				bunkerbezoek.aanwezigheid = BindingUtils.comboboxToString(cb_aanwezigheid);
 				bunkerbezoek.reden_niet_aanwezig = BindingUtils.comboboxToString(cb_reden_niet_aanwezig);
 				bunkerbezoek.reden_niet_aanwezig_tekst = BindingUtils.textinputToString(ti_reden_niet_aanwezig_tekst);
 			}
-
+			
+			public function click_select_invuller(event: Event) : void {
+				selectContactPopup.select = function (contact : Object) : void { invuller = contact; };
+				selectContactPopup.open();
+			}
+			
+			public function click_add_bezoeker(event: Event) : void {
+				selectContactPopup.select = function (contact : Object) : void { bezoekers.addItem(contact); };
+				selectContactPopup.open();
+			}
+			
+			public function click_remove_bezoeker(event: Event) : void {
+				bezoekers.removeItemAt(list_bezoekers.selectedIndex);
+			}
+			
 		]]>
 	</mx:Script>
 
@@ -34,27 +65,31 @@
 		<mx:FormItem 
 			label="Invuller" 
 			direction="horizontal">
-			<mx:TextInput
-				visible="false"
-				includeInLayout="false"
-				id="ti_invuller_id"
-				text="{data.invuller.invuller_id}"/>
-			<mx:TextInput
-				id="ti_invuller"
-				editable="false"
-				text="{data.invuller.naam} {data.invuller.voornaam}"/>
-			<mx:Button label="..."/>
+			<local:ContactRenderer
+				borderStyle="solid"
+				width="400"
+				data="{invuller}" />
+			<mx:Button 
+				label="..." 
+				click="click_select_invuller(event)"/>
 		</mx:FormItem>
 		<mx:FormItem label="Bezoekers">
 			<mx:HBox>
 				<mx:List
 					id="list_bezoekers"
-					dataProvider="{data.bezoekers}"
+					dataProvider="{bezoekers}"
+					rowCount="3"
+					width="400"
 					itemRenderer="ContactRenderer">
 				</mx:List>
 				<mx:VBox>
-					<mx:Button label="+"/>
-					<mx:Button label="-"/>
+					<mx:Button 
+						label="+"
+						click="click_add_bezoeker(event)"/>
+					<mx:Button 
+						label="-"
+						enabled="{list_bezoekers.selectedItem != null}"
+						click="click_remove_bezoeker(event)"/>
 				</mx:VBox>
 			</mx:HBox>
 		</mx:FormItem>

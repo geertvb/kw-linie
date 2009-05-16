@@ -1,4 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="300">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" >
+
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			import mx.core.Application;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			private var contacts: *;
+			
+			public var select: Function;
+			
+			public function open() : void {
+				PopUpManager.addPopUp(this, Application.application as DisplayObject, true);
+				PopUpManager.centerPopUp(this);
+			}
+			
+			public function close(): void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			public function click_zoek(event: Event): void {
+				var contact: Object = new Object();
+				bind(contact);
+				contactService.findByExample(contact);
+			}
+			
+			public function click_kies(event: Event): void {
+				close();
+				if (select != null) {
+					select(list_contacts.selectedItem);
+				}
+			}
+			
+			public function click_annuleer(event: Event): void {
+				close();
+			}
+			
+			public function onFault(event: FaultEvent) : void {
+				
+			}
+			
+			public function onResult(event: ResultEvent) : void {
+				contacts = event.result;
+			}
+			
+			public function bind(contact: Object) : void {
+				contact.naam = BindingUtils.textinputToString(ti_naam);
+				contact.voornaam = BindingUtils.textinputToString(ti_voornaam);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:RemoteObject id="contactService"
+		source="kwl.ContactService" 
+		destination="amfphp">
+		<mx:method 
+			name="findByExample" 
+			fault="onFault(event)" 
+			result="onResult(event)" />
+    </mx:RemoteObject>
+    
+	<mx:Form>
+		<mx:FormItem label="Naam">
+			<mx:TextInput id="ti_naam"/>
+		</mx:FormItem>
+		<mx:FormItem label="Voornaam">
+			<mx:TextInput id="ti_voornaam"/>
+		</mx:FormItem>
+	</mx:Form>
+	
+	<mx:HBox width="100%">
+		<mx:Button
+			label="Zoek"
+			click="click_zoek(event)"/>
+	</mx:HBox>
+	
+	<mx:List id="list_contacts"
+		width="400"
+		dataProvider="{contacts}"
+		itemRenderer="ContactRenderer" 
+		rowCount="4" />
+		
+	<mx:ControlBar>
+		<mx:Button 
+			label="Kies"
+			enabled="{list_contacts.selectedItem != null}"
+			click="click_kies(event)" />
+		<mx:Button 
+			label="Annuleer"
+			click="click_annuleer(event)" />
+	</mx:ControlBar>
 	
 </mx:TitleWindow>

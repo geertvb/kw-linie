@@ -32,7 +32,8 @@
 			}
 			
 			public function onResult(event: ResultEvent) : void {
-				Alert.show(event.result.toString());
+				//Alert.show(event.result.toString());
+				refreshBunkerGrid();
 			}
 			
 			public function bunkerGridChange(event: Event) : void {

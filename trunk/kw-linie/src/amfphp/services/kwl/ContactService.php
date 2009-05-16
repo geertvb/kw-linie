@@ -6,7 +6,7 @@ class ContactService {
 
 	function findAll() {
     	$sql = "SELECT";
-    	$sql .= "  *";
+    	$sql .= "  * ";
     	$sql .= "FROM";
     	$sql .= "  `kwl_contact`";
     	$sql .= "ORDER BY";
@@ -16,7 +16,7 @@ class ContactService {
 
 	function findByID($id) {
     	$sql = "SELECT";
-    	$sql .= "  *";
+    	$sql .= "  * ";
     	$sql .= "FROM";
     	$sql .= "  `kwl_contact`";
     	$sql .= "WHERE";
@@ -34,8 +34,60 @@ class ContactService {
 		
 		return $result;		
 	}
+	
+	function asdf($vo) {
+		$conditions = array();
+		$fieldvalues = array();
+		$fieldtypes = "";
+		foreach ($vo as $fieldname => $fieldvalue) {
+			if ($fieldvalue) {
+				if (is_int($fieldvalue)) {
+	                $fieldtype = 'i';
+	                $operator = "=";
+	            } else if (is_double($fieldvalue)) {
+	                $fieldtype = 'd';
+	                $operator = "=";
+	            } else if (is_string($fieldvalue)) {
+	                $fieldtype = 's';
+	                $operator = "like";
+	                $fieldvalue = "%" . $fieldvalue . "%";
+	            }
+			
+				$conditions[] = "$fieldname $operator ?";
+				$fieldvalues[] = $fieldvalue;
+				$fieldtypes .= $fieldtype;
+			}
+		}
+		if (count($conditions) > 0) {
+			$whereclause = " WHERE " . implode(" AND ", $conditions);
+		} else {
+			$whereclause = "";
+		}
+		return array($whereclause, $fieldtypes, $fieldvalues);
+	}
 
-    function save($contactVO) {
+	function findByExample($contact) {
+		list($where, $types, $values) = $this->asdf($contact);
+		$sql = "SELECT";
+    	$sql .= " * ";
+    	$sql .= "FROM";
+    	$sql .= "  `kwl_contact`";
+    	$sql .= $where;
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				call_user_func_array('mysqli_stmt_bind_param', array_merge (array($stmt, $types), $values)); 
+				if ($stmt->execute()) {
+					$result = getResult($stmt);
+				}
+				$stmt->close();
+			}
+			$mysqli->close();
+		}
+		
+		return $result;
+	}
+
+	function save($contactVO) {
 		if ($mysqli = newMysqli()) {
 
 			$this->saveContact($contactVO, $mysqli);
