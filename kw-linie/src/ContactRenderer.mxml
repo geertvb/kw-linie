@@ -3,6 +3,6 @@
 	<mx:Image x="8" y="8" height="48" width="40"/>
 	<mx:Label x="56" y="4" text="{data.voornaam} {data.naam}" fontWeight="bold"/>
 	<mx:Label x="56" y="24" text="{data.straat} {data.nummer}, {data.postcode} {data.gemeente}"/>
-	<mx:Label x="56" text="{data.email} - {data.telefoon} - {data.gsm}" bottom="4"/>
+	<mx:Label x="56" text="{data.email}" bottom="4"/>
 	
 </mx:Canvas>
