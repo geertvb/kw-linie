@@ -1,16 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:Script>
+		<![CDATA[
+			import referenceData.RedenNietAanwezigHolder;
+			import referenceData.AanwezigheidHolder;
+			import util.BindingUtils;
+
+			[Bindable]
+			private var aanwezigheidList: Object = AanwezigheidHolder.getInstance();
+			
+			[Bindable]
+			private var redenNietAanwezigList: Object = RedenNietAanwezigHolder.getInstance();
+
+			public function bind(bunkerbezoek: Object) : void {
+				bunkerbezoek.datum = BindingUtils.dateFieldToDate(df_datum);
+				bunkerbezoek.invuller_id = BindingUtils.textinputToInteger(ti_invuller_id);
+				//bunkerbezoek.bezoeker_ids = BindingUtils.listToArray(list_bezoekers, "bezoeker_id");
+				bunkerbezoek.aanwezigheid = BindingUtils.comboboxToString(cb_aanwezigheid);
+				bunkerbezoek.reden_niet_aanwezig = BindingUtils.comboboxToString(cb_reden_niet_aanwezig);
+				bunkerbezoek.reden_niet_aanwezig_tekst = BindingUtils.textinputToString(ti_reden_niet_aanwezig_tekst);
+			}
+
+		]]>
+	</mx:Script>
+
 	<mx:Form x="0" y="0">
 		<mx:FormItem label="Datum">
-			<mx:DateField id="df_datum"/>
+			<mx:DateField
+				selectedDate="{data.datum}"
+				id="df_datum"/>
 		</mx:FormItem>
-		<mx:FormItem label="Invuller" direction="horizontal">
-			<mx:TextInput/>
+		<mx:FormItem 
+			label="Invuller" 
+			direction="horizontal">
+			<mx:TextInput
+				visible="false"
+				includeInLayout="false"
+				id="ti_invuller_id"
+				text="{data.invuller.invuller_id}"/>
+			<mx:TextInput
+				id="ti_invuller"
+				editable="false"
+				text="{data.invuller.naam} {data.invuller.voornaam}"/>
 			<mx:Button label="..."/>
 		</mx:FormItem>
 		<mx:FormItem label="Bezoekers">
 			<mx:HBox>
-				<mx:List></mx:List>
+				<mx:List
+					id="list_bezoekers"
+					dataProvider="{data.bezoekers}"
+					itemRenderer="ContactRenderer">
+				</mx:List>
 				<mx:VBox>
 					<mx:Button label="+"/>
 					<mx:Button label="-"/>
@@ -18,29 +59,27 @@
 			</mx:HBox>
 		</mx:FormItem>
 		<mx:FormItem label="Aanwezigheid">
-			<mx:ComboBox id="cb_aanwezigheid">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Ja" />
-						<mx:Object label="Niet zeker" />
-						<mx:Object label="Neen" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx
+				id="cb_aanwezigheid"
+				labelField="aanwezigheid"
+				valueField="aanwezigheid"
+				selectedValue="{data.aanwezigheid}"
+				dataProvider="{aanwezigheidList.data}" />
 		</mx:FormItem>
-		<mx:FormItem label="Reden" enabled="{cb_aanwezigheid.selectedItem.label == 'Neen'}">
-			<mx:ComboBox id="cb_redenNietAanwezig">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Afgebroken" />
-						<mx:Object label="Verzonken" />
-						<mx:Object label="Andere" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+		<mx:FormItem 
+			label="Reden" 
+			enabled="{cb_aanwezigheid.selectedValue == 'Neen'}">
+			<components:ComboBoxEx
+				id="cb_reden_niet_aanwezig"
+				labelField="reden_niet_aanwezig"
+				selectedValue="{data.reden_niet_aanwezig}"
+				dataProvider="{redenNietAanwezigList.data}"/>
 		</mx:FormItem>
 		<mx:FormItem>
-			<mx:TextInput enabled="{!(cb_redenNietAanwezig.selectedItem.label != 'Andere' || cb_aanwezigheid.selectedItem.label != 'Neen')}"/>
+			<mx:TextInput
+				id="ti_reden_niet_aanwezig_tekst"
+				text="{data.reden_niet_aanwezig_tekst}"
+				enabled="{!(cb_reden_niet_aanwezig.selectedValue != 'Andere' || cb_aanwezigheid.selectedValue != 'Neen')}"/>
 		</mx:FormItem>
 	</mx:Form>
 </mx:Canvas>
