@@ -107,6 +107,7 @@
 			<components:ComboBoxEx
 				id="cb_reden_niet_aanwezig"
 				labelField="reden_niet_aanwezig"
+				valueField="reden_niet_aanwezig"
 				selectedValue="{data.reden_niet_aanwezig}"
 				dataProvider="{redenNietAanwezigList.data}"/>
 		</mx:FormItem>
@@ -114,7 +115,7 @@
 			<mx:TextInput
 				id="ti_reden_niet_aanwezig_tekst"
 				text="{data.reden_niet_aanwezig_tekst}"
-				enabled="{!(cb_reden_niet_aanwezig.selectedValue != 'Andere' || cb_aanwezigheid.selectedValue != 'Neen')}"/>
+				enabled="{cb_reden_niet_aanwezig.enabled &amp;&amp; cb_reden_niet_aanwezig.selectedValue == 'Andere'}"/>
 		</mx:FormItem>
 	</mx:Form>
 </mx:Canvas>
