@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="64">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="400" height="54"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off">
+	<!--
 	<mx:Image x="8" y="8" height="48" width="40"/>
-	<mx:Label x="56" y="4" text="{data.voornaam} {data.naam}" fontWeight="bold"/>
-	<mx:Label x="56" y="24" text="{data.straat} {data.nummer}, {data.postcode} {data.gemeente}"/>
-	<mx:Label x="56" text="{data.email}" bottom="4"/>
+	-->
+	<mx:VBox verticalGap="0">
+		<mx:Label text="{data.voornaam} {data.naam}" fontWeight="bold"/>
+		<mx:Label text="{data.straat} {data.nummer}, {data.postcode} {data.gemeente}"/>
+		<mx:Label text="{data.email}"/>
+	</mx:VBox>
 	
 </mx:Canvas>

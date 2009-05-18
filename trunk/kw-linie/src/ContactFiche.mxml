@@ -2,6 +2,9 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" 
+	backgroundColor="#637449" 
+	themeColor="#637449" 
+	backgroundGradientColors="[#637449,#637449]" 
 	xmlns:rpc="mx.rpc.*"
 	xmlns:contactFiche="contactFiche.*"
 	creationComplete="creationComplete()"
@@ -9,20 +12,27 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
+			
+			[Bindable]
+			private var contacts: *;
+			
+			private var contactID: *;
 		
 			private function creationComplete() : void {
 				refreshContactGrid(); 
 			}
 			
 			private function refreshContactGrid() : void {
-				contactServiceFindAllResponder.token = contactService.findAll(); 
+				contactService.findAll(); 
 			}
 			
 			private function click_bewaar(event: Event) : void {
 				var contactVO: Object = new Object();
 				bind(contactVO);
+				contactID = contactVO.contact_id;
 				contactService.save(contactVO);
 			}
 			
@@ -36,6 +46,7 @@
 			
 			private function bind(contactVO: Object) : void {
 				contactView.bind(contactVO);
+				opmerkingenView.bind(contactVO);
 			}
 			
 			private function result_save(event: ResultEvent) : void {
@@ -43,7 +54,7 @@
 			}
 			
 			private function result_create(event: ResultEvent) : void {
-				var contactID: int = event.result as int;
+				contactID = event.result;
 				refreshContactGrid(); 
 			}
 			
@@ -51,21 +62,26 @@
 				refreshContactGrid(); 
 			}
 			
-			private function selectContactID(contactID: int) : void {
-				var items = contactServiceFindAllResponder.lastResult;
-				for (var i=items.length -1 ; i>=0; i--) {
-					if (items[i].contact_id == contactID) {
-						contactGrid.selectedIndex = i;
-						return;
+			private function selectContactID(contactID: *) : void {
+				if (contacts != null && contactID != null) {
+					for (var i: int=contacts.length -1 ; i>=0; i--) {
+						if (contacts[i].contact_id == contactID) {
+							contactGrid.selectedIndex = i;
+							break;
+						}
 					}
 				}
+			}
+			
+			private function result_findAll(event: ResultEvent) : void {
+				contacts = event.result;
+				selectContactID(contactID);
+				contactID = null;
 			}
 			
 		]]>
 	</mx:Script>
 
-	<rpc:CallResponder id="contactServiceFindAllResponder" />
-	
 	<mx:RemoteObject
 		id="contactService"
 		source="kwl.ContactService" 
@@ -74,6 +90,9 @@
 			name="save"
 			result="result_save(event)" />
 		<mx:method
+			name="findAll"
+			result="result_findAll(event)" />
+		<mx:method
 			name="create"
 			result="result_create(event)" />
 		<mx:method
@@ -81,11 +100,11 @@
 			result="result_delete(event)" />
     </mx:RemoteObject>
     
-	<mx:VBox>
+	<mx:VBox x="10" y="10">
 		<mx:DataGrid
 			id="contactGrid"
-			dataProvider="{contactServiceFindAllResponder.lastResult}"
-			selectedIndex="0">
+			dataProvider="{contacts}"
+			selectedIndex="0" >
 			<mx:columns>
 				<mx:DataGridColumn
 					headerText="Naam"
@@ -113,14 +132,24 @@
 				click="click_voeg_toe(event)"/>
 			<mx:Button
 				label="Verwijder"
-				click="click_verwijder(event)"/>
+				click="click_verwijder(event)" enabled="true"/>
 		</mx:HBox>
-		<mx:TabNavigator>
-			<contactFiche:Contact id="contactView" label="Contact" data="{contactGrid.selectedItem}" />
-			<contactFiche:Opmerkingen label="Opmerkingen" data="{contactGrid.selectedItem}" />
+		<mx:TabNavigator
+			creationPolicy="all">
+			<contactFiche:Contact 
+				id="contactView" 
+				label="Contact"
+				enabled="{contactGrid.selectedIndex >= 0}"
+				data="{contactGrid.selectedItem}" />
+			<contactFiche:Opmerkingen
+				id="opmerkingenView" 
+				label="Opmerkingen" 
+				enabled="{contactGrid.selectedIndex >= 0}"
+				data="{contactGrid.selectedItem}" />
 		</mx:TabNavigator>
 		<mx:Button
 			label="Bewaar"
+			enabled="{contactGrid.selectedIndex >= 0}"
 			click="click_bewaar(event)"/>
 		
 	</mx:VBox>

@@ -142,11 +142,12 @@ class ContactService {
 		$sql .= "`gemeente` = ?,"; 
 		$sql .= "`telefoon` = ?,"; 
 		$sql .= "`gsm` = ?,"; 
-		$sql .= "`email` = ? "; 
+		$sql .= "`email` = ?,";
+		$sql .= "`opmerkingen` = ? ";
 		$sql .= "where `contact_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sssssssssi', 
+			$stmt->bind_param('ssssssssssi', 
 				$contactVO["naam"], 
 				$contactVO["voornaam"], 
 				$contactVO["straat"], 
@@ -156,6 +157,7 @@ class ContactService {
 				$contactVO["telefoon"], 
 				$contactVO["gsm"], 
 				$contactVO["email"], 
+				$contactVO["opmerkingen"], 
 				$contactVO["contact_id"]);
 			$stmt->execute();
 			$stmt->close();
