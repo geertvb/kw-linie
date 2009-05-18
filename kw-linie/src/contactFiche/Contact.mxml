@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas 
+	creationComplete="creationComplete()"
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*">
 
 	<mx:Script>
 		<![CDATA[
+			import mx.rpc.events.ResultEvent;
 			import util.BindingUtils;
+			
+			public function creationComplete() : void {
+				gemeenteService.findAll();
+			}
 			
 			public function bind(contact: Object) : void {
 				contact.contact_id = BindingUtils.textinputToString(ti_contact_id);
@@ -22,6 +30,13 @@
 		]]>
 	</mx:Script>
 
+	<mx:RemoteObject
+		id="gemeenteService"
+		source="kwl.GemeenteService" 
+		destination="amfphp">
+		<mx:method
+			name="findAll"/>
+    </mx:RemoteObject>
 
 	<mx:Form x="0" y="0">
 		<mx:FormItem label="ID">
@@ -58,8 +73,13 @@
 				text="{data.postcode}"
 				width="64"/>
 			<mx:FormItem label="Gemeente">
-				<mx:ComboBox
-					id="cb_gemeente"/>
+				<components:ComboBoxEx
+					dataProvider="{gemeenteService.findAll.lastResult}"
+					prompt=""
+					labelField="naam"
+					valueField="naam"
+					selectedValue="{data.gemeente}"
+					id="cb_gemeente" width="192"/>
 			</mx:FormItem>
 		</mx:FormItem>
 		<mx:FormItem label="Telefoon">

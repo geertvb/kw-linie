@@ -55,9 +55,10 @@ package components
 					
 					if (item[_valueField] == _selectedValue || ObjectUtil.compare(item[_valueField], _selectedValue, 1) == 0) {
 						this.selectedIndex = i;
-						break;
+						return;
 					}
 				}
+				this.selectedIndex = -1;
 			}
 		}
 
