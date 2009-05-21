@@ -74,4 +74,17 @@ function getSingleResult($stmt) {
 	return $result;
 }
 
+function getValues($stmt) {
+	$result = array();
+	for (;;) {
+		$value = null;
+		$stmt->bind_result($value);
+		if (!$stmt->fetch()) {
+			break;
+		}
+		$result[] = $value;
+	}
+	return $result;
+}
+
 ?>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*" xmlns:local="*">
 
 	<mx:Script>
@@ -15,84 +14,48 @@
 			[Bindable]
 			private var redenNietAanwezigList: Object = RedenNietAanwezigHolder.getInstance();
 			
-			[Bindable]
-			private var invuller: Object;
-			
-			[Bindable]
-			private var bezoekers: ArrayCollection = new ArrayCollection();
-			
-			private var _selectContactPopup: SelectContactPopup;
-			
-			public function get selectContactPopup() : SelectContactPopup {
-				if (_selectContactPopup == null) {
-					_selectContactPopup = new SelectContactPopup();
-				}
-				return _selectContactPopup;
-			}
-
 			public function bind(bunkerbezoek: Object) : void {
+				bunkerbezoek.bunkerbezoek_id = BindingUtils.textinputToInteger(ti_bunkerbezoek_id);
 				bunkerbezoek.datum = BindingUtils.dateFieldToDate(df_datum);
-				bunkerbezoek.invuller_id = invuller.contact_id;
-				//bunkerbezoek.bezoeker_ids = BindingUtils.listToArray(list_bezoekers, "bezoeker_id");
+				bunkerbezoek.invuller_id = invullerContactSelector.contact_id;
+				bunkerbezoek.bezoeker_ids = bezoekersContactSelector.contact_ids;
 				bunkerbezoek.aanwezigheid = BindingUtils.comboboxToString(cb_aanwezigheid);
 				bunkerbezoek.reden_niet_aanwezig = BindingUtils.comboboxToString(cb_reden_niet_aanwezig);
 				bunkerbezoek.reden_niet_aanwezig_tekst = BindingUtils.textinputToString(ti_reden_niet_aanwezig_tekst);
-			}
-			
-			public function click_select_invuller(event: Event) : void {
-				selectContactPopup.select = function (contact : Object) : void { invuller = contact; };
-				selectContactPopup.open();
-			}
-			
-			public function click_add_bezoeker(event: Event) : void {
-				selectContactPopup.select = function (contact : Object) : void { bezoekers.addItem(contact); };
-				selectContactPopup.open();
-			}
-			
-			public function click_remove_bezoeker(event: Event) : void {
-				bezoekers.removeItemAt(list_bezoekers.selectedIndex);
 			}
 			
 		]]>
 	</mx:Script>
 
 	<mx:Form x="0" y="0">
+		<mx:FormItem label="Uniek ID">
+			<mx:TextInput 
+				id="ti_bunkerbezoek_id"
+				editable="false" 
+				text="{data.bunkerbezoek_id}"/>
+		</mx:FormItem>
+	
 		<mx:FormItem label="Datum">
 			<mx:DateField
-				selectedDate="{data.datum}"
+				formatString="DD/MM/YYYY"
+				selectedDate="{DateField.stringToDate(data.datum,'YYYY-MM-DD')}"
 				id="df_datum"/>
 		</mx:FormItem>
+		
 		<mx:FormItem 
 			label="Invuller" 
 			direction="horizontal">
-			<local:ContactRenderer
-				borderStyle="solid"
-				width="400"
-				data="{invuller}" />
-			<mx:Button 
-				label="..." 
-				click="click_select_invuller(event)"/>
+			<components:ContactSelector
+				id="invullerContactSelector"
+				contact_id="{data.invuller_id}" />
 		</mx:FormItem>
+		
 		<mx:FormItem label="Bezoekers">
-			<mx:HBox>
-				<mx:List
-					id="list_bezoekers"
-					dataProvider="{bezoekers}"
-					rowCount="3"
-					width="400"
-					itemRenderer="ContactRenderer">
-				</mx:List>
-				<mx:VBox>
-					<mx:Button 
-						label="+"
-						click="click_add_bezoeker(event)"/>
-					<mx:Button 
-						label="-"
-						enabled="{list_bezoekers.selectedItem != null}"
-						click="click_remove_bezoeker(event)"/>
-				</mx:VBox>
-			</mx:HBox>
+			<components:ContactListSelector
+				id="bezoekersContactSelector"
+				contact_ids="{data.bezoeker_ids}" />
 		</mx:FormItem>
+		
 		<mx:FormItem label="Aanwezigheid">
 			<components:ComboBoxEx
 				id="cb_aanwezigheid"
@@ -101,6 +64,7 @@
 				selectedValue="{data.aanwezigheid}"
 				dataProvider="{aanwezigheidList.data}" />
 		</mx:FormItem>
+		
 		<mx:FormItem 
 			label="Reden" 
 			enabled="{cb_aanwezigheid.selectedValue == 'Neen'}">
@@ -111,11 +75,13 @@
 				selectedValue="{data.reden_niet_aanwezig}"
 				dataProvider="{redenNietAanwezigList.data}"/>
 		</mx:FormItem>
+		
 		<mx:FormItem>
 			<mx:TextInput
 				id="ti_reden_niet_aanwezig_tekst"
 				text="{data.reden_niet_aanwezig_tekst}"
 				enabled="{cb_reden_niet_aanwezig.enabled &amp;&amp; cb_reden_niet_aanwezig.selectedValue == 'Andere'}"/>
 		</mx:FormItem>
+		
 	</mx:Form>
 </mx:Canvas>

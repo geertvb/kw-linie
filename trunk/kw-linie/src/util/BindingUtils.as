@@ -72,7 +72,7 @@ package util
 		
 		public static function dateFieldToDate(df: DateField) : Object {
 			if (df.enabled) {
-				return df.selectedDate;
+				return DateField.dateToString(df.selectedDate, "YYYY-MM-DD");
 			} else {
 				return null;
 			}

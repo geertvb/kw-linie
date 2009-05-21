@@ -5,13 +5,79 @@
 	themeColor="#637449" 
 	backgroundGradientColors="[#637449,#637449]" 
 	layout="absolute"
+	creationComplete="creationComplete()"
 	xmlns:tab="bunkerBezoekFiche.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+		
+			[Bindable]
+			private var bunkerBezoek: Object;
+		
+			private function creationComplete() : void {
+				bunkerBezoekService.findAll();
+			}
+			
+			private function bunkerBezoekGridChange(event : Event) : void {
+				if (bunkerBezoekGrid.selectedItem != null) {
+					bunkerBezoekService.findByID(bunkerBezoekGrid.selectedItem.bunkerbezoek_id);
+				}
+			}
+			
+			private function fault(event: FaultEvent) : void {
+				Alert.show(event.fault.faultString);
+			}
+			
+			private function result_findByID(event: ResultEvent) : void {
+				bunkerBezoek = event.result;
+			}
+			
+			private function bind(vo: Object) : void {
+				bezoekView.bind(vo);
+			}
+			
+			private function click_bewaar(event: Event) : void {
+				var vo: Object = new Object();
+				bind(vo);
+				bunkerBezoekService.save(vo);
+			}
+			
+			private function result(event: ResultEvent) : void {
+				Alert.show(event.result.toString());
+			}
+		]]>
+	</mx:Script>
 	
 	<mx:Object id="bunker" />
 
-	<mx:Object id="bunkerbezoek" />
+	<mx:RemoteObject id="bunkerBezoekService"
+		source="kwl.BunkerBezoekService" 
+		destination="amfphp"
+		fault="fault(event)">
+		<mx:method
+			name="findByID"
+			result="result_findByID(event)" />
+		<mx:method
+			name="save"
+			result="result(event)" />
+    </mx:RemoteObject>
 	
 	<mx:VBox width="718">
+		<mx:DataGrid id="bunkerBezoekGrid"
+			dataProvider="{bunkerBezoekService.findAll.lastResult}" 
+			width="100%"
+			selectedIndex="0"
+			valueCommit="bunkerBezoekGridChange(event)"
+			change="bunkerBezoekGridChange(event)">
+			<mx:columns>
+				<mx:DataGridColumn dataField="bunkerbezoek_id" headerText="ID" width="40" />
+				<mx:DataGridColumn dataField="datum" headerText="Datum" width="64" />
+			</mx:columns>
+		</mx:DataGrid>
+
 		<mx:HBox>
 			<mx:FormItem label="ID" horizontalAlign="left">
 				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{bunker.bunker_id}" />
@@ -21,13 +87,17 @@
 			</mx:FormItem>
 		</mx:HBox>
 		<mx:TabNavigator width="100%" creationPolicy="all" height="712">
-			<tab:Bezoek label="Bezoek" />
+			<tab:Bezoek 
+				id="bezoekView" 
+				label="Bezoek" 
+				data="{bunkerBezoek}" />
 			<tab:Omgeving label="Omgeving" />
 			<tab:BuitenToestand label="Toestand buiten" />
 			<tab:BinnenToestand label="Toestand binnen" />
 			<tab:Elementen label="Elementen" />
 			<tab:Fotos label="Fotos" />
 		</mx:TabNavigator>
+		<mx:Button label="Bewaar" click="click_bewaar(event)"/>
 	</mx:VBox>
 
 </mx:Application>
