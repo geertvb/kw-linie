@@ -99,12 +99,13 @@ class BunkerBezoekService {
 
 			$this->saveBezoek($vo, $mysqli);
 			$this->updateBezoekers($vo["bunkerbezoek_id"], $vo["bezoeker_ids"]);
+			$this->saveOmgeving($vo, $mysqli);
 			
 			$mysqli->close();
 		}
 		return true;
 	}
-	
+
 	function saveBezoek($vo, $mysqli) {
 		$sql = "update `kwl_bunkerbezoek` ";
 		$sql .= "set ";
@@ -123,6 +124,70 @@ class BunkerBezoekService {
 				$vo["reden_niet_aanwezig"], 
 				$vo["reden_niet_aanwezig_tekst"], 
 				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveOmgeving($vo, $mysqli) {
+		$sql = "update `kwl_bunkerbezoek` ";
+		$sql .= "set ";
+
+		$sql .= "`omgeving_10m_niet_bekeken` = ?,"; 
+		$sql .= "`omgeving_10m_bos` = ?,"; 
+		$sql .= "`omgeving_10m_bebouwing` = ?,"; 
+		$sql .= "`omgeving_10m_weiland` = ?,"; 
+		$sql .= "`omgeving_10m_park` = ?,"; 
+		$sql .= "`omgeving_10m_akker` = ?,"; 
+		$sql .= "`omgeving_10m_water` = ?,"; 
+
+		$sql .= "`omgeving_100m_niet_bekeken` = ?,"; 
+		$sql .= "`omgeving_100m_bos` = ?,"; 
+		$sql .= "`omgeving_100m_bebouwing` = ?,"; 
+		$sql .= "`omgeving_100m_weiland` = ?,"; 
+		$sql .= "`omgeving_100m_park` = ?,"; 
+		$sql .= "`omgeving_100m_akker` = ?,"; 
+		$sql .= "`omgeving_100m_water` = ?,"; 
+		
+		$sql .= "`ligging` = ?,"; 
+		$sql .= "`expositie` = ?,"; 
+		$sql .= "`relief` = ?,"; 
+		$sql .= "`afstand_berijdbare_weg_meter` = ?,"; 
+		$sql .= "`afstand_berijdbare_weg_niet_bekeken` = ?,"; 
+		$sql .= "`recreatieve_ontsluiting` = ?,"; 
+		$sql .= "`recreatieve_ontsluiting_andere` = ? "; 
+		
+		$sql .= "where `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiiiiiiiiiiiisssiissi', 
+				$vo["omgeving_10m_niet_bekeken"], 
+				$vo["omgeving_10m_bos"], 
+				$vo["omgeving_10m_bebouwing"], 
+				$vo["omgeving_10m_weiland"], 
+				$vo["omgeving_10m_park"], 
+				$vo["omgeving_10m_akker"],
+				$vo["omgeving_10m_water"],
+
+				$vo["omgeving_100m_niet_bekeken"], 
+				$vo["omgeving_100m_bos"], 
+				$vo["omgeving_100m_bebouwing"], 
+				$vo["omgeving_100m_weiland"], 
+				$vo["omgeving_100m_park"], 
+				$vo["omgeving_100m_akker"],
+				$vo["omgeving_100m_water"],
+				
+				$vo["ligging"], 
+				$vo["expositie"], 
+				$vo["relief"], 
+				$vo["afstand_berijdbare_weg_meter"], 
+				$vo["afstand_berijdbare_weg_niet_bekeken"], 
+				$vo["recreatieve_ontsluiting"],
+				$vo["recreatieve_ontsluiting_andere"],
+				
+				$vo["bunkerbezoek_id"]
+				);
 			$stmt->execute();
 			$stmt->close();
 		}
