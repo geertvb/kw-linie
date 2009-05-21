@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:ArrayCollection id="dp_ligging">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Geheel ondergronds" />
+		<mx:Object label="Gedeeltelijk ondergronds" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_expositie">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Volledig beschaduwd" />
+		<mx:Object label="Half beschaduwd" />
+		<mx:Object label="In volle zon" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_relief">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Vlak" />
+		<mx:Object label="Hellend" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_recreatieve_ontsluiting">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Ligt langs trage weg" />
+		<mx:Object label="Fietspad" />
+		<mx:Object label="Nuttig om informatiebord te plaatsen?" />
+		<mx:Object label="Andere" />
+	</mx:ArrayCollection>
 
 	<mx:Script>
 		<![CDATA[
@@ -241,41 +268,28 @@
 			</mx:Grid>
 		</mx:FormItem>
 		<mx:FormItem label="Ligging">
-			<mx:ComboBox 
-				id="cb_ligging">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Geheel ondergronds" />
-						<mx:Object label="Gedeeltelijk ondergronds" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx 
+				id="cb_ligging" 
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.ligging}"
+				dataProvider="{dp_ligging}" />
 		</mx:FormItem>
 		<mx:FormItem label="Expositie">
-			<mx:ComboBox
-				id="cb_expositie">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Volledig beschaduwd" />
-						<mx:Object label="Half beschaduwd" />
-						<mx:Object label="In volle zon" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx
+				id="cb_expositie"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.expositie}"
+				dataProvider="{dp_expositie}" />
 		</mx:FormItem>
 		<mx:FormItem label="Relief">
-			<mx:ComboBox
-				id="cb_relief">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Vlak" />
-						<mx:Object label="Hellend" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx
+				id="cb_relief"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.relief}"
+				dataProvider="{dp_relief}" />
 		</mx:FormItem>
 		<mx:FormItem label="Afstand berijdbare weg">
 			<mx:HBox>
@@ -291,17 +305,12 @@
 				label="Niet bekeken"/>
 		</mx:FormItem>
 		<mx:FormItem label="Recreatieve ontsluiting">
-			<mx:ComboBox id="cb_recreatieveOntsluiting">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Ligt langs trage weg" />
-						<mx:Object label="Fietspad" />
-						<mx:Object label="Nuttig om informatiebord te plaatsen?" />
-						<mx:Object label="Andere" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx
+				id="cb_recreatieveOntsluiting"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.recreatieve_ontsluiting}"
+				dataProvider="{dp_recreatieve_ontsluiting}" />
 			<mx:TextInput
 				id="ti_recreatieve_ontsluiting_andere" 
 				enabled="{cb_recreatieveOntsluiting.selectedItem.label == 'Andere'}"/>
