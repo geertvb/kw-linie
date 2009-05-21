@@ -35,6 +35,19 @@ class ContactService {
 		return $result;		
 	}
 	
+	function findByIds($ids) {
+		$sql = "";
+    	$sql .= " SELECT";
+    	$sql .= "   *";
+    	$sql .= " FROM";
+    	$sql .= "   `kwl_contact`";
+    	$sql .= " WHERE";
+    	$sql .= "   `contact_id` in (" . implode(", ", $ids) . ")";
+    	$sql .= " ORDER BY";
+    	$sql .= "   `contact_id` ASC";
+    	return findSQL($sql);
+	}
+	
 	function asdf($vo) {
 		$conditions = array();
 		$fieldvalues = array();

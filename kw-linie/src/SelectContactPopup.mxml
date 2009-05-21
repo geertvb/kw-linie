@@ -9,6 +9,16 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.managers.PopUpManager;
 			
+			private static var _instance: SelectContactPopup;
+			
+			public static function getInstance() : SelectContactPopup {
+				if (_instance == null) {
+					_instance = new SelectContactPopup();
+				}
+				return _instance;
+			}
+
+
 			[Bindable]
 			private var contacts: *;
 			

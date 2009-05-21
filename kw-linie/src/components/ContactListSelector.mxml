@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.utils.ArrayUtil;
+			import com.hillelcoren.utils.ArrayCollectionUtils;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.collections.ArrayCollection;
+		
+			[Bindable]
+			public var contacts: ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var _contact_ids: ArrayCollection = new ArrayCollection();
+			
+			public function set contact_ids(ids: *) : void {
+				if (ids is Array) {
+					_contact_ids = new ArrayCollection(ids);
+				} else {
+					_contact_ids = ids as ArrayCollection;
+				}
+				contactService.findByIds(_contact_ids);
+			}
+			
+			public function get contact_ids() : ArrayCollection {
+				return _contact_ids;
+			}
+		
+			public function addContact(contact: Object) : void {
+				contacts.addItem(contact);
+				contact_ids.addItem(contact.contact_id);
+			}
+
+			public function click_add_contact(event: Event) : void {
+				var selector: SelectContactPopup = SelectContactPopup.getInstance();
+				selector.select = addContact;
+				selector.open();
+			}
+			
+			public function click_remove_contact(event: Event) : void {
+				var contactIndex: int = contactList.selectedIndex;
+				var contact: Object = contacts.getItemAt(contactIndex);
+				contacts.removeItemAt(contactIndex);
+
+				var contact_id: Object = contact.contact_id;
+				contactIndex = _contact_ids.getItemIndex(contact_id);
+				if (contactIndex >= 0) {
+					_contact_ids.removeItemAt(contactIndex);
+				} else {
+					Alert.show("ContactList out of sync");
+				}
+			}
+
+			public function onResult(event: ResultEvent) : void {
+				this.contacts = new ArrayCollection(event.result as Array);
+			}
+			
+			public function onFault(event: FaultEvent) : void {
+				Alert.show(event.fault.faultString);
+			}
+
+		]]>
+	</mx:Script>
+	
+	<mx:RemoteObject id="contactService"
+		source="kwl.ContactService" 
+		destination="amfphp">
+		<mx:method 
+			name="findByIds" 
+			fault="onFault(event)" 
+			result="onResult(event)" />
+    </mx:RemoteObject>
+
+	<mx:HBox>
+		<mx:List
+			id="contactList"
+			dataProvider="{contacts}"
+			rowCount="3"
+			width="400"
+			itemRenderer="ContactRenderer">
+		</mx:List>
+		<mx:VBox>
+			<mx:Button 
+				label="+"
+				click="click_add_contact(event)"/>
+			<mx:Button 
+				label="-"
+				enabled="{contactList.selectedIndex >= 0}"
+				click="click_remove_contact(event)"/>
+		</mx:VBox>
+	</mx:HBox>
+
+</mx:Canvas>
