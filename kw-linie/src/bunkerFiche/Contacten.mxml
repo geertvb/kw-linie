@@ -5,21 +5,25 @@
 		<![CDATA[
 			
 			private function click_voeg_toe(event: Event) : void {
+				var selector: SelectContactPopup = SelectContactPopup.getInstance();
+				selector.select = voeg_toe;
+				selector.open();
+			}
+			
+			private function voeg_toe(contact: Object) : void {
 				contacts.addItem({
 					relatie: "Eigenaar",
-					contact: {
-						naam: "Van Bastelaere",
-						voornaam: "Geert",
-						straat: "Vlinderlaan",
-						nummer: "6/2",
-						postcode: "3000",
-						gemeente: "Leuven"
-					}
+					contact: contact
 				});
+
 			}
 			
 			private function click_verwijder(event: Event) : void {
 				contacts.removeItemAt(contactGrid.selectedIndex);
+			}
+			
+			public function bind(vo: Object) : void {
+				vo.contacts = contacts;
 			}
 			
 		]]>
