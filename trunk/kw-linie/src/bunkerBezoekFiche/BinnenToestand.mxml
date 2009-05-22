@@ -1,51 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:ArrayCollection id="dp_gebruik">
+		<mx:Object 
+			label="Niet bekeken" 
+			data="Niet bekeken"/>
+		<mx:Object 
+			label="Niet geweten (o.w.v. bvb niet toegankelijk)" 
+			data="Niet geweten"/>
+		<mx:Object 
+			label="Geen"
+			data="Geen" />
+		<mx:Object 
+			label="Bewoning (dakloze)"
+			data="Bewoning" />
+		<mx:Object 
+			label="Opslagplaats (hout, wijn, aardappelen, ...)"
+			data="Opslagplaats" />
+		<mx:Object 
+			label="Tuinhuis"
+			data="Tuinhuis" />
+		<mx:Object 
+			label="Kippenhok"
+			data="Kippenhok" />
+		<mx:Object 
+			label="Vleermuiswinterverblijfplaats"
+			data="Vleermuiswinterverblijfplaats" />
+		<mx:Object 
+			label="Andere"
+			data="Andere" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_toestand">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Niet geweten" />
+		<mx:Object label="Proper" />
+		<mx:Object label="Sluikstort" />
+		<mx:Object label="Graffiti" />
+		<mx:Object label="Brandplekken" />
+		<mx:Object label="Andere" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_vochtigheid">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Droog" />
+		<mx:Object label="Vochtig (condens aan plafond)" />
+		<mx:Object label="Zeer nat (laagje water op bodem)" />
+	</mx:ArrayCollection>
+
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			public function bind(vo: Object) : void {
+				vo.toestand_binnen_gebruik = BindingUtils.comboBoxExToString(cb_internGebruik);
+				vo.toestand_binnen_gebruik_andere = BindingUtils.textinputToString(ti_gebruik_andere);
+				vo.toestand_binnen_toestand = BindingUtils.comboBoxExToString(cb_toestandBinnen);
+				vo.toestand_binnen_toestand_andere = BindingUtils.textinputToString(ti_toestand_binnen_toestand_andere);
+				vo.toestand_binnen_vochtigheid = BindingUtils.comboBoxExToString(cb_toestand_binnen_vochtigheid);
+			}
+		]]>
+	</mx:Script>
+
 	<mx:Form x="0" y="0">
+	
 		<mx:FormItem label="Intern gebruik">
-			<mx:ComboBox rowCount="9" id="cb_internGebruik">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Niet geweten (o.w.v. bvb niet toegankelijk)" />
-						<mx:Object label="Geen" />
-						<mx:Object label="Bewoning (dakloze)" />
-						<mx:Object label="Opslagplaats (hout, wijn, aardappelen, ...)" />
-						<mx:Object label="Tuinhuis" />
-						<mx:Object label="Kippenhok" />
-						<mx:Object label="Vleermuiswinterverblijfplaats" />
-						<mx:Object label="Andere" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
-			<mx:TextInput enabled="{cb_internGebruik.selectedItem.label == 'Andere'}"/>
+			<components:ComboBoxEx
+				rowCount="9" 
+				labelField="label"
+				valueField="data"
+				selectedValue="{data.toestand_binnen_gebruik}"
+				dataProvider="{dp_gebruik}"
+				id="cb_internGebruik" />
+			<mx:TextInput
+				id="ti_gebruik_andere"
+				text="{data.toestand_binnen_gebruik_andere}" 
+				enabled="{cb_internGebruik.selectedValue == 'Andere'}"/>
 		</mx:FormItem>
+		
 		<mx:FormItem label="Toestand binnen" horizontalAlign="left">
-			<mx:ComboBox rowCount="9" id="cb_toestandBinnen">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Niet geweten" />
-						<mx:Object label="Proper" />
-						<mx:Object label="Sluikstort" />
-						<mx:Object label="Graffiti" />
-						<mx:Object label="Brandplekken" />
-						<mx:Object label="Andere" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
-			<mx:TextInput enabled="{cb_toestandBinnen.selectedItem.label == 'Andere'}"/>
+			<components:ComboBoxEx
+				rowCount="9" 
+				dataProvider="{dp_toestand}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.toestand_binnen_toestand}"
+				id="cb_toestandBinnen" />
+			<mx:TextInput 
+				id="ti_toestand_binnen_toestand_andere"
+				text="{data.toestand_binnen_toestand_andere}"
+				enabled="{cb_toestandBinnen.selectedItem.label == 'Andere'}"/>
 		</mx:FormItem>
+		
 		<mx:FormItem label="Vochtigheid">
-			<mx:ComboBox>
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Droog" />
-						<mx:Object label="Vochtig (condens aan plafond)" />
-						<mx:Object label="Zeer nat (laagje water op bodem)" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx 
+				id="cb_toestand_binnen_vochtigheid"
+				dataProvider="{dp_vochtigheid}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.toestand_binnen_vochtigheid}"/>
 		</mx:FormItem>
+		
 	</mx:Form>
 </mx:Canvas>

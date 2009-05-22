@@ -101,6 +101,7 @@ class BunkerBezoekService {
 			$this->updateBezoekers($vo["bunkerbezoek_id"], $vo["bezoeker_ids"]);
 			$this->saveOmgeving($vo, $mysqli);
 			$this->saveBuitenToestand($vo, $mysqli);
+			$this->saveBinnenToestand($vo, $mysqli);
 			
 			$mysqli->close();
 		}
@@ -137,6 +138,34 @@ class BunkerBezoekService {
 				$vo["toestand_buiten_andere_tekst"], 
 				$vo["toestand_buiten_toegankelijk"], 
 				$vo["toestand_buiten_ontoegankelijk_reden"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveBinnenToestand($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `toestand_binnen_gebruik` = ?,"; 
+		$sql .= "   `toestand_binnen_gebruik_andere` = ?,"; 
+		$sql .= "   `toestand_binnen_toestand` = ?,"; 
+		$sql .= "   `toestand_binnen_toestand_andere` = ?,"; 
+		$sql .= "   `toestand_binnen_vochtigheid` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('sssssi', 
+				$vo["toestand_binnen_gebruik"], 
+				$vo["toestand_binnen_gebruik_andere"], 
+				$vo["toestand_binnen_toestand"], 
+				$vo["toestand_binnen_toestand_andere"], 
+				$vo["toestand_binnen_vochtigheid"], 
 				
 				$vo["bunkerbezoek_id"]);
 			$stmt->execute();

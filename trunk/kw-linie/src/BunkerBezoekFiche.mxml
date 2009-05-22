@@ -39,6 +39,7 @@
 				bezoekView.bind(vo);
 				omgevingView.bind(vo);
 				buitenToestandView.bind(vo);
+				binnenToestandView.bind(vo);
 			}
 			
 			private function click_bewaar(event: Event) : void {
@@ -101,7 +102,10 @@
 				id="buitenToestandView"
 				data="{bunkerBezoek}"
 				label="Toestand buiten" />
-			<tab:BinnenToestand label="Toestand binnen" />
+			<tab:BinnenToestand
+				id="binnenToestandView" 
+				data="{bunkerBezoek}"
+				label="Toestand binnen" />
 			<tab:Elementen label="Elementen" />
 			<tab:Fotos label="Fotos" />
 		</mx:TabNavigator>
