@@ -1,38 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:ArrayCollection id="dp_toegankelijk">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Ja" />
+		<mx:Object label="Neen" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_toestand_buiten_ontoegankelijk_reden">
+		<mx:Object label="Niet bekeken" />
+		<mx:Object label="Dichtgemetst" />
+		<mx:Object label="Gesloten deur" />
+		<mx:Object label="Versperring ingang door rommel" />
+	</mx:ArrayCollection>
+	
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			public function bind(vo: Object) : void {
+				vo.toestand_buiten_niet_bekeken = BindingUtils.checkboxToBoolean(cb_nb_algemeneToestandBuiten);
+				vo.toestand_buiten_goed = BindingUtils.checkboxToBoolean(cb_toestand_buiten_goed);
+				vo.toestand_buiten_betonrot = BindingUtils.checkboxToBoolean(cb_toestand_buiten_betonrot);
+				vo.toestand_buiten_beschadiging_gevechten = BindingUtils.checkboxToBoolean(cb_toestand_buiten_beschadiging_gevechten);
+				vo.toestand_buiten_beschadiging_latere_datum = BindingUtils.checkboxToBoolean(cb_toestand_buiten_beschadiging_latere_datum);
+				vo.toestand_buiten_beschadiging_natuurlijk = BindingUtils.checkboxToBoolean(cb_toestand_buiten_beschadiging_natuurlijk);
+				vo.toestand_buiten_andere = BindingUtils.checkboxToBoolean(cb_atb_andere);
+				vo.toestand_buiten_andere_tekst = BindingUtils.textinputToString(ti_toestand_buiten_andere_tekst);
+				
+				vo.toestand_buiten_toegankelijk = BindingUtils.comboboxToString(cb_toegankelijk);
+				vo.toestand_buiten_ontoegankelijk_reden = BindingUtils.comboboxToString(cb_toestand_buiten_ontoegankelijk_reden);
+			}
+		]]>
+	</mx:Script>
+
 	<mx:Form x="0" y="0">
+	
 		<mx:FormItem label="Algemene toestand">
-			<mx:CheckBox id="cb_nb_algemeneToestandBuiten" label="Niet bekeken"/>
-			<mx:CheckBox label="Goed" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
-			<mx:CheckBox label="Betonrot" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
-			<mx:CheckBox label="Beschadiging daterend van gevechten" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
-			<mx:CheckBox label="Beschadiging van latere datum" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
-			<mx:CheckBox label="Natuurlijke beschadiging" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
-			<mx:CheckBox id="cb_atb_andere" label="Andere" enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
-			<mx:TextInput enabled="{!(cb_nb_algemeneToestandBuiten.selected || !cb_atb_andere.selected)}"/>
+			<mx:CheckBox
+				selected="{data.toestand_buiten_niet_bekeken}" 
+				id="cb_nb_algemeneToestandBuiten" 
+				label="Niet bekeken"/>
+			<mx:CheckBox 
+				id="cb_toestand_buiten_goed"
+				selected="{data.toestand_buiten_goed}"
+				label="Goed" 
+				enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox 
+				id="cb_toestand_buiten_betonrot"
+				selected="{data.toestand_buiten_betonrot}"
+				label="Betonrot" 
+				enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox 
+				id="cb_toestand_buiten_beschadiging_gevechten"
+				selected="{data.toestand_buiten_beschadiging_gevechten}"
+				label="Beschadiging daterend van gevechten" 
+				enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox
+				id="cb_toestand_buiten_beschadiging_latere_datum"
+				selected="{data.toestand_buiten_beschadiging_latere_datum}" 
+				label="Beschadiging van latere datum" 
+				enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox 
+				id="cb_toestand_buiten_beschadiging_natuurlijk"
+				selected="{data.toestand_buiten_beschadiging_natuurlijk}"
+				label="Natuurlijke beschadiging" 
+				enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:CheckBox 
+				id="cb_atb_andere" 
+				selected="{data.toestand_buiten_andere}"
+				label="Andere" 
+				enabled="{!cb_nb_algemeneToestandBuiten.selected}"/>
+			<mx:TextInput
+				id="ti_toestand_buiten_andere_tekst"
+				text="{data.toestand_buiten_andere_tekst}" 
+				enabled="{!(cb_nb_algemeneToestandBuiten.selected || !cb_atb_andere.selected)}"/>
 		</mx:FormItem>
+		
 		<mx:FormItem label="Toegankelijk">
-			<mx:ComboBox id="cb_toegankelijk">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Ja" />
-						<mx:Object label="Neen" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx
+				id="cb_toegankelijk"
+				dataProvider="{dp_toegankelijk}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.toestand_buiten_toegankelijk}" />
 		</mx:FormItem>
+		
 		<mx:FormItem label="Reden">
-			<mx:ComboBox enabled="{cb_toegankelijk.selectedItem.label == 'Neen'}">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Niet bekeken" />
-						<mx:Object label="Dichtgemetst" />
-						<mx:Object label="Gesloten deur" />
-						<mx:Object label="Versperring ingang door rommel" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+			<components:ComboBoxEx 
+				id="cb_toestand_buiten_ontoegankelijk_reden"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.toestand_buiten_ontoegankelijk_reden}"
+				enabled="{cb_toegankelijk.selectedItem.label == 'Neen'}" />
 		</mx:FormItem>
+		
 	</mx:Form>
 </mx:Canvas>

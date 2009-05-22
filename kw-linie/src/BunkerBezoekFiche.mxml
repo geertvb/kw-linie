@@ -38,6 +38,7 @@
 			private function bind(vo: Object) : void {
 				bezoekView.bind(vo);
 				omgevingView.bind(vo);
+				buitenToestandView.bind(vo);
 			}
 			
 			private function click_bewaar(event: Event) : void {
@@ -96,7 +97,10 @@
 				id="omgevingView"
 				data="{bunkerBezoek}"
 				label="Omgeving" />
-			<tab:BuitenToestand label="Toestand buiten" />
+			<tab:BuitenToestand
+				id="buitenToestandView"
+				data="{bunkerBezoek}"
+				label="Toestand buiten" />
 			<tab:BinnenToestand label="Toestand binnen" />
 			<tab:Elementen label="Elementen" />
 			<tab:Fotos label="Fotos" />
