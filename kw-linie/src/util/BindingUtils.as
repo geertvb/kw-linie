@@ -1,5 +1,7 @@
 package util
 {
+	import components.ComboBoxEx;
+	
 	import mx.controls.CheckBox;
 	import mx.controls.ComboBox;
 	import mx.controls.DateField;
@@ -65,6 +67,14 @@ package util
 		public static function comboboxToString(cb: ComboBox) : Object {
 			if (cb.enabled && cb.selectedIndex>=0) {
 				return cb.selectedLabel;
+			} else {
+				return null;
+			}
+		}
+		
+		public static function comboBoxExToString(cb: ComboBoxEx) : Object {
+			if (cb.enabled && cb.selectedIndex>=0) {
+				return cb.selectedValue;
 			} else {
 				return null;
 			}
