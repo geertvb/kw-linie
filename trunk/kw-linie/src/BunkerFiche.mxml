@@ -51,6 +51,7 @@
 				bescherming.bind(bunker);
 				opmerkingen.bind(bunker);
 				links.bind(bunker);
+				contacten.bind(bunker);
 				
 				return bunker;
 			}
@@ -105,7 +106,7 @@
 				<mx:TextInput editable="false" width="128" text="{_bunker.type}"  color="#000000"/>
 			</mx:FormItem>
 		</mx:HBox>
-		<mx:TabNavigator width="100%" height="360" creationPolicy="all">
+		<mx:TabNavigator width="100%" height="400" creationPolicy="all">
 			<bunkerFiche:Type id="type" label="Type" data="{_bunker}" />
 			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
 			<bunkerFiche:Documenten id="documenten" label="Documenten" data="{_bunker}" />

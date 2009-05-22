@@ -107,6 +107,37 @@ class BunkerService {
 				$stmt->close();
 			}
 						
+			$sql = "";
+			$sql .= " select";
+			$sql .= "   `kwl_bunker_contact`.`relatie`,";
+			$sql .= "   `kwl_contact`.*";
+			$sql .= " from";
+			$sql .= "   `kwl_bunker_contact`,";
+			$sql .= "   `kwl_contact`";
+			$sql .= " where";
+			$sql .= "   `kwl_bunker_contact`.`bunker_id` = ? AND";
+			$sql .= "   `kwl_bunker_contact`.`contact_id` = `kwl_contact`.`contact_id`";
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				if ($stmt->execute()) {
+					$contacts = getResult($stmt);
+
+					$bunkercontacts = array();					
+					foreach ($contacts as $contact) {
+					 	$relatie = $contact->relatie;
+					 	$contact_id = $contact->contact_id;
+					 	unset($contact->relatie);
+					 	$bunkercontacts[] = array(
+					 		relatie => $relatie, 
+					 		contact_id => $contact_id, 
+					 		contact => $contact);
+					}
+
+					$result->contacts = $bunkercontacts; 
+				}
+				$stmt->close();
+			}
+						
 			$mysqli->close();
 		}
 		
@@ -122,6 +153,7 @@ class BunkerService {
 			$this->saveBescherming($bunker, $mysqli);
 			$this->saveOpmerkingen($bunker, $mysqli);
 			$this->updateLinks($mysqli, $bunker["bunker_id"], $bunker["links"]);
+			$result = $this->updateContacts($mysqli, $bunker["bunker_id"], $bunker["contacts"]);
 			
 			$mysqli->close();
 		}
@@ -216,7 +248,35 @@ class BunkerService {
 		return $sql;
     }	
 
-	function saveDocumenten($bunker, $mysqli) {
+	function updateContacts($mysqli, $bunker_id, $contacts) {
+
+		$sql = "";
+    	$sql .= " DELETE FROM `kwl_bunker_contact`";
+    	$sql .= " WHERE";
+    	$sql .= "   `bunker_id` = " . $bunker_id;
+		$mysqli->query($sql);
+		
+		$sql = "";
+		$sql .= " INSERT INTO `kwl_bunker_contact`";
+		$sql .= "   (`bunker_id`, `contact_id`, `relatie`)";
+		$sql .= " VALUES";
+		$values = array();
+		foreach ($contacts as $contact) {
+			$v = "(";
+			$v .= $bunker_id;
+			$v .= ", ";
+			$v .= $contact["contact"]["contact_id"];
+			$v .= ", ";
+			$v .= "'" . $mysqli->real_escape_string($contact["relatie"]) . "'";
+			$v .= ")";
+			$values[] = $v;
+		}
+		$sql .= " " . implode(", ", $values);
+		$mysqli->query($sql);
+		return $sql;
+    }	
+
+    function saveDocumenten($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
 		$sql .= "set ";
 		$sql .= "`vh_grondplan` = ?,"; 
