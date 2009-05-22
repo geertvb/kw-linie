@@ -100,10 +100,49 @@ class BunkerBezoekService {
 			$this->saveBezoek($vo, $mysqli);
 			$this->updateBezoekers($vo["bunkerbezoek_id"], $vo["bezoeker_ids"]);
 			$this->saveOmgeving($vo, $mysqli);
+			$this->saveBuitenToestand($vo, $mysqli);
 			
 			$mysqli->close();
 		}
 		return true;
+	}
+
+	function saveBuitenToestand($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `toestand_buiten_niet_bekeken` = ?,"; 
+		$sql .= "   `toestand_buiten_goed` = ?,"; 
+		$sql .= "   `toestand_buiten_betonrot` = ?,"; 
+		$sql .= "   `toestand_buiten_beschadiging_gevechten` = ?,"; 
+		$sql .= "   `toestand_buiten_beschadiging_latere_datum` = ?,"; 
+		$sql .= "   `toestand_buiten_beschadiging_natuurlijk` = ?,"; 
+		$sql .= "   `toestand_buiten_andere` = ?,"; 
+		$sql .= "   `toestand_buiten_andere_tekst` = ?,"; 
+		$sql .= "   `toestand_buiten_toegankelijk` = ?,"; 
+		$sql .= "   `toestand_buiten_ontoegankelijk_reden` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiiiiisssi', 
+				$vo["toestand_buiten_niet_bekeken"], 
+				$vo["toestand_buiten_goed"], 
+				$vo["toestand_buiten_betonrot"], 
+				$vo["toestand_buiten_beschadiging_gevechten"], 
+				$vo["toestand_buiten_beschadiging_latere_datum"], 
+				$vo["toestand_buiten_beschadiging_natuurlijk"], 
+				$vo["toestand_buiten_andere"], 
+				$vo["toestand_buiten_andere_tekst"], 
+				$vo["toestand_buiten_toegankelijk"], 
+				$vo["toestand_buiten_ontoegankelijk_reden"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
 	}
 
 	function saveBezoek($vo, $mysqli) {
