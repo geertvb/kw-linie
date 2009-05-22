@@ -19,7 +19,7 @@
 			import mx.controls.Alert;
 			
 			public function creationComplete() : void {
-				joomlaUser.send();
+				//joomlaUser.send();
 				refreshBunkerGrid();
 			}
 			
@@ -50,6 +50,7 @@
 				documenten.bind(bunker);
 				bescherming.bind(bunker);
 				opmerkingen.bind(bunker);
+				links.bind(bunker);
 				
 				return bunker;
 			}
@@ -113,7 +114,9 @@
 			<bunkerFiche:Links id="links" label="Links" data="{_bunker}" />
 			<bunkerFiche:Bescherming id="bescherming" label="Bescherming" data="{_bunker}" />
 			<bunkerFiche:Opmerkingen id="opmerkingen" label="Opmerkingen" data="{_bunker}" />
+			<!--
 			<bunkerFiche:Bezoeken id="bezoeken" label="Bezoeken" data="{_bunker}" />
+			-->
 		</mx:TabNavigator>
 		<mx:Button label="Bewaar" click="bunkerService.save(bind());"/>
 	</mx:VBox>

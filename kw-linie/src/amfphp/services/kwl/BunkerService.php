@@ -87,9 +87,9 @@ class BunkerService {
 	}
 
 	function findByID($id) {
-		$sql = "select * from `kwl_bunker` where `bunker_id` = ?";
 		
 		if ($mysqli = newMysqli()) {
+			$sql = "select * from `kwl_bunker` where `bunker_id` = ?";
 			if ($stmt = $mysqli->prepare($sql)) {
 				$stmt->bind_param('i', $id);
 				if ($stmt->execute()) {
@@ -97,6 +97,16 @@ class BunkerService {
 				}
 				$stmt->close();
 			}
+			
+			$sql = "select `url`, `omschrijving` from `kwl_link` where `bunker_id` = ?";
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				if ($stmt->execute()) {
+					$result->links = getResult($stmt);
+				}
+				$stmt->close();
+			}
+						
 			$mysqli->close();
 		}
 		
@@ -111,6 +121,7 @@ class BunkerService {
 			$this->saveDocumenten($bunker, $mysqli);
 			$this->saveBescherming($bunker, $mysqli);
 			$this->saveOpmerkingen($bunker, $mysqli);
+			$this->updateLinks($mysqli, $bunker["bunker_id"], $bunker["links"]);
 			
 			$mysqli->close();
 		}
@@ -176,6 +187,34 @@ class BunkerService {
 			$stmt->close();
 		}
 	}
+	
+	function updateLinks($mysqli, $bunker_id, $links) {
+
+		$sql = "";
+    	$sql .= " DELETE FROM `kwl_link`";
+    	$sql .= " WHERE";
+    	$sql .= "   `bunker_id` = " . $bunker_id;
+		$mysqli->query($sql);
+		
+		$sql = "";
+		$sql .= " INSERT INTO `kwl_link`";
+		$sql .= "   (`bunker_id`, `url`, `omschrijving`)";
+		$sql .= " VALUES";
+		$values = array();
+		foreach ($links as $link) {
+			$v = "(";
+			$v .= $bunker_id;
+			$v .= ", ";
+			$v .= "'" . $mysqli->real_escape_string($link["url"]) . "'";
+			$v .= ", ";
+			$v .= "'" . $mysqli->real_escape_string($link["omschrijving"]) . "'";
+			$v .= ")";
+			$values[] = $v;
+		}
+		$sql .= " " . implode(", ", $values);
+		$mysqli->query($sql);
+		return $sql;
+    }	
 
 	function saveDocumenten($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
