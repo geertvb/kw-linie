@@ -102,10 +102,218 @@ class BunkerBezoekService {
 			$this->saveOmgeving($vo, $mysqli);
 			$this->saveBuitenToestand($vo, $mysqli);
 			$this->saveBinnenToestand($vo, $mysqli);
+			$this->saveIngang($vo, $mysqli);
+			$this->saveBuitendeur($vo, $mysqli);
+			$this->saveBinnendeur($vo, $mysqli);
+			$this->saveCamouflage($vo, $mysqli);
+			$this->saveDakplaten($vo, $mysqli);
+			$this->saveAfsluitluikGranaatwerper($vo, $mysqli);
+			$this->saveAfsluitluikPistoolkoker($vo, $mysqli);
+			$this->saveRoosterIngang($vo, $mysqli);
+			$this->saveNooduitgang($vo, $mysqli);
+			$this->saveVerluchtingspijpen($vo, $mysqli);
 			
 			$mysqli->close();
 		}
 		return true;
+	}
+
+	function saveCamouflage($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `camouflage_niet_bekeken` = ?,"; 
+		$sql .= "   `camouflage_aanwezig` = ?,"; 
+		$sql .= "   `camouflage_baksteen` = ?,"; 
+		$sql .= "   `camouflage_pannendak` = ?,"; 
+		$sql .= "   `camouflage_eitjesbepleistering` = ?,"; 
+		$sql .= "   `camouflage_beschildering` = ?,"; 
+		$sql .= "   `camouflage_haken_voor_netten_aanwezig` = ?,"; 
+		$sql .= "   `camouflage_opmerkingen` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiiiiisi', 
+				$vo["camouflage_niet_bekeken"], 
+				$vo["camouflage_aanwezig"], 
+				$vo["camouflage_baksteen"], 
+				$vo["camouflage_pannendak"], 
+				$vo["camouflage_eitjesbepleistering"], 
+				$vo["camouflage_beschildering"], 
+				$vo["camouflage_haken_voor_netten_aanwezig"], 
+				$vo["camouflage_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveDakplaten($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `dakplaten_niet_bekeken` = ?,"; 
+		$sql .= "   `dakplaten_aanwezig` = ?,"; 
+		$sql .= "   `dakplaten_bunkernummer_leesbaar` = ?,"; 
+		$sql .= "   `dakplaten_opmerkingen` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiisi', 
+				$vo["dakplaten_niet_bekeken"], 
+				$vo["dakplaten_aanwezig"], 
+				$vo["dakplaten_bunkernummer_leesbaar"], 
+				$vo["dakplaten_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveAfsluitluikGranaatwerper($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `afsluitluik_granaatwerper_niet_bekeken` = ?,"; 
+		$sql .= "   `afsluitluik_granaatwerper_aanwezig` = ?,"; 
+		$sql .= "   `afsluitluik_granaatwerper_aantal_totaal` = ?,"; 
+		$sql .= "   `afsluitluik_granaatwerper_aantal_met_ketting` = ?,"; 
+		$sql .= "   `afsluitluik_granaatwerper_opmerkingen` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iisssi', 
+				$vo["afsluitluik_granaatwerper_niet_bekeken"], 
+				$vo["afsluitluik_granaatwerper_aanwezig"], 
+				$vo["afsluitluik_granaatwerper_aantal_totaal"], 
+				$vo["afsluitluik_granaatwerper_aantal_met_ketting"], 
+				$vo["afsluitluik_granaatwerper_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveAfsluitluikPistoolkoker($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `afsluitluik_pistoolkoker_niet_bekeken` = ?,"; 
+		$sql .= "   `afsluitluik_pistoolkoker_aanwezig` = ?,"; 
+		$sql .= "   `afsluitluik_pistoolkoker_met_ketting` = ?,"; 
+		$sql .= "   `afsluitluik_pistoolkoker_opmerkingen` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiisi', 
+				$vo["afsluitluik_pistoolkoker_niet_bekeken"], 
+				$vo["afsluitluik_pistoolkoker_aanwezig"], 
+				$vo["afsluitluik_pistoolkoker_met_ketting"], 
+				$vo["afsluitluik_pistoolkoker_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveRoosterIngang($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `rooster_ingang_niet_bekeken` = ?,"; 
+		$sql .= "   `rooster_ingang_aanwezig` = ?,"; 
+		$sql .= "   `rooster_ingang_opmerkingen` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iisi', 
+				$vo["rooster_ingang_niet_bekeken"], 
+				$vo["rooster_ingang_aanwezig"], 
+				$vo["rooster_ingang_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveNooduitgang($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `nooduitgang_niet_bekeken` = ?,"; 
+		$sql .= "   `nooduitgang_aanwezig` = ?,"; 
+		$sql .= "   `nooduitgang_toestand` = ?,"; 
+		$sql .= "   `nooduitgang_schotbalken_binnenkant_aanwezig` = ?,"; 
+		$sql .= "   `nooduitgang_schotbalken_buitenkant_aanwezig` = ?,"; 
+		$sql .= "   `nooduitgang_opmerkingen` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iisiisi', 
+				$vo["nooduitgang_niet_bekeken"], 
+				$vo["nooduitgang_aanwezig"], 
+				$vo["nooduitgang_toestand"], 
+				$vo["nooduitgang_schotbalken_binnenkant_aanwezig"], 
+				$vo["nooduitgang_schotbalken_buitenkant_aanwezig"], 
+				$vo["nooduitgang_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
+	function saveVerluchtingspijpen($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `verluchtingspijpen_niet_bekeken` = ?,"; 
+		$sql .= "   `verluchtingspijpen_aanwezig` = ?,"; 
+		$sql .= "   `verluchtingspijpen_aantal_totaal` = ?,"; 
+		$sql .= "   `verluchtingspijpen_aantal_met_roostertje` = ?,"; 
+		$sql .= "   `verluchtingspijpen_aantal_met_shouwtje` = ?,"; 
+		$sql .= "   `verluchtingspijpen_opmerkingen` = ?"; 
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iissssi', 
+				$vo["verluchtingspijpen_niet_bekeken"], 
+				$vo["verluchtingspijpen_aanwezig"], 
+				$vo["verluchtingspijpen_aantal_totaal"], 
+				$vo["verluchtingspijpen_aantal_met_roostertje"], 
+				$vo["verluchtingspijpen_aantal_met_shouwtje"], 
+				$vo["verluchtingspijpen_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
 	}
 
 	function saveBuitenToestand($vo, $mysqli) {
@@ -261,4 +469,100 @@ class BunkerBezoekService {
 		}
 		return $sql;
 	}
+	
+	function saveIngang($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+		$sql .= "   `ingang_niet_bekeken` = ?,";
+  		$sql .= "   `ingang_toegang` = ?,";
+  		$sql .= "   `ingang_ladder_nog_aanwezig` = ?,";
+  		$sql .= "   `ingang_opmerkingen` = ?";
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('isisi', 
+				$vo["ingang_niet_bekeken"], 
+				$vo["ingang_toegang"], 
+				$vo["ingang_ladder_nog_aanwezig"], 
+				$vo["ingang_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+		
+	function saveBuitendeur($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+  		$sql .= "   `buitendeur_niet_bekeken` = ?,";
+  		$sql .= "   `buitendeur_aanwezig` = ?,";
+  		$sql .= "   `buitendeur_origineel` = ?,";
+  		$sql .= "   `buitendeur_replica` = ?,";
+  		$sql .= "   `buitendeur_ander_type` = ?,";
+  		$sql .= "   `buitendeur_ander_type_andere` = ?,";
+  		$sql .= "   `buitendeur_toestand` = ?,";
+  		$sql .= "   `buitendeur_scharnieren_aanwezig` = ?,";
+  		$sql .= "   `buitendeur_opmerkingen` = ?";
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiisssisi', 
+				$vo["buitendeur_niet_bekeken"], 
+				$vo["buitendeur_aanwezig"], 
+				$vo["buitendeur_origineel"], 
+				$vo["buitendeur_replica"], 
+				$vo["buitendeur_ander_type"], 
+				$vo["buitendeur_ander_type_andere"], 
+				$vo["buitendeur_toestand"], 
+				$vo["buitendeur_scharnieren_aanwezig"], 
+				$vo["buitendeur_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+		
+	function saveBinnendeur($vo, $mysqli) {
+		$sql = "";
+		$sql .= " update";
+		$sql .= "   `kwl_bunkerbezoek`";
+		$sql .= " set ";
+  		$sql .= "   `binnendeur_niet_bekeken` = ?,";
+  		$sql .= "   `binnendeur_aanwezig` = ?,";
+  		$sql .= "   `binnendeur_origineel` = ?,";
+  		$sql .= "   `binnendeur_replica` = ?,";
+  		$sql .= "   `binnendeur_ander_type` = ?,";
+  		$sql .= "   `binnendeur_ander_type_andere` = ?,";
+  		$sql .= "   `binnendeur_toestand` = ?,";
+  		$sql .= "   `binnendeur_scharnieren_aanwezig` = ?,";
+  		$sql .= "   `binnendeur_opmerkingen` = ?";
+		$sql .= " where";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiisssisi', 
+				$vo["binnendeur_niet_bekeken"], 
+				$vo["binnendeur_aanwezig"], 
+				$vo["binnendeur_origineel"], 
+				$vo["binnendeur_replica"], 
+				$vo["binnendeur_ander_type"], 
+				$vo["binnendeur_ander_type_andere"], 
+				$vo["binnendeur_toestand"], 
+				$vo["binnendeur_scharnieren_aanwezig"], 
+				$vo["binnendeur_opmerkingen"], 
+				
+				$vo["bunkerbezoek_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+		return $sql;
+	}
+
 }

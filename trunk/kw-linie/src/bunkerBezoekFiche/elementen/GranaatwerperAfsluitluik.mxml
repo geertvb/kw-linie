@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:ArrayCollection id="dp_aantal">
+		<mx:Object label="nvt" />
+		<mx:Object label="1" />
+		<mx:Object label="2" />
+		<mx:Object label="3" />
+	</mx:ArrayCollection>
+	
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			public function bind(vo: Object) : void {
+				vo.afsluitluik_granaatwerper_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.afsluitluik_granaatwerper_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.afsluitluik_granaatwerper_aantal_totaal = BindingUtils.comboBoxExToString(cb_aantal_totaal);
+				vo.afsluitluik_granaatwerper_aantal_met_ketting = BindingUtils.comboBoxExToString(cb_aantal_met_ketting);
+				vo.afsluitluik_granaatwerper_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+			}
+		]]>
+	</mx:Script>
 
 	<mx:Form x="0" y="0"
 			paddingBottom="0"
@@ -8,23 +28,40 @@
 			paddingTop="0">
 			
 		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_niet_bekeken"
+				selected="{data.afsluitluik_granaatwerper_niet_bekeken}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_aanwezig"
+				selected="{data.afsluitluik_granaatwerper_aanwezig}" />
 		</mx:FormItem>
 
 		<mx:FormItem label="Totaal aantal">
-			<mx:ComboBox></mx:ComboBox>
+			<components:ComboBoxEx 
+				id="cb_aantal_totaal"
+				dataProvider="{dp_aantal}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.afsluitluik_granaatwerper_aantal_totaal}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Aantal met ketting">
-			<mx:ComboBox></mx:ComboBox>
+			<components:ComboBoxEx 
+				id="cb_aantal_met_ketting"
+				dataProvider="{dp_aantal}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.afsluitluik_granaatwerper_aantal_met_ketting}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea width="320"/>
+			<mx:TextArea 
+				id="ta_opmerkingen"
+				text="{data.afsluitluik_granaatwerper_opmerkingen}"
+				width="320"/>
 		</mx:FormItem>
 
 	</mx:Form>

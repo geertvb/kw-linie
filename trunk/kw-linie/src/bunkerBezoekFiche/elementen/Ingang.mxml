@@ -1,30 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:ArrayCollection id="dp_toegang">
+		<mx:Object label="Gewoon" />
+		<mx:Object label="Via put" />
+	</mx:ArrayCollection>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import util.BindingUtils;
+			
+			public function bind(vo: Object) : void {
+				vo.ingang_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.ingang_toegang = BindingUtils.comboBoxExToString(cb_toegang);
+				vo.ingang_ladder_nog_aanwezig = BindingUtils.checkboxToBoolean(cb_ladder_nog_aanwezig);
+				vo.ingang_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+			}
+		]]>
+	</mx:Script>
 
 	<mx:Form x="0" y="0"
 			paddingBottom="0"
 			paddingLeft="0"
 			paddingRight="0"
 			paddingTop="0">
-			
+
 		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_niet_bekeken"
+				selected="{data.ingang_niet_bekeken}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Toegang">
-			<mx:ComboBox id="cb_toegang">
-				<mx:dataProvider>
-					<mx:ArrayCollection>
-						<mx:Object label="Gewoon" />
-						<mx:Object label="Via put" />
-					</mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
-			<mx:CheckBox label="Ladder nog aanwezig" enabled="{cb_toegang.selectedItem.label == 'Via put'}"/>
+			<components:ComboBoxEx 
+				id="cb_toegang"
+				dataProvider="{dp_toegang}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.ingang_toegang}" />
+			<mx:CheckBox
+				id="cb_ladder_nog_aanwezig"
+				label="Ladder nog aanwezig"
+				enabled="{cb_toegang.selectedItem.label == 'Via put'}"
+				selected="{data.ingang_ladder_nog_aanwezig}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea width="320"/>
+			<mx:TextArea
+				id="ta_opmerkingen"
+				text="{data.ingang_opmerkingen}" 
+				width="320"/>
 		</mx:FormItem>
 		
 	</mx:Form>

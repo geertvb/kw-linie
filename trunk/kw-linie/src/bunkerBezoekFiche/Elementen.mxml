@@ -2,7 +2,27 @@
 <mx:Canvas
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:elementen="bunkerBezoekFiche.elementen.*">
-
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			public function bind(vo: Object) : void {
+				ingangView.bind(vo);
+				binnendeurView.bind(vo);
+				buitendeurView.bind(vo);
+				camouflageView.bind(vo);
+				dakplatenView.bind(vo);
+				granaatwerperAfsluitluikView.bind(vo);
+				ingangRoosterView.bind(vo);
+				nooduitgangView.bind(vo);
+				pistoolkokerAfsluitluikView.bind(vo);
+				verluchtingspijpenView.bind(vo);
+			}
+		]]>
+	</mx:Script>
+	
+	
 	<mx:HBox x="10" y="10" width="100%" height="100%">
 	
 		<mx:List id="list_elementen" 
@@ -29,25 +49,60 @@
 			
 		</mx:List>
 		
-		<mx:LinkBar />
-		
 		<mx:ViewStack id="viewstack1" 
 				width="100%" height="100%"
-				selectedIndex="{list_elementen.selectedIndex}">
+				selectedIndex="{list_elementen.selectedIndex}"
+				creationPolicy="all">
 				
-			<elementen:Ingang label="Ingang" />
-			<elementen:Buitendeur label="Buitendeur" />
-			<elementen:Binnendeur label="Binnendeur" />
-			<elementen:PistoolkokerAfsluitluik label="Afsluitluik pistoolkoker" />
-			<elementen:Nooduitgang label="Nooduitgang" />
-			<elementen:Dakplaten label="Dakplaten" />
-			<elementen:Camouflage label="Camouflage" />
-			<elementen:IngangRooster label="Rooster aan de ingang" />
-			<elementen:Schietgat label="Schietgat 1" />
-			<elementen:Schietgat label="Schietgat 2" />
-			<elementen:Schietgat label="Schietgat 3" />
-			<elementen:GranaatwerperAfsluitluik label="Afsluitluik granaatwerper" />
-			<elementen:Verluchtingspijpen label="Verluchtingspijpen" />
+			<elementen:Ingang
+				id="ingangView"
+				data="{data}" 
+				label="Ingang" />
+			<elementen:Buitendeur 
+				id="buitendeurView"
+				data="{data}" 
+				label="Buitendeur" />
+			<elementen:Binnendeur 
+				id="binnendeurView"
+				data="{data}" 
+				label="Binnendeur" />
+			<elementen:PistoolkokerAfsluitluik 
+				id="pistoolkokerAfsluitluikView"
+				data="{data}" 
+				label="Afsluitluik pistoolkoker" />
+			<elementen:Nooduitgang 
+				id="nooduitgangView"
+				data="{data}" 
+				label="Nooduitgang" />
+			<elementen:Dakplaten 
+				id="dakplatenView"
+				data="{data}" 
+				label="Dakplaten" />
+			<elementen:Camouflage 
+				id="camouflageView"
+				data="{data}" 
+				label="Camouflage" />
+			<elementen:IngangRooster
+				id="ingangRoosterView" 
+				data="{data}" 
+				label="Rooster aan de ingang" />
+			<elementen:Schietgat 
+				data="{data}" 
+				label="Schietgat 1" />
+			<elementen:Schietgat 
+				data="{data}" 
+				label="Schietgat 2" />
+			<elementen:Schietgat 
+				data="{data}" 
+				label="Schietgat 3" />
+			<elementen:GranaatwerperAfsluitluik
+				id="granaatwerperAfsluitluikView" 
+				data="{data}" 
+				label="Afsluitluik granaatwerper" />
+			<elementen:Verluchtingspijpen
+				id="verluchtingspijpenView" 
+				data="{data}" 
+				label="Verluchtingspijpen" />
 			
 		</mx:ViewStack>
 		

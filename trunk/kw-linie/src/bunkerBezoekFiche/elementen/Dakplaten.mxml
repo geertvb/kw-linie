@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			
+			public function bind(vo: Object) : void {
+				vo.dakplaten_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.dakplaten_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.dakplaten_bunkernummer_leesbaar = BindingUtils.checkboxToBoolean(cb_bunkernummer_leesbaar);
+				vo.dakplaten_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+			}
+		]]>
+	</mx:Script>
+
 	<mx:Form x="0" y="0"
 			paddingBottom="0"
 			paddingLeft="0"
@@ -8,19 +21,28 @@
 			paddingTop="0">
 			
 		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_niet_bekeken"
+				selected="{data.dakplaten_niet_bekeken}" />
 		</mx:FormItem>
 
 		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_aanwezig"
+				selected="{data.dakplaten_aanwezig}" />
 		</mx:FormItem>
 
 		<mx:FormItem label="Bunkernummer leesbaar">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_bunkernummer_leesbaar"
+				selected="{data.dakplaten_bunkernummer_leesbaar}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea width="320"/>
+			<mx:TextArea 
+				id="ta_opmerkingen"
+				text="{data.dakplaten_opmerkingen}"
+				width="320"/>
 		</mx:FormItem>
 
 	</mx:Form>
