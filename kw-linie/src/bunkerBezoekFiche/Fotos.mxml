@@ -1,32 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+		
+			private function click_voeg_toe(event: Event) : void {
+				
+			}
+			
+			private function click_bekijk(event: Event) : void {
+				var parameters: URLVariables = new URLVariables();
+				parameters.foto_id = list_fotos.selectedItem.foto_id;
+
+				var request: URLRequest = new URLRequest();
+				request.url = "download_foto.php";
+				request.method = URLRequestMethod.GET;
+				request.data = parameters;
+
+				navigateToURL(request, "_blank");
+			}
+			
+			private function close_verwijder_alert(event: CloseEvent) : void {
+				if (event.detail==Alert.YES) {
+                    fotos.removeItemAt(list_fotos.selectedIndex);
+    			}
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				Alert.yesLabel = "Ja";
+				Alert.noLabel = "Nee";
+				Alert.show(
+					"Ben je zeker dat je de geselecteerde foto wil wissen?",
+					"Verwijderen",
+					Alert.YES | Alert.NO,
+					null,
+					close_verwijder_alert);
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:ArrayCollection
+		id="fotos"
+		source="{data.fotos}" />
+
 	<mx:VBox bottom="10" top="0" right="10" left="10">
-		<mx:TileList height="100%" width="100%" rowCount="3" itemRenderer="FotoTile">
-			<mx:dataProvider>
-				<mx:Array>
-                    <mx:Object
-                    	omschrijving="Grondplan"
-                    	filename="grondplan.jpg"
-                    	size="320K"
-                    	width="320"
-                    	height="240"
-                    	type="jpg" />
-                    <mx:Object
-                    	omschrijving="Luchtfoto"
-                    	filename="areal.jpg"
-                    	size="423K"
-                    	width="1024"
-                    	height="768"
-                    	type="jpg" />
-                </mx:Array>
-			</mx:dataProvider>
-		</mx:TileList>
+	
+		<mx:TileList 
+			id="list_fotos"
+			rowCount="2" columnCount="4"
+			itemRenderer="FotoTile"
+			dataProvider="{fotos}" 
+			rowHeight="160" columnWidth="160"/>
+		
 		<mx:HBox width="100%" horizontalAlign="center">
-			<mx:Button label="Voeg toe"/>
-			<mx:Button label="Bekijk"/>
-			<mx:Button label="Verwijder"/>
+			<mx:Button 
+				label="Voeg toe"
+				click="click_voeg_toe(event)"/>
+			<mx:Button 
+				label="Bekijk"
+				click="click_bekijk(event)"
+				enabled="{list_fotos.selectedIndex >= 0}"/>
+			<mx:Button 
+				label="Verwijder"
+				click="click_verwijder(event)"
+				enabled="{list_fotos.selectedIndex >= 0}"/>
 		</mx:HBox>
+		
 	</mx:VBox>
 	
 </mx:Canvas>

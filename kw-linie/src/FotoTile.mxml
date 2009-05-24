@@ -5,7 +5,7 @@
 		source="download_thumb.php?foto_id={data.foto_id}" 
 		horizontalCenter="0"
 		scaleContent="false"
- verticalCenter="-30"/>
+ 		verticalCenter="-30"/>
 	
 	<mx:VBox bottom="0" left="0" right="0" verticalGap="0">
 		<mx:Label text="{data.omschrijving}" textAlign="center" fontStyle="normal" fontWeight="bold" fontSize="12" width="160"/>

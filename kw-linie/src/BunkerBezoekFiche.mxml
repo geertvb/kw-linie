@@ -111,7 +111,10 @@
 				id="elementenView"
 				data="{bunkerBezoek}" 
 				label="Elementen" />
-			<tab:Fotos label="Fotos" />
+			<tab:Fotos
+				id="fotoView"
+				data="{bunkerBezoek}" 
+				label="Fotos" />
 		</mx:TabNavigator>
 		<mx:Button label="Bewaar" click="click_bewaar(event)"/>
 	</mx:VBox>
