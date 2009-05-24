@@ -35,6 +35,8 @@ class BunkerBezoekService {
 				}
 				$stmt->close();
 			}
+			
+			$result->fotos = $this->findFotos($mysqli, $id);
 						
 			$mysqli->close();
 		}
@@ -42,11 +44,41 @@ class BunkerBezoekService {
 		return $result;		
 	}
 	
-	function arrayToList($a) {
+	private function findFotos($mysqli, $id) {
+		$sql = "";
+		$sql .= " SELECT";
+		$sql .= "   `kwl_foto`.`foto_id`,";
+		$sql .= "   `kwl_foto`.`omschrijving`,";
+		$sql .= "   `kwl_foto`.`filename`,";
+		$sql .= "   `kwl_foto`.`mimetype`,";
+		$sql .= "   `kwl_foto`.`width`,";
+		$sql .= "   `kwl_foto`.`height`,";
+		$sql .= "   `kwl_foto`.`size`";
+		$sql .= " FROM";
+		$sql .= "   `kwl_bunkerbezoek_foto`,";
+		$sql .= "   `kwl_foto`";
+		$sql .= " WHERE";
+		$sql .= "   `kwl_bunkerbezoek_foto`.`bunkerbezoek_id` = ? AND";
+		$sql .= "   `kwl_bunkerbezoek_foto`.`foto_id` = `kwl_foto`.`foto_id`";
+		$sql .= " ORDER BY";
+		$sql .= "   `kwl_foto`.`foto_id` ASC";
+
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getresult($stmt);
+			}
+			$stmt->close();
+		}
+		
+		return $result;		
+	}	
+	
+	private function arrayToList($a) {
 		return "(" . implode(", ", $a) . ")";
 	}
 	
-	function updateBezoekers($bunkerbezoek_id, $bezoeker_ids) {
+	private function updateBezoekers($bunkerbezoek_id, $bezoeker_ids) {
     	$mysqli = newMysqli();
     	
     	$sql = "";
@@ -118,7 +150,7 @@ class BunkerBezoekService {
 		return true;
 	}
 
-	function saveCamouflage($vo, $mysqli) {
+	private function saveCamouflage($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -152,7 +184,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveDakplaten($vo, $mysqli) {
+	private function saveDakplaten($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -178,7 +210,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveAfsluitluikGranaatwerper($vo, $mysqli) {
+	private function saveAfsluitluikGranaatwerper($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -206,7 +238,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveAfsluitluikPistoolkoker($vo, $mysqli) {
+	private function saveAfsluitluikPistoolkoker($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -232,7 +264,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveRoosterIngang($vo, $mysqli) {
+	private function saveRoosterIngang($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -256,7 +288,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveNooduitgang($vo, $mysqli) {
+	private function saveNooduitgang($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -286,7 +318,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveVerluchtingspijpen($vo, $mysqli) {
+	private function saveVerluchtingspijpen($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -316,7 +348,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveBuitenToestand($vo, $mysqli) {
+	private function saveBuitenToestand($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -354,7 +386,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveBinnenToestand($vo, $mysqli) {
+	private function saveBinnenToestand($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -382,7 +414,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveBezoek($vo, $mysqli) {
+	private function saveBezoek($vo, $mysqli) {
 		$sql = "update `kwl_bunkerbezoek` ";
 		$sql .= "set ";
 		$sql .= "`datum` = ?,"; 
@@ -406,7 +438,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 
-	function saveOmgeving($vo, $mysqli) {
+	private function saveOmgeving($vo, $mysqli) {
 		$sql = "update `kwl_bunkerbezoek` ";
 		$sql .= "set ";
 
@@ -470,7 +502,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 	
-	function saveIngang($vo, $mysqli) {
+	private function saveIngang($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -495,7 +527,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 		
-	function saveBuitendeur($vo, $mysqli) {
+	private function saveBuitendeur($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
@@ -530,7 +562,7 @@ class BunkerBezoekService {
 		return $sql;
 	}
 		
-	function saveBinnendeur($vo, $mysqli) {
+	private function saveBinnendeur($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
