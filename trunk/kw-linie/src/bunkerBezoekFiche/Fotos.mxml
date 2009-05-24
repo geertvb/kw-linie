@@ -3,23 +3,21 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import util.FotoUtils;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
+			
+			private function uploadComplete(foto: Object) : void {
+				fotos.addItem(foto);
+			}
 		
 			private function click_voeg_toe(event: Event) : void {
-				
+				FotoUtils.upload(uploadComplete);
 			}
 			
 			private function click_bekijk(event: Event) : void {
-				var parameters: URLVariables = new URLVariables();
-				parameters.foto_id = list_fotos.selectedItem.foto_id;
-
-				var request: URLRequest = new URLRequest();
-				request.url = "download_foto.php";
-				request.method = URLRequestMethod.GET;
-				request.data = parameters;
-
-				navigateToURL(request, "_blank");
+				FotoUtils.navigateTo(list_fotos.selectedItem.foto_id);
 			}
 			
 			private function close_verwijder_alert(event: CloseEvent) : void {
@@ -37,6 +35,10 @@
 					Alert.YES | Alert.NO,
 					null,
 					close_verwijder_alert);
+			}
+			
+			public function bind(vo: Object) : void {
+				vo.fotos = fotos;
 			}
 			
 		]]>

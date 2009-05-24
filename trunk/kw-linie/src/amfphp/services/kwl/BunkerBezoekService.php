@@ -78,8 +78,9 @@ class BunkerBezoekService {
 		return "(" . implode(", ", $a) . ")";
 	}
 	
-	private function updateBezoekers($bunkerbezoek_id, $bezoeker_ids) {
-    	$mysqli = newMysqli();
+	private function updateBezoekers($vo, $mysqli) {
+		$bunkerbezoek_id = $vo["bunkerbezoek_id"];
+		$bezoeker_ids = $vo["bezoeker_ids"];
     	
     	$sql = "";
     	$sql .= " SELECT";
@@ -121,16 +122,63 @@ class BunkerBezoekService {
 			$sql .= " " . implode(", ", $values);
 			$mysqli->query($sql);
 		}
-					
-		$mysqli->close();
-    	return $result;
     }	
 
-	function save($vo) {
+	private function updateFotos($vo, $mysqli) {
+		$bunkerbezoek_id = $vo["bunkerbezoek_id"];
+		$new_ids = array();
+		foreach ($vo["fotos"] as $foto) {
+			$new_ids[] = $foto["foto_id"];
+		}
+		
+    	$sql = "";
+    	$sql .= " SELECT";
+    	$sql .= "   `foto_id`";
+    	$sql .= " FROM";
+    	$sql .= "   `kwl_bunkerbezoek_foto`";
+    	$sql .= " WHERE";
+    	$sql .= "   `bunkerbezoek_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $bunkerbezoek_id);
+			if ($stmt->execute()) {
+				$old_ids = getValues($stmt);
+			}
+			$stmt->close();
+		}
+		
+    	// Remove bezoeker ids
+		$remove_ids = array_diff($old_ids, $new_ids);
+		if (count($remove_ids) > 0) {
+			$sql = "";
+	    	$sql .= " DELETE FROM `kwl_bunkerbezoek_foto`";
+	    	$sql .= " WHERE";
+	    	$sql .= "   `bunkerbezoek_id` = " . $bunkerbezoek_id . " AND ";
+	    	$sql .= "   `foto_id` in " . $this->arrayToList($remove_ids);
+			$mysqli->query($sql);
+    	}
+		
+		// Add bezoeker ids
+		$add_ids = array_diff($new_ids, $old_ids);
+    	if (count($add_ids) > 0) {
+			$sql = "";
+			$sql .= " INSERT INTO `kwl_bunkerbezoek_foto`";
+			$sql .= "   (`bunkerbezoek_id`, `foto_id`)";
+			$sql .= " VALUES";
+			$values = array();
+			foreach ($add_ids as $add_id) {
+				$values[] = "(" . $bunkerbezoek_id . ", " . $add_id . ")";
+			}
+			$sql .= " " . implode(", ", $values);
+			$mysqli->query($sql);
+		}
+    }	
+
+    function save($vo) {
 		if ($mysqli = newMysqli()) {
 
 			$this->saveBezoek($vo, $mysqli);
-			$this->updateBezoekers($vo["bunkerbezoek_id"], $vo["bezoeker_ids"]);
+			$this->updateBezoekers($vo, $mysqli);
+			$this->updateFotos($vo, $mysqli);
 			$this->saveOmgeving($vo, $mysqli);
 			$this->saveBuitenToestand($vo, $mysqli);
 			$this->saveBinnenToestand($vo, $mysqli);

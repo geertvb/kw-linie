@@ -21,18 +21,10 @@
 			}
 			
 			public function uploadDocument() : void {
-				var parameters: URLVariables = new URLVariables();
-				parameters.bunker_id = data.bunker_id;
-				
-				var request: URLRequest = new URLRequest();
-				request.url = "upload_document.php";
-				request.method = URLRequestMethod.POST;
-				request.data = parameters;
-
-				var uploadFile : UploadFile = new UploadFile();
-				uploadFile.request = request;
-				uploadFile.upload(this);
-				uploadFile.addEventListener(FlexEvent.UPDATE_COMPLETE,documentUploaded,false,0,true);
+				var uploadFile : UploadFile = UploadFile.getInstance();
+				uploadFile.url = "upload_document.php";
+				uploadFile.complete = documentUploaded;
+				uploadFile.upload();
 			}
 			
 			public function documentUploaded(event: Event) : void {

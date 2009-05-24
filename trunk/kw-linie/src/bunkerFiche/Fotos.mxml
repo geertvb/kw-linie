@@ -6,6 +6,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import util.FotoUtils;
 			import mx.rpc.events.FaultEvent;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
@@ -25,18 +26,7 @@
 			}
 			
 			public function click_voeg_toe(event: Event) : void {
-				var parameters: URLVariables = new URLVariables();
-				parameters.bunker_id = data.bunker_id;
-				
-				var request: URLRequest = new URLRequest();
-				request.url = "upload_foto.php";
-				request.method = URLRequestMethod.POST;
-				request.data = parameters;
-
-				var uploadFile : UploadFile = new UploadFile();
-				uploadFile.request = request;
-				uploadFile.upload(this);
-				uploadFile.addEventListener(FlexEvent.UPDATE_COMPLETE,fotoUploaded,false,0,true);
+				FotoUtils.upload(fotoUploaded);
 			}
 			
 			public function fotoUploaded(event: Event) : void {
@@ -44,15 +34,7 @@
 			}
 			
 			public function click_bekijk(event: Event) : void {
-				var parameters: URLVariables = new URLVariables();
-				parameters.foto_id = list_fotos.selectedItem.foto_id;
-
-				var request: URLRequest = new URLRequest();
-				request.url = "download_foto.php";
-				request.method = URLRequestMethod.GET;
-				request.data = parameters;
-
-				navigateToURL(request, "_blank");
+				FotoUtils.navigateTo(list_fotos.selectedItem.foto_id);
 			}
 			
 			public function close_verwijder_alert(event: CloseEvent) : void {
