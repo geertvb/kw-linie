@@ -5,18 +5,24 @@
 	title="Voeg document toe" 
 	xmlns:net="flash.net.*">
 	
-    <mx:Metadata>
-        [Event(name="uploadComplete")]
-    </mx:Metadata>
-
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Application;
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
+
+			private static var _instance: UploadFile;
 			
-			private var popupParent: DisplayObject;
+			public static function getInstance() : UploadFile {
+				if (_instance == null) {
+					_instance = new UploadFile();
+				}
+				return _instance;
+			}
 			
-			public var request: URLRequest;
+			public var url: String;
+			
+			public var complete: Function;
 			
 			private function removeMe():void {
                 PopUpManager.removePopUp(this);
@@ -33,12 +39,21 @@
 		
 			public function onUploadComplete(event : Event) : void {
 				removeMe();
-                dispatchEvent(new Event("uploadComplete"));
+			}
+		
+			public function onUploadCompleteData(event : DataEvent) : void {
+				if (complete != null) {
+					complete(event);
+				}
 			}
 		
 			public function click_voeg_toe(event : Event) : void {
-	            //var fileReference: FileReference = FileReference(event.target);
-	            request.data.omschrijving = ti_omschrijving.text;
+				var request: URLRequest = new URLRequest();
+				request.url = url;
+				request.method = URLRequestMethod.POST;
+				var parameters: URLVariables = new URLVariables();
+				parameters.omschrijving = ti_omschrijving.text;
+				request.data = parameters;
             	fileReference.upload(request, "file");
 			}
 		
@@ -61,9 +76,8 @@
                 fileReference.browse();
 			}
 		
-			public function upload(popupParent: DisplayObject) : void {
-				this.popupParent = popupParent;
-				PopUpManager.addPopUp(this, popupParent, true);
+			public function upload() : void {
+				PopUpManager.addPopUp(this, Application.application as DisplayObject, true);
 				PopUpManager.centerPopUp(this);
 			}
 		]]>
@@ -73,6 +87,7 @@
 		select="onSelect(event)"
 		progress="onUploadProgress(event)"
 		complete="onUploadComplete(event)"
+		uploadCompleteData="onUploadCompleteData(event)"
 		ioError="onUploadIoError(event)"
 		securityError="onUploadSecurityError(event)">
 	</net:FileReference>
@@ -80,16 +95,20 @@
 	<mx:VBox paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
 
 		<mx:Form paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+		
 			<mx:FormItem label="Omschrijving">
 				<mx:TextInput width="256" id="ti_omschrijving"/>
 			</mx:FormItem>
+			
 			<mx:FormItem label="Bestandsnaam" direction="horizontal">
 				<mx:TextInput width="256" id="ti_bestandsnaam" editable="false"/>
 				<mx:Button click="click_select_file()" label="..."/>
 			</mx:FormItem>
+			
 			<mx:FormItem label="Grootte">
 				<mx:TextInput width="96" id="ti_grootte" editable="false"/>
 			</mx:FormItem>
+			
 		</mx:Form>
 
 		<mx:ProgressBar 
@@ -97,16 +116,20 @@
 			id="progressBar" 
 			mode="manual" 
 			width="100%"/>
+			
 	</mx:VBox>
 
 	<mx:ControlBar horizontalAlign="center">
+	
 		<mx:Button 
 			label="Voeg toe" 
 			click="click_voeg_toe(event)" 
 			enabled="{ti_omschrijving.text.length>0 &amp;&amp; ti_bestandsnaam.text.length>0}"/>
+			
 		<mx:Button 
 			label="Annuleer" 
 			click="click_annuleer(event)"/>
+			
 	</mx:ControlBar>
 
 </mx:TitleWindow>

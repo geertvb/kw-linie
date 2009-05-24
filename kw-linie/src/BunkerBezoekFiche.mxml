@@ -41,6 +41,7 @@
 				buitenToestandView.bind(vo);
 				binnenToestandView.bind(vo);
 				elementenView.bind(vo);
+				fotoView.bind(vo);
 			}
 			
 			private function click_bewaar(event: Event) : void {
