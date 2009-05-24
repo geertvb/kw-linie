@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			
+			public function bind(vo: Object) : void {
+				vo.camouflage_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.camouflage_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.camouflage_baksteen = BindingUtils.checkboxToBoolean(cb_baksteen);
+				vo.camouflage_pannendak = BindingUtils.checkboxToBoolean(cb_pannendak);
+				vo.camouflage_eitjesbepleistering = BindingUtils.checkboxToBoolean(cb_eitjesbepleistering);
+				vo.camouflage_beschildering = BindingUtils.checkboxToBoolean(cb_beschildering);
+				vo.camouflage_haken_voor_netten_aanwezig = BindingUtils.checkboxToBoolean(cb_haken_voor_netten_aanwezig);
+				vo.camouflage_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+			}
+		]]>
+	</mx:Script>
+
 	<mx:Form x="0" y="0"
 			paddingBottom="0"
 			paddingLeft="0"
@@ -8,26 +25,47 @@
 			paddingTop="0">
 			
 		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_niet_bekeken"
+				selected="{data.camouflage_niet_bekeken}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_aanwezig"
+				selected="{data.camouflage_aanwezig}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Type">
-			<mx:CheckBox label="Baksteen"/>
-			<mx:CheckBox label="Pannendak"/>
-			<mx:CheckBox label="'eitjes'-bepleistering"/>
-			<mx:CheckBox label="Beschildering"/>
+			<mx:CheckBox
+				id="cb_baksteen"
+				selected="{data.camouflage_baksteen}" 
+				label="Baksteen"/>
+			<mx:CheckBox 
+				id="cb_pannendak"
+				selected="{data.camouflage_pannendak}"
+				label="Pannendak"/>
+			<mx:CheckBox 
+				id="cb_eitjesbepleistering"
+				selected="{data.camouflage_eitjesbepleistering}"
+				label="'eitjes'-bepleistering"/>
+			<mx:CheckBox 
+				id="cb_beschildering"
+				selected="{data.camouflage_beschildering}"
+				label="Beschildering"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Haken voor netten">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_haken_voor_netten_aanwezig"
+				selected="{data.camouflage_haken_voor_netten_aanwezig}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea width="320"/>
+			<mx:TextArea
+				id="ta_opmerkingen"
+				text="{data.camouflage_opmerkingen}" 
+				width="320"/>
 		</mx:FormItem>
 
 	</mx:Form>
