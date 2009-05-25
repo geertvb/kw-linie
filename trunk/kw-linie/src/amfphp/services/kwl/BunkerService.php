@@ -17,6 +17,7 @@ class BunkerService {
 		return findSQL($sql);
 	}
 	
+	/*
 	function findDocumenten($id) {
 		$sql = "SELECT `document_id`, `bunker_id`, `omschrijving`, `filename`, `mimetype`, `size` FROM `kwl_document` WHERE `bunker_id` = ? order by `document_id` asc";
 
@@ -48,6 +49,7 @@ class BunkerService {
 		
 		return $result;
 	}
+	*/
 	
 	function findDeelgemeentes() {
 		$sql = "SELECT distinct `deelgemeente` FROM `kwl_bunker` WHERE `deelgemeente` is not null order by `deelgemeente` asc";
@@ -67,51 +69,87 @@ class BunkerService {
 			}
 			
 			$result->fotos = $this->findFotos($mysqli, $id);
-			
-			$sql = "select `url`, `omschrijving` from `kwl_link` where `bunker_id` = ?";
-			if ($stmt = $mysqli->prepare($sql)) {
-				$stmt->bind_param('i', $id);
-				if ($stmt->execute()) {
-					$result->links = getResult($stmt);
-				}
-				$stmt->close();
-			}
-						
-			$sql = "";
-			$sql .= " select";
-			$sql .= "   `kwl_bunker_contact`.`relatie`,";
-			$sql .= "   `kwl_contact`.*";
-			$sql .= " from";
-			$sql .= "   `kwl_bunker_contact`,";
-			$sql .= "   `kwl_contact`";
-			$sql .= " where";
-			$sql .= "   `kwl_bunker_contact`.`bunker_id` = ? AND";
-			$sql .= "   `kwl_bunker_contact`.`contact_id` = `kwl_contact`.`contact_id`";
-			if ($stmt = $mysqli->prepare($sql)) {
-				$stmt->bind_param('i', $id);
-				if ($stmt->execute()) {
-					$contacts = getResult($stmt);
-
-					$bunkercontacts = array();					
-					foreach ($contacts as $contact) {
-					 	$relatie = $contact->relatie;
-					 	$contact_id = $contact->contact_id;
-					 	unset($contact->relatie);
-					 	$bunkercontacts[] = array(
-					 		relatie => $relatie, 
-					 		contact_id => $contact_id, 
-					 		contact => $contact);
-					}
-
-					$result->contacts = $bunkercontacts; 
-				}
-				$stmt->close();
-			}
+			$result->contacts = $this->findContacts($mysqli, $id);
+			$result->links = $this->findLinks($mysqli, $id);
+			$result->documenten = $this->findDocumenten($mysqli, $id);
 						
 			$mysqli->close();
 		}
 		
 		return $result;		
+	}
+	
+	private function findDocumenten($mysqli, $id) {
+		$sql = "";
+		$sql .= " SELECT";
+		$sql .= "   `kwl_document`.`document_id`,";
+		$sql .= "   `kwl_document`.`omschrijving`,";
+		$sql .= "   `kwl_document`.`filename`,";
+		$sql .= "   `kwl_document`.`mimetype`,";
+		$sql .= "   `kwl_document`.`size`";
+		$sql .= " FROM";
+		$sql .= "   `kwl_bunker_document`,";
+		$sql .= "   `kwl_document`";
+		$sql .= " WHERE";
+		$sql .= "   `kwl_bunker_document`.`bunker_id` = ? AND";
+		$sql .= "   `kwl_bunker_document`.`document_id` = `kwl_document`.`document_id`";
+		$sql .= " ORDER BY";
+		$sql .= "   `kwl_document`.`document_id` ASC";
+
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$documenten = getresult($stmt);
+			}
+			$stmt->close();
+		}
+		
+		return $documenten;		
+	}	
+	
+	private function findLinks($mysqli, $id) {
+		$sql = "select `url`, `omschrijving` from `kwl_link` where `bunker_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$links = getResult($stmt);
+			}
+			$stmt->close();
+		}
+		return $links;
+	}
+	
+	private function findContacts($mysqli, $id) {
+		$sql = "";
+		$sql .= " select";
+		$sql .= "   `kwl_bunker_contact`.`relatie`,";
+		$sql .= "   `kwl_contact`.*";
+		$sql .= " from";
+		$sql .= "   `kwl_bunker_contact`,";
+		$sql .= "   `kwl_contact`";
+		$sql .= " where";
+		$sql .= "   `kwl_bunker_contact`.`bunker_id` = ? AND";
+		$sql .= "   `kwl_bunker_contact`.`contact_id` = `kwl_contact`.`contact_id`";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$contacts = getResult($stmt);
+
+				$bunkercontacts = array();					
+				foreach ($contacts as $contact) {
+				 	$relatie = $contact->relatie;
+				 	$contact_id = $contact->contact_id;
+				 	unset($contact->relatie);
+				 	$bunkercontacts[] = array(
+				 		relatie => $relatie, 
+				 		contact_id => $contact_id, 
+				 		contact => $contact);
+				}
+
+			}
+			$stmt->close();
+		}
+		return $bunkercontacts;
 	}
 
 	private function findFotos($mysqli, $id) {
@@ -155,12 +193,62 @@ class BunkerService {
 			$this->updateLinks($mysqli, $bunker["bunker_id"], $bunker["links"]);
 			$this->updateContacts($mysqli, $bunker["bunker_id"], $bunker["contacts"]);
 			$this->updateFotos($bunker, $mysqli);
+			$this->updateDocumenten($bunker, $mysqli);
 			
 			$mysqli->close();
 		}
 		return true;
 	}
 	
+	private function updateDocumenten($vo, $mysqli) {
+		$bunker_id = $vo["bunker_id"];
+		$new_ids = array();
+		foreach ($vo["documenten"] as $document) {
+			$new_ids[] = $document["document_id"];
+		}
+		
+    	$sql = "";
+    	$sql .= " SELECT";
+    	$sql .= "   `document_id`";
+    	$sql .= " FROM";
+    	$sql .= "   `kwl_bunker_document`";
+    	$sql .= " WHERE";
+    	$sql .= "   `bunker_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $bunker_id);
+			if ($stmt->execute()) {
+				$old_ids = getValues($stmt);
+			}
+			$stmt->close();
+		}
+		
+    	// Remove document ids
+		$remove_ids = array_diff($old_ids, $new_ids);
+		if (count($remove_ids) > 0) {
+			$sql = "";
+	    	$sql .= " DELETE FROM `kwl_bunker_document`";
+	    	$sql .= " WHERE";
+	    	$sql .= "   `bunker_id` = " . $bunker_id . " AND ";
+	    	$sql .= "   `document_id` in (" . implode(", ", $remove_ids) . ")";
+			$mysqli->query($sql);
+    	}
+		
+		// Add document ids
+		$add_ids = array_diff($new_ids, $old_ids);
+    	if (count($add_ids) > 0) {
+			$sql = "";
+			$sql .= " INSERT INTO `kwl_bunker_document`";
+			$sql .= "   (`bunker_id`, `document_id`)";
+			$sql .= " VALUES";
+			$values = array();
+			foreach ($add_ids as $add_id) {
+				$values[] = "(" . $bunker_id . ", " . $add_id . ")";
+			}
+			$sql .= " " . implode(", ", $values);
+			$mysqli->query($sql);
+		}
+    }	
+
 	private function updateFotos($vo, $mysqli) {
 		$bunker_id = $vo["bunker_id"];
 		$new_ids = array();
