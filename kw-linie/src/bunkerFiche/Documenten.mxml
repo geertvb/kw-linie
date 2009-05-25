@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
-	initialize="init()"
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:rpc="mx.rpc.*" 
 	xmlns:local="*">
 
 	<mx:Script>
 		<![CDATA[
+			import util.DocumentUtils;
 			import mx.rpc.events.FaultEvent;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
@@ -16,19 +16,12 @@
 			import mx.managers.PopUpManager;
 			import util.BindingUtils;
 			
-			public function init() : void {
-				ChangeWatcher.watch(this, ["data","bunker_id"],change_bunker_id);
+			private function uploadDocument() : void {
+				DocumentUtils.upload(uploadComplete);
 			}
 			
-			public function uploadDocument() : void {
-				var uploadFile : UploadFile = UploadFile.getInstance();
-				uploadFile.url = "upload_document.php";
-				uploadFile.complete = documentUploaded;
-				uploadFile.upload();
-			}
-			
-			public function documentUploaded(event: Event) : void {
-				refreshDocumentList();
+			private function uploadComplete(document: Object) : void {
+				documenten.addItem(document);
 			}
 			
 			public function bind(bunker: Object) : void {
@@ -42,23 +35,16 @@
 				bunker.vh_andere = BindingUtils.checkboxToBoolean(cb_availAndere);
 				bunker.vh_andere_tekst = BindingUtils.textAreaToString(ti_availAndereTekst);
 				//bunker.vh_andere_bron = BindingUtils.textinputToString(ti_availAndereBron);
+				bunker.documenten = documenten;
 			}
 			
 			public function click_bekijk(event: Event) : void {
-				var parameters: URLVariables = new URLVariables();
-				parameters.document_id = list_documenten.selectedItem.document_id;
-
-				var request: URLRequest = new URLRequest();
-				request.url = "download_document.php";
-				request.method = URLRequestMethod.GET;
-				request.data = parameters;
-
-				navigateToURL(request, "_blank");
+				DocumentUtils.navigateTo(list_documenten.selectedItem.document_id);
 			}
 			
 			public function close_verwijder_alert(event: CloseEvent) : void {
 				if (event.detail==Alert.YES) {
-                    bunkerService.deleteDocument(list_documenten.selectedItem.document_id);
+                    documenten.removeItemAt(list_documenten.selectedIndex);
     			}
 			}
 			
@@ -73,38 +59,13 @@
 					close_verwijder_alert);
 			}
 			
-			public function refreshDocumentList() : void {
-				bunkerFindDocumentenResponder.token = bunkerService.findDocumenten(data.bunker_id);
-			}
-			
-			public function change_bunker_id(event: Event) : void {
-				refreshDocumentList();
-			}
-			
-			public function result_deleteDocument(event: Event) : void {
-				refreshDocumentList();
-			}
-
-			public function fault_deleteDocument(event: FaultEvent) : void {
-				Alert.show(event.fault.faultString);
-			}
 		]]>
 	</mx:Script>
 
-	<mx:Object id="_documenten" />
+	<mx:ArrayCollection id="documenten" source="{data.documenten}" />
 
-	<rpc:CallResponder id="bunkerFindDocumentenResponder" result="_documenten = event.result" />
-
-	<mx:RemoteObject id="bunkerService"
-		source="kwl.BunkerService" 
-		destination="amfphp">
-		<mx:method 
-			name="deleteDocument" 
-			fault="fault_deleteDocument(event)" 
-			result="result_deleteDocument(event)" />
-    </mx:RemoteObject>
-	
 	<mx:Form x="0" y="0" height="100%">
+	
 		<mx:FormItem label="Voorhanden">
 			<mx:CheckBox 
 				id="cb_availGrondplan" 
@@ -150,26 +111,35 @@
 				text="{data.vh_andere_bron}" width="100%"/>
 			-->
 		</mx:FormItem>
+		
 	</mx:Form>
+	
 	<mx:VBox width="328" bottom="10" right="10" top="0">
+	
 		<mx:List 
 			id="list_documenten"
 			width="100%" height="100%"
 			itemRenderer="DocumentRenderer"
-			dataProvider="{_documenten}" />
+			dataProvider="{documenten}" />
+			
 		<mx:HBox width="100%" horizontalAlign="center">
+		
 			<mx:Button 
 				label="Voeg toe" 
 				click="uploadDocument()"/>
+				
 			<mx:Button 
 				label="Bekijk"
 				click="click_bekijk(event)"
 				enabled="{list_documenten.selectedIndex >= 0}"/>
+				
 			<mx:Button 
 				label="Verwijder"
 				click="click_verwijder(event)"
 				enabled="{list_documenten.selectedIndex >= 0}"/>
+				
 		</mx:HBox>
+		
 	</mx:VBox>
 
 </mx:Canvas>

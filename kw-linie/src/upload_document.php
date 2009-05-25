@@ -8,7 +8,7 @@ $mysqli = newMysqli();
 
 $stmt = $mysqli->prepare("INSERT INTO kwl_document (`bunker_id`, `omschrijving`, `filename`, `mimetype`, `size`, `content`) VALUES (?, ?, ?, ?, ?, ?)");
 
-$bunker_id = $_POST["bunker_id"];
+$bunker_id = 0; //$_POST["bunker_id"];
 $omschrijving = $_POST["omschrijving"];
 $filename = $_FILES["file"]["name"];
 $mimetype = $_FILES["file"]["type"];
@@ -27,7 +27,31 @@ $stmt->execute();
 
 $stmt->close();
 
+// Get document_id
+
+if ($result = $mysqli->query("SELECT LAST_INSERT_ID()")) {
+	list($document_id) = $result->fetch_row();
+	$result->close();
+}
+
 $mysqli->close();
 
-echo "OK"
+$xml = new XMLWriter();
+$xml->openMemory();
+$xml->setIndent(true);
+$xml->setIndentString(' ');
+$xml->startDocument('1.0', 'UTF-8');
+$xml->startElement("document");
+
+	$xml->writeElement('document_id', $document_id);
+	$xml->writeElement('omschrijving', $omschrijving);
+	$xml->writeElement('filename', $filename);
+	$xml->writeElement('mimetype', $mimetype);
+	$xml->writeElement('size', $size);
+	
+$xml->endElement();
+$xml->endDocument();
+
+echo $xml->outputMemory();
+
 ?>
