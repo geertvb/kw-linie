@@ -1,49 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:rpc="mx.rpc.*" 
-	initialize="init()">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:Script>
 		<![CDATA[
 			import util.FotoUtils;
-			import mx.rpc.events.FaultEvent;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
-			import mx.events.FlexEvent;
-			import mx.binding.utils.ChangeWatcher;
 		
-			public function init() : void {
-				ChangeWatcher.watch(this, ["data","bunker_id"],change_bunker_id);
+			private function uploadComplete(foto: Object) : void {
+				fotos.addItem(foto);
+			}
+		
+			private function click_voeg_toe(event: Event) : void {
+				FotoUtils.upload(uploadComplete);
 			}
 			
-			public function change_bunker_id(event: Event) : void {
-				refreshFotos();
-			}
-			
-			public function refreshFotos() : void {
-				bunkerFindFotosResponder.token = bunkerService.findFotos(data.bunker_id);
-			}
-			
-			public function click_voeg_toe(event: Event) : void {
-				FotoUtils.upload(fotoUploaded);
-			}
-			
-			public function fotoUploaded(event: Event) : void {
-				refreshFotos();
-			}
-			
-			public function click_bekijk(event: Event) : void {
+			private function click_bekijk(event: Event) : void {
 				FotoUtils.navigateTo(list_fotos.selectedItem.foto_id);
 			}
 			
-			public function close_verwijder_alert(event: CloseEvent) : void {
+			private function close_verwijder_alert(event: CloseEvent) : void {
 				if (event.detail==Alert.YES) {
-                    bunkerService.deleteFoto(list_fotos.selectedItem.foto_id);
+                    fotos.removeItemAt(list_fotos.selectedIndex);
     			}
 			}
 			
-			public function click_verwijder(event: Event) : void {
+			private function click_verwijder(event: Event) : void {
 				Alert.yesLabel = "Ja";
 				Alert.noLabel = "Nee";
 				Alert.show(
@@ -54,49 +36,43 @@
 					close_verwijder_alert);
 			}
 			
-			public function result_deleteFoto(event: Event) : void {
-				refreshFotos();
+			public function bind(vo: Object) : void {
+				vo.fotos = fotos;
 			}
-
-			public function fault_deleteFoto(event: FaultEvent) : void {
-				Alert.show(event.fault.faultString);
-			}
+			
 		]]>
 	</mx:Script>
 
-	<mx:Object id="_fotos" />
+	<mx:ArrayCollection id="fotos" source="{data.fotos}"/>
 
-	<rpc:CallResponder id="bunkerFindFotosResponder" result="_fotos = event.result" />
-
-	<mx:RemoteObject id="bunkerService"
-		source="kwl.BunkerService" 
-		destination="amfphp">
-		<mx:method 
-			name="deleteFoto" 
-			fault="fault_deleteFoto(event)" 
-			result="result_deleteFoto(event)" />
-    </mx:RemoteObject>
-	
 	<mx:VBox bottom="10" top="0" right="10" left="10">
+	
 		<mx:TileList
 			id="list_fotos"
-			height="100%" width="100%" 
-			rowCount="2"
-			dataProvider="{_fotos}" 
-			itemRenderer="FotoTile">
-		</mx:TileList>
+			height="100%" width="100%"
+			rowHeight="160" columnWidth="160" 
+			rowCount="2" columnCount="4"
+			dataProvider="{fotos}" 
+			itemRenderer="FotoTile" />
+		
 		<mx:HBox width="100%" horizontalAlign="center">
+		
 			<mx:Button
 				label="Voeg toe"
 				click="click_voeg_toe(event)"/>
+				
 			<mx:Button 
 				label="Bekijk"
 				click="click_bekijk(event)"
 				enabled="{list_fotos.selectedIndex >= 0}"/>
+				
 			<mx:Button 
 				label="Verwijder"
 				click="click_verwijder(event)"
 				enabled="{list_fotos.selectedIndex >= 0}"/>
+				
 		</mx:HBox>
+		
 	</mx:VBox>
+	
 </mx:Canvas>

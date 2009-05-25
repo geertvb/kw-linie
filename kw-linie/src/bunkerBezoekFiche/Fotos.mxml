@@ -3,7 +3,6 @@
 
 	<mx:Script>
 		<![CDATA[
-			import mx.rpc.events.ResultEvent;
 			import util.FotoUtils;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
