@@ -52,6 +52,7 @@
 				opmerkingen.bind(bunker);
 				links.bind(bunker);
 				contacten.bind(bunker);
+				fotos.bind(bunker);
 				
 				return bunker;
 			}

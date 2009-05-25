@@ -34,40 +34,8 @@ class BunkerService {
 		return $result;		
 	}
 	
-	function findFotos($id) {
-		$sql = "SELECT `foto_id`, `bunker_id`, `omschrijving`, `filename`, `mimetype`, `width`, `height`, `size` FROM `kwl_foto` WHERE `bunker_id` = ? order by `foto_id` asc";
-
-		if ($mysqli = newMysqli()) {
-			if ($stmt = $mysqli->prepare($sql)) {
-				$stmt->bind_param('i', $id);
-				if ($stmt->execute()) {
-					$result = getresult($stmt);
-				}
-				$stmt->close();
-			}
-			$mysqli->close();
-		}
-		
-		return $result;		
-	}
-	
 	function deleteDocument($id) {
 		$sql = "DELETE FROM `kwl_document` WHERE `document_id` = ?";
-
-		if ($mysqli = newMysqli()) {
-			if ($stmt = $mysqli->prepare($sql)) {
-				$stmt->bind_param('i', $id);
-				$result = $stmt->execute();
-				$stmt->close();
-			}
-			$mysqli->close();
-		}
-		
-		return $result;
-	}
-	
-	function deleteFoto($id) {
-		$sql = "DELETE FROM `kwl_foto` WHERE `foto_id` = ?";
 
 		if ($mysqli = newMysqli()) {
 			if ($stmt = $mysqli->prepare($sql)) {
@@ -97,6 +65,8 @@ class BunkerService {
 				}
 				$stmt->close();
 			}
+			
+			$result->fotos = $this->findFotos($mysqli, $id);
 			
 			$sql = "select `url`, `omschrijving` from `kwl_link` where `bunker_id` = ?";
 			if ($stmt = $mysqli->prepare($sql)) {
@@ -144,6 +114,36 @@ class BunkerService {
 		return $result;		
 	}
 
+	private function findFotos($mysqli, $id) {
+		$sql = "";
+		$sql .= " SELECT";
+		$sql .= "   `kwl_foto`.`foto_id`,";
+		$sql .= "   `kwl_foto`.`omschrijving`,";
+		$sql .= "   `kwl_foto`.`filename`,";
+		$sql .= "   `kwl_foto`.`mimetype`,";
+		$sql .= "   `kwl_foto`.`width`,";
+		$sql .= "   `kwl_foto`.`height`,";
+		$sql .= "   `kwl_foto`.`size`";
+		$sql .= " FROM";
+		$sql .= "   `kwl_bunker_foto`,";
+		$sql .= "   `kwl_foto`";
+		$sql .= " WHERE";
+		$sql .= "   `kwl_bunker_foto`.`bunker_id` = ? AND";
+		$sql .= "   `kwl_bunker_foto`.`foto_id` = `kwl_foto`.`foto_id`";
+		$sql .= " ORDER BY";
+		$sql .= "   `kwl_foto`.`foto_id` ASC";
+
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getresult($stmt);
+			}
+			$stmt->close();
+		}
+		
+		return $result;		
+	}	
+	
 	function save($bunker) {
 		if ($mysqli = newMysqli()) {
 
@@ -153,14 +153,64 @@ class BunkerService {
 			$this->saveBescherming($bunker, $mysqli);
 			$this->saveOpmerkingen($bunker, $mysqli);
 			$this->updateLinks($mysqli, $bunker["bunker_id"], $bunker["links"]);
-			$result = $this->updateContacts($mysqli, $bunker["bunker_id"], $bunker["contacts"]);
+			$this->updateContacts($mysqli, $bunker["bunker_id"], $bunker["contacts"]);
+			$this->updateFotos($bunker, $mysqli);
 			
 			$mysqli->close();
 		}
 		return true;
 	}
 	
-	function saveLocatie($bunker, $mysqli) {
+	private function updateFotos($vo, $mysqli) {
+		$bunker_id = $vo["bunker_id"];
+		$new_ids = array();
+		foreach ($vo["fotos"] as $foto) {
+			$new_ids[] = $foto["foto_id"];
+		}
+		
+    	$sql = "";
+    	$sql .= " SELECT";
+    	$sql .= "   `foto_id`";
+    	$sql .= " FROM";
+    	$sql .= "   `kwl_bunker_foto`";
+    	$sql .= " WHERE";
+    	$sql .= "   `bunker_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $bunker_id);
+			if ($stmt->execute()) {
+				$old_ids = getValues($stmt);
+			}
+			$stmt->close();
+		}
+		
+    	// Remove foto ids
+		$remove_ids = array_diff($old_ids, $new_ids);
+		if (count($remove_ids) > 0) {
+			$sql = "";
+	    	$sql .= " DELETE FROM `kwl_bunker_foto`";
+	    	$sql .= " WHERE";
+	    	$sql .= "   `bunker_id` = " . $bunker_id . " AND ";
+	    	$sql .= "   `foto_id` in (" . implode(", ", $remove_ids) . ")";
+			$mysqli->query($sql);
+    	}
+		
+		// Add foto ids
+		$add_ids = array_diff($new_ids, $old_ids);
+    	if (count($add_ids) > 0) {
+			$sql = "";
+			$sql .= " INSERT INTO `kwl_bunker_foto`";
+			$sql .= "   (`bunker_id`, `foto_id`)";
+			$sql .= " VALUES";
+			$values = array();
+			foreach ($add_ids as $add_id) {
+				$values[] = "(" . $bunker_id . ", " . $add_id . ")";
+			}
+			$sql .= " " . implode(", ", $values);
+			$mysqli->query($sql);
+		}
+    }	
+
+	private function saveLocatie($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
 		$sql .= "set ";
 		$sql .= "`x` = ?,"; 
@@ -193,7 +243,7 @@ class BunkerService {
 		}
 	}
 
-	function saveType($bunker, $mysqli) {
+	private function saveType($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
 		$sql .= "set ";
 		$sql .= "`type` = ?,"; 
@@ -220,7 +270,7 @@ class BunkerService {
 		}
 	}
 	
-	function updateLinks($mysqli, $bunker_id, $links) {
+	private function updateLinks($mysqli, $bunker_id, $links) {
 
 		$sql = "";
     	$sql .= " DELETE FROM `kwl_link`";
@@ -248,7 +298,7 @@ class BunkerService {
 		return $sql;
     }	
 
-	function updateContacts($mysqli, $bunker_id, $contacts) {
+	private function updateContacts($mysqli, $bunker_id, $contacts) {
 
 		$sql = "";
     	$sql .= " DELETE FROM `kwl_bunker_contact`";
@@ -276,7 +326,7 @@ class BunkerService {
 		return $sql;
     }	
 
-    function saveDocumenten($bunker, $mysqli) {
+    private function saveDocumenten($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
 		$sql .= "set ";
 		$sql .= "`vh_grondplan` = ?,"; 
@@ -308,7 +358,7 @@ class BunkerService {
 		return $sql;
 	}
 
-	function saveBescherming($bunker, $mysqli) {
+	private function saveBescherming($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` ";
 		$sql .= "set ";
 		$sql .= "`bescherming_gewestplan` = ?,"; 
@@ -338,7 +388,7 @@ class BunkerService {
 		return $sql;
 	}
 
-	function saveOpmerkingen($bunker, $mysqli) {
+	private function saveOpmerkingen($bunker, $mysqli) {
 		$sql = "update `kwl_bunker` set `opmerkingen` = ? where `bunker_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
@@ -361,16 +411,6 @@ class BunkerService {
     	return findSQL($sql);
     }
     
-    /*
-    function save($bunker) {
-    	ob_start();
-    	var_dump($bunker);
-    	$result = ob_get_contents();
-    	ob_end_clean();
-    	return $result;
-    }
-    */
-
 }
 
 ?>
