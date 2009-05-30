@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+		
+			private function click_voeg_toe(event: Event) : void {
+				links.addItem({url:"a",omschrijving:"b"});
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				links.removeItemAt(linksGrid.selectedIndex);
+			}
+			
+			private function click_bekijk(event: Event) : void {
+				var request: URLRequest = new URLRequest();
+				request.url = links.getItemAt(linksGrid.selectedIndex).url;
+				request.method = URLRequestMethod.GET;
+				navigateToURL(request, "_blank");
+			}
+			
+			public function bind(vo: Object) : void {
+				vo.links = links;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:ArrayCollection id="links" source="{data.links}" /> 
+	
+	<mx:VBox x="10" width="480" bottom="10" top="0">
+
+		<mx:DataGrid
+			id="linksGrid" 
+			height="100%" width="100%"
+			editable="true"
+			dataProvider="{links}">
+			<mx:columns>
+				<mx:DataGridColumn
+					headerText="URL"
+					dataField="url" />
+				<mx:DataGridColumn
+					headerText="Omschrijving"
+					dataField="omschrijving" />
+			</mx:columns>
+		</mx:DataGrid>
+
+		<mx:HBox width="100%" horizontalAlign="center">
+			<mx:Button 
+				label="Voeg toe"
+				click="click_voeg_toe(event)"/>
+			<mx:Button
+				enabled="{linksGrid.selectedIndex >= 0}" 
+				label="Bekijk"
+				click="click_bekijk(event)" />
+			<mx:Button 
+				enabled="{linksGrid.selectedIndex >= 0}" 
+				label="Verwijder"
+				click="click_verwijder(event)"/>
+		</mx:HBox>
+
+	</mx:VBox>
+
+</mx:Canvas>

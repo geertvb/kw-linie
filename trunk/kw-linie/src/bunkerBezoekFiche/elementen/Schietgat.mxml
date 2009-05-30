@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:ArrayCollection id="dp_toestand">
+		<mx:Object label="dichtgemetst" />
+		<mx:Object label="open" />
+		<mx:Object label="achteraf breder gemaakt" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_affuit_toestand">
+		<mx:Object label="toestand 1" />
+		<mx:Object label="toestand 2" />
+		<mx:Object label="toestand 3" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_observatiesleuf_toestand">
+		<mx:Object label="toestand 1" />
+		<mx:Object label="toestand 2" />
+		<mx:Object label="toestand 3" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_affuit_type">
+		<mx:Object label="type 1" />
+		<mx:Object label="type 2" />
+		<mx:Object label="type 3" />
+	</mx:ArrayCollection>
+	
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			
+			public function bind(vo: Object) : void {
+				vo.niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.toestand = BindingUtils.comboBoxExToString(cb_toestand);
+				vo.schootsveld = BindingUtils.textinputToInteger(ti_schootsveld);
+				vo.afsluitluik_buitenzijde_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_buitenzijde_aanwezig);
+				vo.afsluitluik_bedieningsketting_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_bedieningsketting_aanwezig);
+				vo.afsluitluik_binnenzijde_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_binnenzijde_aanwezig);
+				vo.affuit_aanwezig = BindingUtils.checkboxToBoolean(cb_affuit_aanwezig);
+				vo.affuit_type = BindingUtils.comboBoxExToString(cb_affuit_type);
+				vo.affuit_toestand = BindingUtils.comboBoxExToString(cb_affuit_toestand);
+				vo.affuit_verankeringspunten_aanwezig = BindingUtils.checkboxToBoolean(cb_affuit_verankeringspunten_aanwezig);
+				vo.affuit_nummer_inscripties_aanwezig = BindingUtils.checkboxToBoolean(cb_affuit_nummer_inscripties_aanwezig);
+				vo.witte_lijn_aanwezig = BindingUtils.checkboxToBoolean(cb_witte_lijn_aanwezig);
+				vo.observatiesleuf_toestand = BindingUtils.comboBoxExToString(cb_observatiesleuf_toestand);
+				vo.observatiesleuf_luikje_aanwezig = BindingUtils.checkboxToBoolean(cb_observatiesleuf_luikje_aanwezig);
+				vo.haken_petroleumlampen_aanwezig = BindingUtils.checkboxToBoolean(cb_haken_petroleumlampen_aanwezig);
+				vo.haken_petroleumlampen_aantal = BindingUtils.textinputToInteger(ti_haken_petroleumlampen_aantal);
+				vo.houten_schapje_aanwezig = BindingUtils.checkboxToBoolean(cb_houten_schapje_aanwezig);
+				vo.zitbankje_aanwezig = BindingUtils.checkboxToBoolean(cb_zitbankje_aanwezig);
+				vo.metalen_schap_met_haken_aanwezig = BindingUtils.checkboxToBoolean(cb_metalen_schap_met_haken_aanwezig);
+				vo.metalen_schap_met_haken_aantal = BindingUtils.textinputToInteger(ti_metalen_schap_met_haken_aantal);
+				vo.opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+			}
+		]]>
+	</mx:Script>
 
 	<mx:Form x="0" y="0"
 			paddingBottom="0"
@@ -8,82 +62,147 @@
 			paddingTop="0">
 			
 		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox/>
+			<mx:CheckBox
+				id="cb_niet_bekeken"
+				selected="{data.niet_bekeken}"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Toestand">
-			<mx:ComboBox></mx:ComboBox>
+			<components:ComboBoxEx
+				id="cb_toestand"
+				dataProvider="{dp_toestand}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.toestand}" />
 		</mx:FormItem>
 
 		<mx:FormItem label="Schootsveld">
 			<mx:HBox width="100%">
-				<mx:TextInput width="64"/>
+				<mx:TextInput
+					id="ti_schootsveld"
+					text="{data.schootsveld}" 
+					width="64"/>
 				<mx:Label text="graden"/>
 			</mx:HBox>
 		</mx:FormItem>
 
 		<mx:FormItem label="Afsluitluik">
-			<mx:CheckBox label="Buitenzijde aanwezig"/>
-			<mx:CheckBox label="Bedieningsketting"/>
-			<mx:CheckBox label="Binnenzijde aanwezig"/>
+			<mx:CheckBox 
+				id="cb_afsluitluik_buitenzijde_aanwezig"
+				selected="{data.afsluitluik_buitenzijde_aanwezig}"
+				label="Buitenzijde aanwezig"/>
+			<mx:CheckBox 
+				id="cb_afsluitluik_bedieningsketting_aanwezig"
+				selected="{data.afsluitluik_bedieningsketting_aanwezig}"
+				label="Bedieningsketting"/>
+			<mx:CheckBox 
+				id="cb_afsluitluik_binnenzijde_aanwezig"
+				selected="{data.afsluitluik_binnenzijde_aanwezig}"
+				label="Binnenzijde aanwezig"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Affuit">
 			<mx:Form paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0">
 				<mx:FormItem label="Aanwezig">
-					<mx:CheckBox/>
+					<mx:CheckBox
+						id="cb_affuit_aanwezig"
+						selected="{data.affuit_aanwezig}"/>
 				</mx:FormItem>
 				<mx:FormItem label="Type">
-					<mx:ComboBox></mx:ComboBox>
+					<components:ComboBoxEx
+						id="cb_affuit_type"
+						dataProvider="{dp_affuit_type}"
+						labelField="label"
+						valueField="label"
+						selectedValue="{data.affuit_type}" />
 				</mx:FormItem>
 				<mx:FormItem label="Toestand">
-					<mx:ComboBox></mx:ComboBox>
+					<components:ComboBoxEx 
+						id="cb_affuit_toestand"
+						dataProvider="{dp_affuit_toestand}"
+						labelField="label"
+						valueField="label"
+						selectedValue="{data.affuit_toestand}"/>
 				</mx:FormItem>
 				<mx:FormItem label="Verankeringspunten">
-					<mx:CheckBox label="Aanwezig in vloer"/>
+					<mx:CheckBox 
+						id="cb_affuit_verankeringspunten_aanwezig"
+						selected="{data.affuit_verankeringspunten_aanwezig}"
+						label="Aanwezig in vloer"/>
 				</mx:FormItem>
 				<mx:FormItem label="Nummer inscripties">
-					<mx:CheckBox label="Aanwezig"/>
+					<mx:CheckBox 
+						id="cb_affuit_nummer_inscripties_aanwezig"
+						selected="{data.affuit_nummer_inscripties_aanwezig}"
+						label="Aanwezig"/>
 				</mx:FormItem>
 			</mx:Form>
 		</mx:FormItem>
 
 		<mx:FormItem label="Witte lijn">
-			<mx:CheckBox label="Aanwezig"/>
+			<mx:CheckBox 
+				id="cb_witte_lijn_aanwezig"
+				selected="{data.witte_lijn_aanwezig}"
+				label="Aanwezig"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Observatiesleuf">
-			<mx:ComboBox></mx:ComboBox>
-			<mx:CheckBox label="Luikje aanwezig"/>
+			<components:ComboBoxEx
+				id="cb_observatiesleuf_toestand"
+				dataProvider="{dp_observatiesleuf_toestand}"
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.observatiesleuf_toestand}"/>
+			<mx:CheckBox 
+				id="cb_observatiesleuf_luikje_aanwezig"
+				selected="{data.observatiesleuf_luikje_aanwezig}"
+				label="Luikje aanwezig"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Haken petroleumlampen">
-			<mx:CheckBox label="Aanwezig"/>
-			<mx:TextInput width="64"/>
+			<mx:CheckBox
+				id="cb_haken_petroleumlampen_aanwezig"
+				selected="{data.haken_petroleumlampen_aanwezig}" 
+				label="Aanwezig"/>
+			<mx:TextInput 
+				id="ti_haken_petroleumlampen_aantal"
+				text="{data.haken_petroleumlampen_aantal}"
+				width="64"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Houten schapje">
-			<mx:CheckBox label="Aanwezig"/>
+			<mx:CheckBox
+				id="cb_houten_schapje_aanwezig"
+				selected="{data.houten_schapje_aanwezig}" 
+				label="Aanwezig"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Zitbankje">
-			<mx:CheckBox label="Aanwezig"/>
+			<mx:CheckBox 
+				id="cb_zitbankje_aanwezig"
+				selected="{data.zitbankje_aanwezig}"
+				label="Aanwezig"/>
 		</mx:FormItem>
 
 		<mx:FormItem label="Metalen schap">
-			<mx:CheckBox label="Aanwezig"/>
+			<mx:CheckBox
+				id="cb_metalen_schap_met_haken_aanwezig"
+				selected="{data.metalen_schap_met_haken_aanwezig}" 
+				label="Aanwezig"/>
 			<mx:HBox width="100%">
-				<mx:TextInput width="64"/>
+				<mx:TextInput 
+					id="ti_metalen_schap_met_haken_aantal"
+					text="{data.metalen_schap_met_haken_aantal}"
+					width="64"/>
 				<mx:Label text="Aantal haken"/>
 			</mx:HBox>
 		</mx:FormItem>
 
 		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea width="320"/>
+			<mx:TextArea 
+				id="ta_opmerkingen"
+				text="{data.opmerkingen}"
+				width="320"/>
 		</mx:FormItem>
 
 	</mx:Form>

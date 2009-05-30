@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import util.StringUtils;
+			import util.BindingUtils;
+			import referenceData.BunkerSchietgatenHolder;
+			import referenceData.BunkerExtHolder;
+			import referenceData.BunkerCodeHolder;
+			import referenceData.BunkerTypeHolder;
+			
+			[Bindable]
+			private var types: Object = BunkerTypeHolder.getInstance();
+
+			[Bindable]
+			private var codes: Object = BunkerCodeHolder.getInstance();
+
+			[Bindable]
+			private var exts: Object = BunkerExtHolder.getInstance();
+
+			[Bindable]
+			private var schietgaten: Object = BunkerSchietgatenHolder.getInstance();
+			
+			public function bunkerNummer(code: String, nr: int, ext: String) : String {
+				var padded: String = StringUtils.leftPadding(nr.toString(), 2);
+				return StringUtils.join([code, padded, ext]);
+			}
+			
+			public function bind(vo: Object) : void {
+				vo.bunker_id = BindingUtils.textinputToInteger(ti_bunker_id);
+				vo.type = BindingUtils.comboboxToString(cb_type);
+				vo.aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Form x="0" y="0">
+		<mx:FormItem label="Uniek Nummer (ID)">
+			<mx:TextInput  
+				id="ti_bunker_id"
+				width="96" 
+				text="{data.bunker_id}"
+				editable="false"/>
+		</mx:FormItem>
+		<mx:FormItem label="Type">
+			<components:ComboBoxEx 
+				id="cb_type"
+				dataProvider="{types.data}" 
+				labelField="type"
+				valueField="type"
+				selectedValue="{data.type}"
+				width="200"/>
+		</mx:FormItem>
+		<mx:FormItem label="Nog aanwezig">
+			<mx:CheckBox 
+				id="cb_aanwezig"
+				label=" "
+				selected="{data.aanwezig}"/>
+		</mx:FormItem>
+	</mx:Form>
+	
+</mx:Canvas>
