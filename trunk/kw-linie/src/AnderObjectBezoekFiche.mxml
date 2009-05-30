@@ -36,12 +36,14 @@
 			}
 			
 			private function bind(vo: Object) : void {
+				<!--
 				bezoekView.bind(vo);
 				omgevingView.bind(vo);
 				buitenToestandView.bind(vo);
 				binnenToestandView.bind(vo);
 				elementenView.bind(vo);
 				fotoView.bind(vo);
+				-->
 			}
 			
 			private function click_bewaar(event: Event) : void {
@@ -92,6 +94,7 @@
 			</mx:FormItem>
 		</mx:HBox>
 		<mx:TabNavigator width="100%" creationPolicy="all" height="712">
+		<!--
 			<tab:Bezoek 
 				id="bezoekView" 
 				label="Bezoek" 
@@ -116,6 +119,7 @@
 				id="fotoView"
 				data="{anderObjectBezoek}" 
 				label="Fotos" />
+				-->
 		</mx:TabNavigator>
 		<mx:Button label="Bewaar" click="click_bewaar(event)"/>
 	</mx:VBox>
