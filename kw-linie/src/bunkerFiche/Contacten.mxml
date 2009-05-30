@@ -50,8 +50,8 @@
 		                    <mx:ComboBox>
 		                        <mx:dataProvider>
 		                            <mx:String>Eigenaar</mx:String>
-		                            <mx:String>Huurder</mx:String>
-		                            <mx:String>...</mx:String>
+		                            <mx:String>Contactpersoon</mx:String>
+		                            <mx:String>Beheerder</mx:String>
 		                        </mx:dataProvider>
 		                    </mx:ComboBox>
 		                </mx:Component>
