@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			
+			private function click_voeg_toe(event: Event) : void {
+				var selector: SelectContactPopup = SelectContactPopup.getInstance();
+				selector.select = voeg_toe;
+				selector.open();
+			}
+			
+			private function voeg_toe(contact: Object) : void {
+				contacts.addItem({
+					relatie: "Eigenaar",
+					contact: contact
+				});
+
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				contacts.removeItemAt(contactGrid.selectedIndex);
+			}
+			
+			public function bind(vo: Object) : void {
+				vo.contacts = contacts;
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:ArrayCollection id="contacts" source="{data.contacts}" />
+
+	<mx:VBox x="10" width="640" bottom="10" top="0">
+	
+		<mx:DataGrid
+			id="contactGrid"
+			rowCount="3"
+			rowHeight="54"
+			editable="true"
+			dataProvider="{contacts}">
+			<mx:columns>
+				<mx:DataGridColumn
+					headerText="Relatie"
+					width="192"
+					editable="true"
+					dataField="relatie">
+					<mx:itemEditor>
+		                <mx:Component>
+		                    <mx:ComboBox>
+		                        <mx:dataProvider>
+		                            <mx:String>Eigenaar</mx:String>
+		                            <mx:String>Huurder</mx:String>
+		                            <mx:String>...</mx:String>
+		                        </mx:dataProvider>
+		                    </mx:ComboBox>
+		                </mx:Component>
+		            </mx:itemEditor>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn
+					headerText="Contact"
+					width="400"
+					editable="false"
+					itemRenderer="ContactRenderer"
+					dataField="contact" />
+			</mx:columns>
+		</mx:DataGrid>
+
+		<mx:HBox width="100%" horizontalAlign="center">
+			<mx:Button
+				label="Voeg toe"
+				click="click_voeg_toe(event)" />
+			<mx:Button
+				label="Verwijder"
+				enabled="{contactGrid.selectedIndex >= 0}"
+				click="click_verwijder(event)" />
+		</mx:HBox>
+		
+	</mx:VBox>
+
+</mx:Canvas>

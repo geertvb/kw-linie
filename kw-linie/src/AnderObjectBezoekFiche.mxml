@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundColor="#637449" 
+	themeColor="#637449" 
+	backgroundGradientColors="[#637449,#637449]" 
+	layout="absolute"
+	creationComplete="creationComplete()"
+	xmlns:tab="anderObjectBezoekFiche.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+		
+			[Bindable]
+			private var anderObjectBezoek: Object;
+		
+			private function creationComplete() : void {
+				anderObjectBezoekService.findAll();
+			}
+			
+			private function anderObjectBezoekGridChange(event : Event) : void {
+				if (anderObjectBezoekGrid.selectedItem != null) {
+					anderObjectBezoekService.findByID(anderObjectBezoekGrid.selectedItem.anderobjectbezoek_id);
+				}
+			}
+			
+			private function fault(event: FaultEvent) : void {
+				Alert.show(event.fault.faultString);
+			}
+			
+			private function result_findByID(event: ResultEvent) : void {
+				anderObjectBezoek = event.result;
+			}
+			
+			private function bind(vo: Object) : void {
+				bezoekView.bind(vo);
+				omgevingView.bind(vo);
+				buitenToestandView.bind(vo);
+				binnenToestandView.bind(vo);
+				elementenView.bind(vo);
+				fotoView.bind(vo);
+			}
+			
+			private function click_bewaar(event: Event) : void {
+				var vo: Object = new Object();
+				bind(vo);
+				anderObjectBezoekService.save(vo);
+			}
+			
+			private function result(event: ResultEvent) : void {
+				Alert.show(event.result.toString());
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Object id="bunker" />
+
+	<mx:RemoteObject id="anderObjectBezoekService"
+		source="kwl.AnderObjectBezoekService" 
+		destination="amfphp"
+		fault="fault(event)">
+		<mx:method
+			name="findByID"
+			result="result_findByID(event)" />
+		<mx:method
+			name="save"
+			result="result(event)" />
+    </mx:RemoteObject>
+	
+	<mx:VBox width="718">
+		<mx:DataGrid id="anderObjectBezoekGrid"
+			dataProvider="{anderObjectBezoekService.findAll.lastResult}" 
+			width="100%"
+			selectedIndex="0"
+			valueCommit="anderObjectBezoekGridChange(event)"
+			change="anderObjectBezoekGridChange(event)">
+			<mx:columns>
+				<mx:DataGridColumn dataField="anderobjectbezoek_id" headerText="ID" width="40" />
+				<mx:DataGridColumn dataField="datum" headerText="Datum" width="64" />
+			</mx:columns>
+		</mx:DataGrid>
+
+		<mx:HBox>
+			<mx:FormItem label="ID" horizontalAlign="left">
+				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{bunker.bunker_id}" />
+			</mx:FormItem>
+			<mx:FormItem label="Nummer" horizontalAlign="left">
+				<mx:TextInput editable="false" width="64" text="{bunker.nummer}" />
+			</mx:FormItem>
+		</mx:HBox>
+		<mx:TabNavigator width="100%" creationPolicy="all" height="712">
+			<tab:Bezoek 
+				id="bezoekView" 
+				label="Bezoek" 
+				data="{anderObjectBezoek}" />
+			<tab:Omgeving
+				id="omgevingView"
+				data="{anderObjectBezoek}"
+				label="Omgeving" />
+			<tab:BuitenToestand
+				id="buitenToestandView"
+				data="{anderObjectBezoek}"
+				label="Toestand buiten" />
+			<tab:BinnenToestand
+				id="binnenToestandView" 
+				data="{anderObjectBezoek}"
+				label="Toestand binnen" />
+			<tab:Elementen
+				id="elementenView"
+				data="{anderObjectBezoek}" 
+				label="Elementen" />
+			<tab:Fotos
+				id="fotoView"
+				data="{anderObjectBezoek}" 
+				label="Fotos" />
+		</mx:TabNavigator>
+		<mx:Button label="Bewaar" click="click_bewaar(event)"/>
+	</mx:VBox>
+
+</mx:Application>

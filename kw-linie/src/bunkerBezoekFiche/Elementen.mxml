@@ -39,9 +39,7 @@
 					<mx:Object label="Dakplaten" />
 					<mx:Object label="Camouflage" />
 					<mx:Object label="Rooster aan de ingang" />
-					<mx:Object label="Schietgat 1" />
-					<mx:Object label="Schietgat 2" />
-					<mx:Object label="Schietgat 3" />
+					<mx:Object label="Schietgaten" />
 					<mx:Object label="Afsluitluik granaatwerper" />
 					<mx:Object label="Verluchtingspijpen" />
 				</mx:ArrayCollection>
@@ -86,15 +84,9 @@
 				id="ingangRoosterView" 
 				data="{data}" 
 				label="Rooster aan de ingang" />
-			<elementen:Schietgat 
+			<elementen:Schietgaten 
 				data="{data}" 
-				label="Schietgat 1" />
-			<elementen:Schietgat 
-				data="{data}" 
-				label="Schietgat 2" />
-			<elementen:Schietgat 
-				data="{data}" 
-				label="Schietgat 3" />
+				label="Schietgaten" />
 			<elementen:GranaatwerperAfsluitluik
 				id="granaatwerperAfsluitluikView" 
 				data="{data}" 

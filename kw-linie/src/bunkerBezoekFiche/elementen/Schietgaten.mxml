@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:elementen="bunkerBezoekFiche.elementen.*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			public function bind(vo : Object) : void {
+				var a: ArrayCollection = new ArrayCollection();
+				var schietgat: Object;
+				
+				schietgat = new Object();
+				sg1.bind(schietgat);
+				a.addItem(schietgat);
+				
+				schietgat = new Object();
+				sg2.bind(schietgat);
+				a.addItem(schietgat);
+				
+				schietgat = new Object();
+				sg3.bind(schietgat);
+				a.addItem(schietgat);
+				
+				vo.schietgaten = a; 
+			}
+		]]>
+	</mx:Script>
+
+	<mx:VBox horizontalAlign="center">
+
+		<mx:ToggleButtonBar 
+			dataProvider="{viewstack}" />
+
+		<mx:ViewStack id="viewstack">
+			<elementen:Schietgat id="sg1" label="Schietgat 1" data="{data.schietgaten.getItemAt(0)}" />
+			<elementen:Schietgat id="sg2" label="Schietgat 2" data="{data.schietgaten.getItemAt(1)}" />
+			<elementen:Schietgat id="sg3" label="Schietgat 3" data="{data.schietgaten.getitemAt(2)}" />
+		</mx:ViewStack>
+
+	</mx:VBox>
+
+</mx:Canvas>

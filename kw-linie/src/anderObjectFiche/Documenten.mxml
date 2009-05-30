@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:rpc="mx.rpc.*" 
+	xmlns:local="*">
+
+	<mx:Script>
+		<![CDATA[
+			import util.DocumentUtils;
+			import mx.rpc.events.FaultEvent;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.events.FlexEvent;
+			import mx.events.CloseEvent;
+			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			import util.BindingUtils;
+			
+			private function uploadDocument() : void {
+				DocumentUtils.upload(uploadComplete);
+			}
+			
+			private function uploadComplete(document: Object) : void {
+				documenten.addItem(document);
+			}
+			
+			public function bind(bunker: Object) : void {
+				bunker.vh_grondplan = BindingUtils.checkboxToBoolean(cb_availGrondplan);
+				bunker.vh_onteigeningsdossier = BindingUtils.checkboxToBoolean(cb_availOnteigeningsdossier);
+				bunker.vh_lastenboek = BindingUtils.checkboxToBoolean(cb_availLastenboek);
+				bunker.vh_militair_bunkerdossier = BindingUtils.checkboxToBoolean(cb_availMilitairBunkerdossier);
+				bunker.vh_overgave_aan_domeinen = BindingUtils.checkboxToBoolean(cb_availOvergave);
+				bunker.vh_verkoop_door_domeinen = BindingUtils.checkboxToBoolean(cb_availVerkoopDomeinen);
+				bunker.vh_oude_fotos = BindingUtils.checkboxToBoolean(cb_availOudeFotos);
+				bunker.vh_andere = BindingUtils.checkboxToBoolean(cb_availAndere);
+				bunker.vh_andere_tekst = BindingUtils.textAreaToString(ti_availAndereTekst);
+				//bunker.vh_andere_bron = BindingUtils.textinputToString(ti_availAndereBron);
+				bunker.documenten = documenten;
+			}
+			
+			public function click_bekijk(event: Event) : void {
+				DocumentUtils.navigateTo(list_documenten.selectedItem.document_id);
+			}
+			
+			public function close_verwijder_alert(event: CloseEvent) : void {
+				if (event.detail==Alert.YES) {
+                    documenten.removeItemAt(list_documenten.selectedIndex);
+    			}
+			}
+			
+			public function click_verwijder(event: Event) : void {
+				Alert.yesLabel = "Ja";
+				Alert.noLabel = "Nee";
+				Alert.show(
+					"Ben je zeker dat je het document wil wissen?",
+					"Verwijderen",
+					Alert.YES | Alert.NO,
+					null,
+					close_verwijder_alert);
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:ArrayCollection id="documenten" source="{data.documenten}" />
+
+	<mx:Form x="0" y="0" height="100%">
+	
+		<mx:FormItem label="Voorhanden">
+			<mx:CheckBox 
+				id="cb_availGrondplan" 
+				selected="{data.vh_grondplan}" 
+				label="Grondplan" />
+			<mx:CheckBox 
+				id="cb_availOnteigeningsdossier" 
+				selected="{data.vh_onteigeningsdossier}" 
+				label="Onteigeningsdossier"/>
+			<mx:CheckBox 
+				id="cb_availLastenboek" 
+				selected="{data.vh_lastenboek}" 
+				label="Lastenboek"/>
+			<mx:CheckBox 
+				id="cb_availMilitairBunkerdossier" 
+				selected="{data.vh_militair_bunkerdossier}" 
+				label="Militair bunkerdossier"/>
+			<mx:CheckBox 
+				id="cb_availOvergave" 
+				selected="{data.vh_overgave_aan_domeinen}" 
+				label="Overgave landsverdediging aan domeinen"/>
+			<mx:CheckBox 
+				id="cb_availVerkoopDomeinen" 
+				selected="{data.vh_verkoop_door_domeinen}" 
+				label="Verkoop door domeinen"/>
+			<mx:CheckBox 
+				id="cb_availOudeFotos" 
+				selected="{data.vh_oude_fotos}" 
+				label="Oude fotos"/>
+			<mx:CheckBox 
+				id="cb_availAndere" 
+				selected="{data.vh_andere}" 
+				label="Andere (omschrijving + bron)" />
+			<mx:TextArea
+				id="ti_availAndereTekst"
+				enabled="{cb_availAndere.selected}"
+				text="{data.vh_andere_tekst}"
+				width="100%"/>
+			<!--
+			<mx:TextInput
+				id="ti_availAndereBron"
+				enabled="{cb_availAndere.selected}"
+				text="{data.vh_andere_bron}" width="100%"/>
+			-->
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+	<mx:VBox width="328" bottom="10" right="10" top="0">
+	
+		<mx:List 
+			id="list_documenten"
+			width="100%" height="100%"
+			itemRenderer="DocumentRenderer"
+			dataProvider="{documenten}" />
+			
+		<mx:HBox width="100%" horizontalAlign="center">
+		
+			<mx:Button 
+				label="Voeg toe" 
+				click="uploadDocument()"/>
+				
+			<mx:Button 
+				label="Bekijk"
+				click="click_bekijk(event)"
+				enabled="{list_documenten.selectedIndex >= 0}"/>
+				
+			<mx:Button 
+				label="Verwijder"
+				click="click_verwijder(event)"
+				enabled="{list_documenten.selectedIndex >= 0}"/>
+				
+		</mx:HBox>
+		
+	</mx:VBox>
+
+</mx:Canvas>

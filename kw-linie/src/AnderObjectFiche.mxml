@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:anderObjectFiche="anderObjectFiche.*"
+	backgroundColor="#637449" 
+	themeColor="#637449" 
+	backgroundGradientColors="[#637449,#637449]" 
+	layout="absolute">
+	
+	<mx:ArrayCollection id="andereObjecten" />
+	
+	<mx:Object id="anderObject" />
+	
+	<mx:VBox width="718">
+	
+		<mx:DataGrid id="anderObjectGrid"
+			dataProvider="{andereObjecten}" 
+			width="100%"
+			selectedIndex="0"
+			valueCommit=""
+			change="">
+			<mx:columns>
+				<mx:DataGridColumn dataField="ander_object_id" headerText="ID" width="40" />
+				<mx:DataGridColumn dataField="type" headerText="Type" width="128" />
+				<mx:DataGridColumn dataField="gemeente" headerText="Gemeente" />
+				<mx:DataGridColumn dataField="deelgemeente" headerText="Deelgemeente" />
+				<mx:DataGridColumn dataField="straat" headerText="Straat" />
+			</mx:columns>
+		</mx:DataGrid>
+		
+		<mx:TabNavigator width="100%" height="400" creationPolicy="all">
+			<anderObjectFiche:Type id="type" label="Type" data="{anderObject}" />
+			<anderObjectFiche:Locatie id="locatie" label="Locatie" data="{anderObject}" />
+			<anderObjectFiche:Documenten id="documenten" label="Documenten" data="{anderObject}" />
+			<anderObjectFiche:Fotos id="fotos" label="Fotos" data="{anderObject}" />
+			<anderObjectFiche:Contacten id="contacten" label="Contacten" data="{anderObject}" />
+			<anderObjectFiche:Links id="links" label="Links" data="{anderObject}" />
+			<anderObjectFiche:Bescherming id="bescherming" label="Bescherming" data="{anderObject}" />
+			<anderObjectFiche:Opmerkingen id="opmerkingen" label="Opmerkingen" data="{anderObject}" />
+		</mx:TabNavigator>
+		
+		<mx:Button 
+			label="Bewaar"/>
+			
+	</mx:VBox>
+	
+</mx:Application>
