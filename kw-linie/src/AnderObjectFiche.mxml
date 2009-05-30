@@ -2,31 +2,138 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:anderObjectFiche="anderObjectFiche.*"
+	creationComplete="creationComplete()"
 	backgroundColor="#637449" 
 	themeColor="#637449" 
 	backgroundGradientColors="[#637449,#637449]" 
 	layout="absolute">
 	
-	<mx:ArrayCollection id="andereObjecten" />
+	<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			public function creationComplete() : void {
+				refreshGrid();
+			}
+		
+			public function refreshGrid() : void {
+				anderObjectService.findAll();
+			}
+			
+			public function refresh_anderobject() : void {
+				if (anderObjectGrid.selectedIndex >= 0) {
+					anderObjectService.findByID(anderObjectGrid.selectedItem.anderobject_id);
+				} else {
+					anderObject = null;
+				}
+			}
+			
+			private function result_findByID(event: ResultEvent) : void {
+				anderObject = event.result;
+			}
+			
+			private function click_voeg_toe(event: Event) : void {
+				anderObjectService.create();
+			}
+			
+			private function result_create(event: ResultEvent) : void {
+				var anderobject: Object = new Object();
+				anderobject.anderobject_id = event.result;
+				andereObjecten.addItem(anderobject);
+				anderObjectGrid.selectedItem = anderobject;
+			}
+
+			public function bind(vo: Object) : Object {
+				
+				type.bind(vo);
+				locatie.bind(vo);
+				documenten.bind(vo);
+				bescherming.bind(vo);
+				opmerkingen.bind(vo);
+				links.bind(vo);
+				contacten.bind(vo);
+				fotos.bind(vo);
+				
+				return vo;
+			}
+			
+			private function click_bewaar(event: Event) : void {
+				var vo : Object = new Object();
+				anderObjectService.save(bind(vo));
+			}
+			
+			private function result_save(event: ResultEvent) : void {
+				var index: int = andereObjecten.getItemIndex(anderObjectGrid.selectedItem);
+				var anderobject: Object = event.result;
+				andereObjecten.setItemAt(anderobject, index);
+			}
+			
+			private function fault(event: FaultEvent) : void {
+				Alert.show(event.fault.faultString);
+			}
+
+			private function result_remove(event: ResultEvent) : void {
+				refreshGrid();
+			}
+
+			private function close_verwijder_alert(event: CloseEvent) : void {
+				if (event.detail==Alert.YES) {
+					anderObjectService.remove(anderObjectGrid.selectedItem.anderobject_id);
+    			}
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				Alert.yesLabel = "Ja";
+				Alert.noLabel = "Nee";
+				Alert.show(
+					"Ben je zeker dat je het object wil verwijderen?",
+					"Verwijderen",
+					Alert.YES | Alert.NO,
+					null,
+					close_verwijder_alert);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:ArrayCollection id="andereObjecten" 
+		source="{anderObjectService.findAll.lastResult}"/>
 	
 	<mx:Object id="anderObject" />
 	
+	<mx:RemoteObject id="anderObjectService"
+		source="kwl.AnderObjectService" 
+		destination="amfphp"
+		fault="fault(event)">
+		<mx:method name="create" result="result_create(event)" />
+		<mx:method name="save" result="result_save(event)" />
+		<mx:method name="remove" result="result_remove(event)" />
+		<mx:method name="findByID" result="result_findByID(event)" />
+    </mx:RemoteObject>
+
 	<mx:VBox width="718">
 	
 		<mx:DataGrid id="anderObjectGrid"
 			dataProvider="{andereObjecten}" 
 			width="100%"
 			selectedIndex="0"
-			valueCommit=""
-			change="">
+			valueCommit="refresh_anderobject()"
+			change="refresh_anderobject()">
 			<mx:columns>
-				<mx:DataGridColumn dataField="ander_object_id" headerText="ID" width="40" />
+				<mx:DataGridColumn dataField="anderobject_id" headerText="ID" width="40" />
 				<mx:DataGridColumn dataField="type" headerText="Type" width="128" />
 				<mx:DataGridColumn dataField="gemeente" headerText="Gemeente" />
 				<mx:DataGridColumn dataField="deelgemeente" headerText="Deelgemeente" />
 				<mx:DataGridColumn dataField="straat" headerText="Straat" />
 			</mx:columns>
 		</mx:DataGrid>
+		
+		<mx:HBox width="100%">
+			<mx:Button label="Voeg toe" click="click_voeg_toe(event)" />
+			<mx:Button label="Verwijder" enabled="{anderObjectGrid.selectedIndex >= 0}" click="click_verwijder(event)"/>
+		</mx:HBox>
 		
 		<mx:TabNavigator width="100%" height="400" creationPolicy="all">
 			<anderObjectFiche:Type id="type" label="Type" data="{anderObject}" />
@@ -40,7 +147,9 @@
 		</mx:TabNavigator>
 		
 		<mx:Button 
-			label="Bewaar"/>
+			label="Bewaar" 
+			click="click_bewaar(event)" 
+			enabled="{anderObjectGrid.selectedIndex >= 0}"/>
 			
 	</mx:VBox>
 	

@@ -6,7 +6,9 @@
 			import mx.collections.ArrayCollection;
 		
 			private function click_voeg_toe(event: Event) : void {
-				links.addItem({url:"a",omschrijving:"b"});
+				links.addItem({
+					url:"http://www.domain.ext/...",
+					omschrijving:"Omschrijving"});
 			}
 			
 			private function click_verwijder(event: Event) : void {

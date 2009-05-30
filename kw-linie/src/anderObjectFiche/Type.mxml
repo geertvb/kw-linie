@@ -5,44 +5,28 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import referenceData.AnderObjectTypeHolder;
 			import util.StringUtils;
 			import util.BindingUtils;
-			import referenceData.BunkerSchietgatenHolder;
-			import referenceData.BunkerExtHolder;
-			import referenceData.BunkerCodeHolder;
-			import referenceData.BunkerTypeHolder;
 			
 			[Bindable]
-			private var types: Object = BunkerTypeHolder.getInstance();
+			private var types: Object = AnderObjectTypeHolder.getInstance();
 
-			[Bindable]
-			private var codes: Object = BunkerCodeHolder.getInstance();
-
-			[Bindable]
-			private var exts: Object = BunkerExtHolder.getInstance();
-
-			[Bindable]
-			private var schietgaten: Object = BunkerSchietgatenHolder.getInstance();
-			
-			public function bunkerNummer(code: String, nr: int, ext: String) : String {
-				var padded: String = StringUtils.leftPadding(nr.toString(), 2);
-				return StringUtils.join([code, padded, ext]);
-			}
-			
 			public function bind(vo: Object) : void {
-				vo.bunker_id = BindingUtils.textinputToInteger(ti_bunker_id);
+				vo.anderobject_id = BindingUtils.textinputToInteger(ti_anderobject_id);
 				vo.type = BindingUtils.comboboxToString(cb_type);
 				vo.aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
 			}
+
 		]]>
 	</mx:Script>
 	
 	<mx:Form x="0" y="0">
 		<mx:FormItem label="Uniek Nummer (ID)">
 			<mx:TextInput  
-				id="ti_bunker_id"
+				id="ti_anderobject_id"
 				width="96" 
-				text="{data.bunker_id}"
+				text="{data.anderobject_id}"
 				editable="false"/>
 		</mx:FormItem>
 		<mx:FormItem label="Type">

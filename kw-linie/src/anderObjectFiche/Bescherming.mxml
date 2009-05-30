@@ -5,15 +5,15 @@
 		<![CDATA[
 			import util.BindingUtils;
 
-			public function bind(bunker: Object) : void {
-				bunker.bescherming_gewestplan = BindingUtils.checkboxToBoolean(cb_bescherming_gewestplan);
-				bunker.bescherming_landschapsatlas = BindingUtils.checkboxToBoolean(cb_bescherming_landschapsatlas);
-				bunker.bescherming_ven_ivon = BindingUtils.checkboxToBoolean(cb_bescherming_ven_ivon);
-				bunker.bescherming_sbz = BindingUtils.checkboxToBoolean(cb_bescherming_sbz);
-				bunker.bescherming_beschermd = BindingUtils.checkboxToBoolean(cb_bescherming_beschermd);
-				bunker.bescherming_rup = BindingUtils.checkboxToBoolean(cb_bescherming_rup);
-				bunker.bescherming_andere = BindingUtils.checkboxToBoolean(cb_bescherming_andere);
-				bunker.bescherming_andere_tekst = BindingUtils.textAreaToString(ta_bescherming_andere_tekst);
+			public function bind(vo: Object) : void {
+				vo.bescherming_gewestplan = BindingUtils.checkboxToBoolean(cb_bescherming_gewestplan);
+				vo.bescherming_landschapsatlas = BindingUtils.checkboxToBoolean(cb_bescherming_landschapsatlas);
+				vo.bescherming_ven_ivon = BindingUtils.checkboxToBoolean(cb_bescherming_ven_ivon);
+				vo.bescherming_sbz = BindingUtils.checkboxToBoolean(cb_bescherming_sbz);
+				vo.bescherming_beschermd = BindingUtils.checkboxToBoolean(cb_bescherming_beschermd);
+				vo.bescherming_rup = BindingUtils.checkboxToBoolean(cb_bescherming_rup);
+				vo.bescherming_andere = BindingUtils.checkboxToBoolean(cb_bescherming_andere);
+				vo.bescherming_andere_tekst = BindingUtils.textAreaToString(ta_bescherming_andere_tekst);
 			}
 		]]>
 	</mx:Script>

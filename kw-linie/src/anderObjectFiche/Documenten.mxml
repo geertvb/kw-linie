@@ -24,18 +24,14 @@
 				documenten.addItem(document);
 			}
 			
-			public function bind(bunker: Object) : void {
-				bunker.vh_grondplan = BindingUtils.checkboxToBoolean(cb_availGrondplan);
-				bunker.vh_onteigeningsdossier = BindingUtils.checkboxToBoolean(cb_availOnteigeningsdossier);
-				bunker.vh_lastenboek = BindingUtils.checkboxToBoolean(cb_availLastenboek);
-				bunker.vh_militair_bunkerdossier = BindingUtils.checkboxToBoolean(cb_availMilitairBunkerdossier);
-				bunker.vh_overgave_aan_domeinen = BindingUtils.checkboxToBoolean(cb_availOvergave);
-				bunker.vh_verkoop_door_domeinen = BindingUtils.checkboxToBoolean(cb_availVerkoopDomeinen);
-				bunker.vh_oude_fotos = BindingUtils.checkboxToBoolean(cb_availOudeFotos);
-				bunker.vh_andere = BindingUtils.checkboxToBoolean(cb_availAndere);
-				bunker.vh_andere_tekst = BindingUtils.textAreaToString(ti_availAndereTekst);
-				//bunker.vh_andere_bron = BindingUtils.textinputToString(ti_availAndereBron);
-				bunker.documenten = documenten;
+			public function bind(vo: Object) : void {
+				vo.vh_plattegrond = BindingUtils.checkboxToBoolean(cb_availPlattegrond);
+				vo.vh_coupes = BindingUtils.checkboxToBoolean(cb_availCoupes);
+				vo.vh_oude_fotos = BindingUtils.checkboxToBoolean(cb_availOudeFotos);
+				vo.vh_andere = BindingUtils.checkboxToBoolean(cb_availAndere);
+				vo.vh_andere_tekst = BindingUtils.textAreaToString(ti_availAndereTekst);
+
+				vo.documenten = documenten;
 			}
 			
 			public function click_bekijk(event: Event) : void {
@@ -68,29 +64,13 @@
 	
 		<mx:FormItem label="Voorhanden">
 			<mx:CheckBox 
-				id="cb_availGrondplan" 
-				selected="{data.vh_grondplan}" 
-				label="Grondplan" />
+				id="cb_availPlattegrond" 
+				selected="{data.vh_plattegrond}" 
+				label="Plattegrond" />
 			<mx:CheckBox 
-				id="cb_availOnteigeningsdossier" 
-				selected="{data.vh_onteigeningsdossier}" 
-				label="Onteigeningsdossier"/>
-			<mx:CheckBox 
-				id="cb_availLastenboek" 
-				selected="{data.vh_lastenboek}" 
-				label="Lastenboek"/>
-			<mx:CheckBox 
-				id="cb_availMilitairBunkerdossier" 
-				selected="{data.vh_militair_bunkerdossier}" 
-				label="Militair bunkerdossier"/>
-			<mx:CheckBox 
-				id="cb_availOvergave" 
-				selected="{data.vh_overgave_aan_domeinen}" 
-				label="Overgave landsverdediging aan domeinen"/>
-			<mx:CheckBox 
-				id="cb_availVerkoopDomeinen" 
-				selected="{data.vh_verkoop_door_domeinen}" 
-				label="Verkoop door domeinen"/>
+				id="cb_availCoupes" 
+				selected="{data.vh_coupes}" 
+				label="Coupes"/>
 			<mx:CheckBox 
 				id="cb_availOudeFotos" 
 				selected="{data.vh_oude_fotos}" 
@@ -104,12 +84,6 @@
 				enabled="{cb_availAndere.selected}"
 				text="{data.vh_andere_tekst}"
 				width="100%"/>
-			<!--
-			<mx:TextInput
-				id="ti_availAndereBron"
-				enabled="{cb_availAndere.selected}"
-				text="{data.vh_andere_bron}" width="100%"/>
-			-->
 		</mx:FormItem>
 		
 	</mx:Form>

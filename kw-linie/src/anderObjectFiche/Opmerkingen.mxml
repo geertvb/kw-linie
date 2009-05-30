@@ -5,8 +5,8 @@
 		<![CDATA[
 			import util.BindingUtils;
 
-			public function bind(bunker: Object) : void {
-				bunker.opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+			public function bind(vo: Object) : void {
+				vo.opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
 		]]>
 	</mx:Script>
