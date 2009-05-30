@@ -5,11 +5,12 @@
 	themeColor="#637449" 
 	backgroundGradientColors="[#637449,#637449]" 
 	layout="absolute"
-	creationComplete="creationComplete()"
+	creationComplete="refreshGrid()"
 	xmlns:tab="anderObjectBezoekFiche.*">
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
 			import mx.rpc.events.FaultEvent;
@@ -17,7 +18,7 @@
 			[Bindable]
 			private var anderObjectBezoek: Object;
 		
-			private function creationComplete() : void {
+			private function refreshGrid() : void {
 				anderObjectBezoekService.findAll();
 			}
 			
@@ -36,14 +37,8 @@
 			}
 			
 			private function bind(vo: Object) : void {
-				<!--
 				bezoekView.bind(vo);
-				omgevingView.bind(vo);
-				buitenToestandView.bind(vo);
-				binnenToestandView.bind(vo);
-				elementenView.bind(vo);
-				fotoView.bind(vo);
-				-->
+				toestandView.bind(vo);
 			}
 			
 			private function click_bewaar(event: Event) : void {
@@ -53,17 +48,58 @@
 			}
 			
 			private function result(event: ResultEvent) : void {
-				Alert.show(event.result.toString());
+				var index: int = anderObjectBezoeken.getItemIndex(anderObjectBezoekGrid.selectedItem);
+				var anderobjectbezoek: Object = event.result;
+				anderObjectBezoeken.setItemAt(anderobjectbezoek, index);
+			}
+			
+			private function result_create(event: ResultEvent) : void {
+				var anderobjectbezoek: Object = new Object();
+				anderobjectbezoek.anderobjectbezoek_id = event.result;
+				anderObjectBezoeken.addItem(anderobjectbezoek);
+				anderObjectBezoekGrid.selectedItem = anderobjectbezoek;
+			}
+
+			private function click_voeg_toe(event: Event) : void {
+				anderObjectBezoekService.create();
+			}
+
+			private function result_remove(event: ResultEvent) : void {
+				refreshGrid();
+			}
+
+			private function close_verwijder_alert(event: CloseEvent) : void {
+				if (event.detail==Alert.YES) {
+					anderObjectBezoekService.remove(anderObjectBezoekGrid.selectedItem.anderobjectbezoek_id);
+    			}
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				Alert.yesLabel = "Ja";
+				Alert.noLabel = "Nee";
+				Alert.show(
+					"Ben je zeker dat je het object wil verwijderen?",
+					"Verwijderen",
+					Alert.YES | Alert.NO,
+					null,
+					close_verwijder_alert);
 			}
 		]]>
 	</mx:Script>
-	
-	<mx:Object id="bunker" />
 
+	<mx:ArrayCollection id="anderObjectBezoeken" 
+		source="{anderObjectBezoekService.findAll.lastResult}"/>
+	
 	<mx:RemoteObject id="anderObjectBezoekService"
 		source="kwl.AnderObjectBezoekService" 
 		destination="amfphp"
 		fault="fault(event)">
+		<mx:method 
+			name="create" 
+			result="result_create(event)" />
+		<mx:method 
+			name="remove" 
+			result="result_remove(event)" />
 		<mx:method
 			name="findByID"
 			result="result_findByID(event)" />
@@ -74,7 +110,7 @@
 	
 	<mx:VBox width="718">
 		<mx:DataGrid id="anderObjectBezoekGrid"
-			dataProvider="{anderObjectBezoekService.findAll.lastResult}" 
+			dataProvider="{anderObjectBezoeken}" 
 			width="100%"
 			selectedIndex="0"
 			valueCommit="anderObjectBezoekGridChange(event)"
@@ -86,40 +122,24 @@
 		</mx:DataGrid>
 
 		<mx:HBox>
-			<mx:FormItem label="ID" horizontalAlign="left">
-				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{bunker.bunker_id}" />
-			</mx:FormItem>
-			<mx:FormItem label="Nummer" horizontalAlign="left">
-				<mx:TextInput editable="false" width="64" text="{bunker.nummer}" />
-			</mx:FormItem>
+			<mx:Button 
+				label="Voeg toe" 
+				click="click_voeg_toe(event)"/>
+			<mx:Button 
+				label="Verwijder" 
+				click="click_verwijder(event)" 
+				enabled="{anderObjectBezoekGrid.selectedIndex >= 0}"/>
 		</mx:HBox>
-		<mx:TabNavigator width="100%" creationPolicy="all" height="712">
-		<!--
+		
+		<mx:TabNavigator width="100%" creationPolicy="all" height="450">
 			<tab:Bezoek 
 				id="bezoekView" 
 				label="Bezoek" 
 				data="{anderObjectBezoek}" />
-			<tab:Omgeving
-				id="omgevingView"
+			<tab:Toestand
+				id="toestandView"
 				data="{anderObjectBezoek}"
-				label="Omgeving" />
-			<tab:BuitenToestand
-				id="buitenToestandView"
-				data="{anderObjectBezoek}"
-				label="Toestand buiten" />
-			<tab:BinnenToestand
-				id="binnenToestandView" 
-				data="{anderObjectBezoek}"
-				label="Toestand binnen" />
-			<tab:Elementen
-				id="elementenView"
-				data="{anderObjectBezoek}" 
-				label="Elementen" />
-			<tab:Fotos
-				id="fotoView"
-				data="{anderObjectBezoek}" 
-				label="Fotos" />
-				-->
+				label="Toestand" />
 		</mx:TabNavigator>
 		<mx:Button label="Bewaar" click="click_bewaar(event)"/>
 	</mx:VBox>

@@ -1,0 +1,90 @@
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*" 
+	xmlns:local="*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			import referenceData.RedenNietAanwezigHolder;
+			import referenceData.AanwezigheidHolder;
+			import util.BindingUtils;
+
+			[Bindable]
+			private var aanwezigheidList: Object = AanwezigheidHolder.getInstance();
+			
+			[Bindable]
+			private var redenNietAanwezigList: Object = RedenNietAanwezigHolder.getInstance();
+			
+			public function bind(vo: Object) : void {
+				vo.anderobjectbezoek_id = BindingUtils.textinputToInteger(ti_anderobjectbezoek_id);
+				vo.datum = BindingUtils.dateFieldToDate(df_datum);
+				vo.invuller_id = invullerContactSelector.contact_id;
+				vo.bezoeker_ids = bezoekersContactSelector.contact_ids;
+				vo.aanwezigheid = BindingUtils.comboboxToString(cb_aanwezigheid);
+				vo.reden_niet_aanwezig = BindingUtils.comboboxToString(cb_reden_niet_aanwezig);
+				vo.reden_niet_aanwezig_tekst = BindingUtils.textinputToString(ti_reden_niet_aanwezig_tekst);
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:Form x="0" y="0">
+		<mx:FormItem label="Uniek ID">
+			<mx:TextInput 
+				id="ti_anderobjectbezoek_id"
+				editable="false" 
+				text="{data.anderobjectbezoek_id}"/>
+		</mx:FormItem>
+	
+		<mx:FormItem label="Datum">
+			<mx:DateField
+				formatString="DD/MM/YYYY"
+				selectedDate="{DateField.stringToDate(data.datum,'YYYY-MM-DD')}"
+				id="df_datum"/>
+		</mx:FormItem>
+		
+		<mx:FormItem 
+			label="Invuller" 
+			direction="horizontal">
+			<components:ContactSelector
+				id="invullerContactSelector"
+				contact_id="{data.invuller_id}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Bezoekers">
+			<components:ContactListSelector
+				id="bezoekersContactSelector"
+				contact_ids="{data.bezoeker_ids}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Aanwezigheid">
+			<components:ComboBoxEx
+				id="cb_aanwezigheid"
+				labelField="aanwezigheid"
+				valueField="aanwezigheid"
+				selectedValue="{data.aanwezigheid}"
+				dataProvider="{aanwezigheidList.data}" />
+		</mx:FormItem>
+		
+		<mx:FormItem 
+			label="Reden" 
+			enabled="{cb_aanwezigheid.selectedValue == 'Neen'}">
+			<components:ComboBoxEx
+				id="cb_reden_niet_aanwezig"
+				labelField="reden_niet_aanwezig"
+				valueField="reden_niet_aanwezig"
+				selectedValue="{data.reden_niet_aanwezig}"
+				dataProvider="{redenNietAanwezigList.data}"/>
+		</mx:FormItem>
+		
+		<mx:FormItem>
+			<mx:TextInput
+				id="ti_reden_niet_aanwezig_tekst"
+				text="{data.reden_niet_aanwezig_tekst}"
+				enabled="{cb_reden_niet_aanwezig.enabled &amp;&amp; cb_reden_niet_aanwezig.selectedValue == 'Andere'}"/>
+		</mx:FormItem>
+		
+	</mx:Form>
+</mx:Canvas>
