@@ -37,6 +37,7 @@ class BunkerBezoekService {
 			}
 			
 			$result->fotos = $this->findFotos($mysqli, $id);
+			$result->schietgaten = $this->findSchietgaten($mysqli, $id);
 						
 			$mysqli->close();
 		}
@@ -67,6 +68,30 @@ class BunkerBezoekService {
 			$stmt->bind_param('i', $id);
 			if ($stmt->execute()) {
 				$result = getresult($stmt);
+			}
+			$stmt->close();
+		}
+		
+		return $result;		
+	}	
+	
+	private function findSchietgaten($mysqli, $id) {
+		$sql = "";
+		$sql .= " SELECT";
+		$sql .= "   *";
+		$sql .= " FROM";
+		$sql .= "   `kwl_bunkerbezoek_schietgat`";
+		$sql .= " WHERE";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		$sql .= " ORDER BY";
+		$sql .= "   `schietgat_nummer` ASC";
+
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getresult($stmt);
+			} else {
+				throw new Exception($mysqli->error);
 			}
 			$stmt->close();
 		}
@@ -192,6 +217,7 @@ class BunkerBezoekService {
 			$this->saveRoosterIngang($vo, $mysqli);
 			$this->saveNooduitgang($vo, $mysqli);
 			$this->saveVerluchtingspijpen($vo, $mysqli);
+			$this->updateSchietgaten($vo, $mysqli);
 			
 			$mysqli->close();
 		}
@@ -643,6 +669,59 @@ class BunkerBezoekService {
 			$stmt->close();
 		}
 		return $sql;
+	}
+	
+	private function updateSchietgaten($vo, $mysqli) {
+		$bunkerbezoek_id = $vo["bunkerbezoek_id"];
+		$schietgaten = $vo["schietgaten"];
+		if ($schietgaten == null || count($schietgaten) == 0) {
+			$sql = "";
+	    	$sql .= " DELETE FROM `kwl_bunkerbezoek_schietgat`";
+	    	$sql .= " WHERE";
+	    	$sql .= "   `bunkerbezoek_id` = " . $bunkerbezoek_id;
+			$mysqli->query($sql);
+			throw new Exception('Empty');
+		} else {
+			$remove_ids = array();
+			foreach ($schietgaten as $schietgat) {
+				$remove_nrs[] = $schietgat["schietgat_nummer"];
+			}
+			$sql = "";
+	    	$sql .= " DELETE FROM `kwl_bunkerbezoek_schietgat`";
+	    	$sql .= " WHERE";
+	    	$sql .= "   `bunkerbezoek_id` = " . $bunkerbezoek_id . " AND ";
+	    	$sql .= "   `schietgat_nummer` not in (" . implode(", ", $remove_nrs) . ")";
+			$mysqli->query($sql);
+			
+			$sql = "";
+			$sql .= " INSERT INTO `kwl_bunkerbezoek_schietgat` (";
+			$sql .= "   `bunkerbezoek_id`,";
+			$sql .= "   `schietgat_nummer`,";
+			$sql .= "   `niet_bekeken`";
+			$sql .= " ) VALUES (";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?";
+			$sql .= " ) ON DUPLICATE KEY UPDATE";
+			$sql .= " `niet_bekeken` = VALUES(`niet_bekeken`)";
+			
+			if ($stmt = $mysqli->prepare($sql)) {
+				foreach ($schietgaten as $schietgat) {
+					$stmt->bind_param('iii', 
+						$bunkerbezoek_id, 
+						$schietgat["schietgat_nummer"], 
+						$schietgat["niet_bekeken"]
+					);
+					if (!$stmt->execute()) {
+						throw new Exception($mysqli->error);
+					}
+				}
+				$stmt->close();
+			} else {
+				throw new Exception($mysqli->error);
+			}
+			
+		}
 	}
 
 }

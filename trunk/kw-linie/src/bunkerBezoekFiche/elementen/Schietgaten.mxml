@@ -10,14 +10,17 @@
 				var schietgat: Object;
 				
 				schietgat = new Object();
+				schietgat.schietgat_nummer = 1;
 				sg1.bind(schietgat);
 				a.addItem(schietgat);
 				
 				schietgat = new Object();
+				schietgat.schietgat_nummer = 2;
 				sg2.bind(schietgat);
 				a.addItem(schietgat);
 				
 				schietgat = new Object();
+				schietgat.schietgat_nummer = 3;
 				sg3.bind(schietgat);
 				a.addItem(schietgat);
 				
@@ -25,6 +28,10 @@
 			}
 		]]>
 	</mx:Script>
+	
+	<mx:ArrayCollection 
+		id="schietgaten" 
+		source="{data.schietgaten}" />
 
 	<mx:VBox horizontalAlign="center">
 
@@ -32,9 +39,9 @@
 			dataProvider="{viewstack}" />
 
 		<mx:ViewStack id="viewstack">
-			<elementen:Schietgat id="sg1" label="Schietgat 1" data="{data.schietgaten.getItemAt(0)}" />
-			<elementen:Schietgat id="sg2" label="Schietgat 2" data="{data.schietgaten.getItemAt(1)}" />
-			<elementen:Schietgat id="sg3" label="Schietgat 3" data="{data.schietgaten.getitemAt(2)}" />
+			<elementen:Schietgat id="sg1" label="Schietgat 1" data="{schietgaten.getItemAt(0)}" />
+			<elementen:Schietgat id="sg2" label="Schietgat 2" data="{schietgaten.getItemAt(1)}" />
+			<elementen:Schietgat id="sg3" label="Schietgat 3" data="{schietgaten.getItemAt(2)}"/>
 		</mx:ViewStack>
 
 	</mx:VBox>

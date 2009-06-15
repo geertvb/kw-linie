@@ -70,7 +70,7 @@
 			result="result(event)" />
     </mx:RemoteObject>
 	
-	<mx:VBox width="718">
+	<mx:VBox width="886">
 		<mx:DataGrid id="bunkerBezoekGrid"
 			dataProvider="{bunkerBezoekService.findAll.lastResult}" 
 			width="100%"
@@ -91,7 +91,7 @@
 				<mx:TextInput editable="false" width="64" text="{bunker.nummer}" />
 			</mx:FormItem>
 		</mx:HBox>
-		<mx:TabNavigator width="100%" creationPolicy="all" height="712">
+		<mx:TabNavigator width="100%" creationPolicy="all" height="512">
 			<tab:Bezoek 
 				id="bezoekView" 
 				label="Bezoek" 
