@@ -18,6 +18,7 @@
 				nooduitgangView.bind(vo);
 				pistoolkokerAfsluitluikView.bind(vo);
 				verluchtingspijpenView.bind(vo);
+				schietgatenView.bind(vo);
 			}
 		]]>
 	</mx:Script>
@@ -26,8 +27,7 @@
 	<mx:HBox x="10" y="10" width="100%" height="100%">
 	
 		<mx:List id="list_elementen" 
-				height="100%" 
-				selectedIndex="0">
+				selectedIndex="0" rowCount="11">
 				
 			<mx:dataProvider>
 				<mx:ArrayCollection>
@@ -84,7 +84,8 @@
 				id="ingangRoosterView" 
 				data="{data}" 
 				label="Rooster aan de ingang" />
-			<elementen:Schietgaten 
+			<elementen:Schietgaten
+				id="schietgatenView" 
 				data="{data}" 
 				label="Schietgaten" />
 			<elementen:GranaatwerperAfsluitluik
