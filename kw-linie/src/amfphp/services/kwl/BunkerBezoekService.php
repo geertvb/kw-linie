@@ -697,20 +697,118 @@ class BunkerBezoekService {
 			$sql .= " INSERT INTO `kwl_bunkerbezoek_schietgat` (";
 			$sql .= "   `bunkerbezoek_id`,";
 			$sql .= "   `schietgat_nummer`,";
-			$sql .= "   `niet_bekeken`";
+			$sql .= "   `niet_bekeken`,";
+
+			$sql .= "   `toestand`,";
+			$sql .= "   `schootsveld`,";
+			$sql .= "   `afsluitluik_buitenzijde_aanwezig`,";
+			$sql .= "   `afsluitluik_bedieningsketting_aanwezig`,";
+			$sql .= "   `afsluitluik_binnenzijde_aanwezig`,";
+
+			$sql .= "   `affuit_aanwezig`,";
+			$sql .= "   `affuit_type`,";
+			$sql .= "   `affuit_toestand`,";
+			$sql .= "   `affuit_verankeringspunten_aanwezig`,";
+			$sql .= "   `affuit_nummer_inscripties_aanwezig`,";
+
+			$sql .= "   `witte_lijn_aanwezig`,";
+			$sql .= "   `observatiesleuf_toestand`,";
+			$sql .= "   `observatiesleuf_luikje_aanwezig`,";
+			$sql .= "   `haken_petroleumlampen_aanwezig`,";
+			$sql .= "   `haken_petroleumlampen_aantal`,";
+
+			$sql .= "   `houten_schapje_aanwezig`,";
+			$sql .= "   `zitbankje_aanwezig`,";
+			$sql .= "   `metalen_schap_met_haken_aanwezig`,";
+			$sql .= "   `metalen_schap_met_haken_aantal`,";
+			$sql .= "   `opmerkingen`";
+
 			$sql .= " ) VALUES (";
 			$sql .= "   ?,";
 			$sql .= "   ?,";
+			
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+
 			$sql .= "   ?";
 			$sql .= " ) ON DUPLICATE KEY UPDATE";
-			$sql .= " `niet_bekeken` = VALUES(`niet_bekeken`)";
+			$sql .= " `niet_bekeken` = VALUES(`niet_bekeken`),";
+
+			$sql .= " `toestand` = VALUES(`toestand`),";
+			$sql .= " `schootsveld` = VALUES(`schootsveld`),";
+			$sql .= " `afsluitluik_buitenzijde_aanwezig` = VALUES(`afsluitluik_buitenzijde_aanwezig`),";
+			$sql .= " `afsluitluik_bedieningsketting_aanwezig` = VALUES(`afsluitluik_bedieningsketting_aanwezig`),";
+			$sql .= " `afsluitluik_binnenzijde_aanwezig` = VALUES(`afsluitluik_binnenzijde_aanwezig`),";
+			
+			$sql .= " `affuit_aanwezig` = VALUES(`affuit_aanwezig`),";
+			$sql .= " `affuit_type` = VALUES(`affuit_type`),";
+			$sql .= " `affuit_toestand` = VALUES(`affuit_toestand`),";
+			$sql .= " `affuit_verankeringspunten_aanwezig` = VALUES(`affuit_verankeringspunten_aanwezig`),";
+			$sql .= " `affuit_nummer_inscripties_aanwezig` = VALUES(`affuit_nummer_inscripties_aanwezig`),";
+			
+			$sql .= " `witte_lijn_aanwezig` = VALUES(`witte_lijn_aanwezig`),";
+			$sql .= " `observatiesleuf_toestand` = VALUES(`observatiesleuf_toestand`),";
+			$sql .= " `observatiesleuf_luikje_aanwezig` = VALUES(`observatiesleuf_luikje_aanwezig`),";
+			$sql .= " `haken_petroleumlampen_aanwezig` = VALUES(`haken_petroleumlampen_aanwezig`),";
+			$sql .= " `haken_petroleumlampen_aantal` = VALUES(`haken_petroleumlampen_aantal`),";
+			
+			$sql .= " `houten_schapje_aanwezig` = VALUES(`houten_schapje_aanwezig`),";
+			$sql .= " `zitbankje_aanwezig` = VALUES(`zitbankje_aanwezig`),";
+			$sql .= " `metalen_schap_met_haken_aanwezig` = VALUES(`metalen_schap_met_haken_aanwezig`),";
+			$sql .= " `metalen_schap_met_haken_aantal` = VALUES(`metalen_schap_met_haken_aantal`),";
+			$sql .= " `opmerkingen` = VALUES(`opmerkingen`)";
 			
 			if ($stmt = $mysqli->prepare($sql)) {
 				foreach ($schietgaten as $schietgat) {
-					$stmt->bind_param('iii', 
+					$stmt->bind_param('iiisiiiiissiiisiiiiiiis', 
 						$bunkerbezoek_id, 
 						$schietgat["schietgat_nummer"], 
-						$schietgat["niet_bekeken"]
+						$schietgat["niet_bekeken"],
+
+						$schietgat["toestand"],
+						$schietgat["schootsveld"],
+						$schietgat["afsluitluik_buitenzijde_aanwezig"],
+						$schietgat["afsluitluik_bedieningsketting_aanwezig"],
+						$schietgat["afsluitluik_binnenzijde_aanwezig"],
+
+						$schietgat["affuit_aanwezig"],
+						$schietgat["affuit_type"],
+						$schietgat["affuit_toestand"],
+						$schietgat["affuit_verankeringspunten_aanwezig"],
+						$schietgat["affuit_nummer_inscripties_aanwezig"],
+
+						$schietgat["witte_lijn_aanwezig"],
+						$schietgat["observatiesleuf_toestand"],
+						$schietgat["observatiesleuf_luikje_aanwezig"],
+						$schietgat["haken_petroleumlampen_aanwezig"],
+						$schietgat["haken_petroleumlampen_aantal"],
+
+						$schietgat["houten_schapje_aanwezig"],
+						$schietgat["zitbankje_aanwezig"],
+						$schietgat["metalen_schap_met_haken_aanwezig"],
+						$schietgat["metalen_schap_met_haken_aantal"],
+						$schietgat["opmerkingen"]
 					);
 					if (!$stmt->execute()) {
 						throw new Exception($mysqli->error);
