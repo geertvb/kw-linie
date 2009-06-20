@@ -4,6 +4,26 @@ include_once '../../../mysqliUtils.php';
 
 class BunkerService {
 	
+    function create() {
+    	$sql = "";
+    	$sql .= " INSERT INTO `kwl_bunker`";
+    	$sql .= " ()";
+    	$sql .= " VALUES";
+    	$sql .= " ()";
+    	
+    	if ($mysqli = newMysqli()) {
+			$mysqli->query($sql);
+			$result = $mysqli->query("SELECT LAST_INSERT_ID()");
+			if ($result) {
+				list($bunker_id) = $result->fetch_row();
+				$result->close();
+			}
+			$mysqli->close();
+    	}
+    	
+    	return $bunker_id;
+    }
+    
 	function findTypes() {
 		return findSQL("select distinct `type` from `kwl_bunker` where `type` is not null order by `type` asc");
 	}

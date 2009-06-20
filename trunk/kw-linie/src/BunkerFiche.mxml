@@ -24,7 +24,7 @@
 			}
 			
 			public function refreshBunkerGrid() : void {
-				bunkerFindAllResponder.token = bunkerService.findAll();
+				bunkerService.findAll();
 			}
 			
 			public function onFault(event: FaultEvent) : void {
@@ -57,13 +57,26 @@
 				return bunker;
 			}
 			
+			private function click_voeg_toe(event: Event) : void {
+				bunkerService.create();
+			}
+			
+			private function result_create(event: ResultEvent) : void {
+				var newBunker: Object = new Object();
+				newBunker.bunker_id = event.result;
+				bunkers.addItem(newBunker);
+				bunkerGrid.selectedItem = newBunker;
+			}
+
 		]]>
 	</mx:Script>
 	
 	<mx:Object id="_bunker" />
 
+	<mx:ArrayCollection id="bunkers" 
+		source="{bunkerService.findAll.lastResult}"/>
+	
 	<xyz:CallResponder id="bunkerResponder" result="_bunker = event.result" />
-	<xyz:CallResponder id="bunkerFindAllResponder" />
 	
 	<mx:HTTPService 
 		id="joomlaUser" 
@@ -73,16 +86,15 @@
 	
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService" 
-		destination="amfphp">
-		<mx:method 
-			name="save" 
-			fault="onFault(event)" 
-			result="onResult(event)" />
+		destination="amfphp"
+		fault="onFault(event)">
+		<mx:method name="save" result="onResult(event)" />
+		<mx:method name="create" result="result_create(event)" />
     </mx:RemoteObject>
 
 	<mx:VBox width="718">
 		<mx:DataGrid id="bunkerGrid"
-			dataProvider="{bunkerFindAllResponder.lastResult}" 
+			dataProvider="{bunkers}" 
 			width="100%"
 			selectedIndex="0"
 			valueCommit="bunkerGridChange(event)"
@@ -96,17 +108,20 @@
 				<mx:DataGridColumn dataField="straat" headerText="Straat" />
 			</mx:columns>
 		</mx:DataGrid>
+		
 		<mx:HBox>
-			<mx:FormItem label="ID" horizontalAlign="left" color="#FFFFFF">
-				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{_bunker.bunker_id}"  color="#000000"/>
-			</mx:FormItem>
-			<mx:FormItem label="Nummer" horizontalAlign="left" color="#FFFFFF">
-				<mx:TextInput editable="false" width="64" text="{_bunker.nummer}"  color="#000000"/>
-			</mx:FormItem>
-			<mx:FormItem label="Type" color="#FFFFFF">
-				<mx:TextInput editable="false" width="128" text="{_bunker.type}"  color="#000000"/>
-			</mx:FormItem>
+		
+			<mx:Button 
+				label="Voeg toe" 
+				click="click_voeg_toe(event)" />
+			<!--	
+			<mx:Button 
+				label="Button" 
+				enabled="{bunkerGrid.selectedIndex >= 0}" 
+				click="click_verwijder(event)"/>
+			-->
 		</mx:HBox>
+		
 		<mx:TabNavigator width="100%" height="400" creationPolicy="all">
 			<bunkerFiche:Type id="type" label="Type" data="{_bunker}" />
 			<bunkerFiche:Locatie id="locatie" label="Locatie" data="{_bunker}" />
