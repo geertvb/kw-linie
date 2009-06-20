@@ -24,7 +24,17 @@ class BunkerService {
     	return $bunker_id;
     }
     
-	function findTypes() {
+    function remove($id) {
+    	$sql = "DELETE FROM `kwl_bunker` WHERE `bunker_id` = ?";
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				$stmt->execute();
+			}
+		}
+    }
+    
+    function findTypes() {
 		return findSQL("select distinct `type` from `kwl_bunker` where `type` is not null order by `type` asc");
 	}
 	
