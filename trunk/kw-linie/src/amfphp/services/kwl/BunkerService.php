@@ -280,6 +280,19 @@ class BunkerService {
     }	
 
 	private function updateFotos($vo, $mysqli) {
+		$sql = "update `kwl_bunker` set `defaultfoto_id` = ? where `bunker_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('ii', 
+				$vo["defaultfoto_id"], 
+				$vo["bunker_id"]);
+			if (!$stmt->execute()) {
+				throw new Exception($mysqli->error);
+			}
+			$stmt->close();
+		} else {
+			throw new Exception($mysqli->error);
+		}
+
 		$bunker_id = $vo["bunker_id"];
 		$new_ids = array();
 		foreach ($vo["fotos"] as $foto) {

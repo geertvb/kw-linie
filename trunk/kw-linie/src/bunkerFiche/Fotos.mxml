@@ -38,13 +38,14 @@
 			
 			public function bind(vo: Object) : void {
 				vo.fotos = fotos;
+				vo.defaultfoto_id = defaultfotoRBG.selectedValue;
 			}
 			
 		]]>
 	</mx:Script>
 
 	<mx:ArrayCollection id="fotos" source="{data.fotos}"/>
-
+	
 	<mx:VBox bottom="10" top="0" right="10" left="10">
 	
 		<mx:TileList
@@ -53,7 +54,7 @@
 			rowHeight="160" columnWidth="160" 
 			rowCount="2" columnCount="4"
 			dataProvider="{fotos}" 
-			itemRenderer="FotoTile" />
+			itemRenderer="components.FotoRadioTile" />
 		
 		<mx:HBox width="100%" horizontalAlign="center">
 		
@@ -70,9 +71,17 @@
 				label="Verwijder"
 				click="click_verwijder(event)"
 				enabled="{list_fotos.selectedIndex >= 0}"/>
+	
+			<mx:Button
+				label="Voeg toe"
+				click="click_voeg_toe(event)"/>
 				
 		</mx:HBox>
 		
 	</mx:VBox>
 	
+	<mx:RadioButtonGroup 
+		id="defaultfotoRBG" 
+		selectedValue="{data.defaultfoto_id}"/>
+
 </mx:Canvas>
