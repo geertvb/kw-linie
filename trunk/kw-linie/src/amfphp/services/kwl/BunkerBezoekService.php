@@ -4,6 +4,36 @@ include_once '../../../mysqliUtils.php';
 
 class BunkerBezoekService {
 
+    function create() {
+    	$sql = "";
+    	$sql .= " INSERT INTO `kwl_bunkerbezoek`";
+    	$sql .= " ()";
+    	$sql .= " VALUES";
+    	$sql .= " ()";
+    	
+    	if ($mysqli = newMysqli()) {
+			$mysqli->query($sql);
+			$result = $mysqli->query("SELECT LAST_INSERT_ID()");
+			if ($result) {
+				list($bunkerbezoek_id) = $result->fetch_row();
+				$result->close();
+			}
+			$mysqli->close();
+    	}
+    	
+    	return $bunkerbezoek_id;
+    }
+    
+    function remove($id) {
+    	$sql = "DELETE FROM `kwl_bunkerbezoek` WHERE `bunkerbezoek_id` = ?";
+		if ($mysqli = newMysqli()) {
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $id);
+				$stmt->execute();
+			}
+		}
+    }
+    
 	function findAll() {
     	$sql = "SELECT";
     	$sql .= "  * ";
