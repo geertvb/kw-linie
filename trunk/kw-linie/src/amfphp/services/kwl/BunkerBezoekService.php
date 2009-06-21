@@ -57,6 +57,7 @@ class BunkerBezoekService {
 				$stmt->close();
 			}
 			
+			$result->bunker = $this->findBunker($mysqli, $result->bunker_id);
 			$result->invuller = $this->findContact($mysqli, $result->invuller_id);
 			$result->bezoekers = $this->findBezoekers($mysqli, $id);
 			$result->fotos = $this->findFotos($mysqli, $id);
@@ -67,7 +68,21 @@ class BunkerBezoekService {
 		
 		return $result;		
 	}
-	
+
+	private function findBunker($mysqli, $id) {
+		
+		$sql = "select * from `kwl_bunker` where `bunker_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getSingleResult($stmt);
+			}
+			$stmt->close();
+		}
+		
+		return $result;		
+	}
+		
 	private function findContact($mysqli, $id) {
     	$sql = "SELECT";
     	$sql .= "  * ";
@@ -559,6 +574,7 @@ class BunkerBezoekService {
 		$sql = "update `kwl_bunkerbezoek` ";
 		$sql .= "set ";
 		$sql .= "`datum` = ?,"; 
+		$sql .= "`bunker_id` = ?,"; 
 		$sql .= "`invuller_id` = ?,"; 
 		$sql .= "`aanwezigheid` = ?,"; 
 		$sql .= "`reden_niet_aanwezig` = ?,"; 
@@ -566,8 +582,9 @@ class BunkerBezoekService {
 		$sql .= "where `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sisssi', 
+			$stmt->bind_param('siisssi', 
 				$vo["datum"], 
+				$vo["bunker_id"], 
 				$vo["invuller_id"], 
 				$vo["aanwezigheid"], 
 				$vo["reden_niet_aanwezig"], 

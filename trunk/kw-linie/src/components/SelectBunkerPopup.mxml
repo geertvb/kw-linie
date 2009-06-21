@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*" 
+	layout="vertical"
+	creationComplete="onCreationComplete(event)">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import components.BunkerRenderer;
+		
+			private static var _instance: SelectBunkerPopup;
+			
+			public static function getInstance() : SelectBunkerPopup {
+				if (_instance == null) {
+					_instance = new SelectBunkerPopup();
+				}
+				return _instance;
+			}
+
+			public var select: Function;
+			
+			public function open() : void {
+				PopUpManager.addPopUp(this, Application.application as DisplayObject, true);
+				PopUpManager.centerPopUp(this);
+			}
+			
+			public function close(): void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function onCreationComplete(event: Event) : void {
+				bunkerService.findAll();
+			}
+			
+			private function result_find(event: ResultEvent) : void {
+				bunkers.source = event.result as Array;
+			}
+			
+			private function onFault(event: FaultEvent) : void {
+				Alert.show(event.fault.faultString);
+			}
+			
+			private function click_kies(event: Event): void {
+				close();
+				if (select != null) {
+					select(bunkerList.selectedItem);
+				}
+			}
+			
+			private function click_annuleer(event: Event): void {
+				close();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:ArrayCollection id="bunkers" />
+
+	<mx:RemoteObject id="bunkerService"
+		source="kwl.BunkerService" 
+		destination="amfphp"
+		fault="onFault(event)">
+		<mx:method name="findByExample" result="result_find(event)" />
+		<mx:method name="findAll" result="result_find(event)" />
+    </mx:RemoteObject>
+    
+	<mx:Form>
+		<mx:FormItem label="Type">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="Code">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="Nummer">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="Gemeente">
+			<mx:TextInput/>
+		</mx:FormItem>
+		<mx:FormItem label="Deelgemeente">
+			<mx:TextInput/>
+		</mx:FormItem>
+	</mx:Form>
+	
+	<mx:HBox width="100%">
+		<mx:Button
+			label="Zoek" />
+	</mx:HBox>
+	
+	<mx:List id="bunkerList"
+		width="400"
+		dataProvider="{bunkers}"
+		itemRenderer="components.BunkerRenderer" 
+		rowCount="4" />
+		
+	<mx:ControlBar>
+
+		<mx:Button 
+			label="Kies"
+			enabled="{bunkerList.selectedItem != null}"
+			click="click_kies(event)" />
+
+		<mx:Button 
+			label="Annuleer"
+			click="click_annuleer(event)" />
+
+	</mx:ControlBar>
+	
+</mx:TitleWindow>
