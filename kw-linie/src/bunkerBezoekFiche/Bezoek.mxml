@@ -16,6 +16,7 @@
 			
 			public function bind(bunkerbezoek: Object) : void {
 				bunkerbezoek.bunkerbezoek_id = BindingUtils.textinputToInteger(ti_bunkerbezoek_id);
+				bunkerbezoek.bunker_id = bunkerSelector.bunker_id;
 				bunkerbezoek.datum = BindingUtils.dateFieldToDate(df_datum);
 				bunkerbezoek.invuller_id = invullerContactSelector.contact_id;
 				bunkerbezoek.bezoeker_ids = bezoekersContactSelector.contact_ids;
@@ -42,9 +43,13 @@
 				id="df_datum"/>
 		</mx:FormItem>
 		
-		<mx:FormItem 
-			label="Invuller" 
-			direction="horizontal">
+		<mx:FormItem label="Bunker">
+			<components:BunkerSelector
+				id="bunkerSelector"
+				bunker="{data.bunker}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Invuller">
 			<components:ContactSelector
 				id="invullerContactSelector"
 				contact="{data.invuller}" />
