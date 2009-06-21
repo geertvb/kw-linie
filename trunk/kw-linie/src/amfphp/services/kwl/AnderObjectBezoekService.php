@@ -58,14 +58,8 @@ class AnderObjectBezoekService {
 				$stmt->close();
 			}
 			
-			$sql = "select `contact_id` from `kwl_anderobjectbezoek_contact` where `anderobjectbezoek_id` = ?";
-			if ($stmt = $mysqli->prepare($sql)) {
-				$stmt->bind_param('i', $id);
-				if ($stmt->execute()) {
-					$result->bezoeker_ids = getValues($stmt);
-				}
-				$stmt->close();
-			}
+			$result->invuller = $this->findContact($mysqli, $result->invuller_id);
+			$result->bezoekers = $this->findBezoekers($mysqli, $id);
 			
 			$mysqli->close();
 		}
@@ -73,6 +67,50 @@ class AnderObjectBezoekService {
 		return $result;		
 	}
 		
+	private function findContact($mysqli, $id) {
+    	$sql = "SELECT";
+    	$sql .= "  * ";
+    	$sql .= "FROM";
+    	$sql .= "  `kwl_contact`";
+    	$sql .= "WHERE";
+    	$sql .= "  `contact_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getSingleResult($stmt);
+			}
+			$stmt->close();
+		}
+		
+		return $result;		
+	}
+	
+	private function findBezoekers($mysqli, $id) {
+		$sql = "";
+		$sql .= " SELECT";
+		$sql .= "   `kwl_contact`.*";
+		$sql .= " FROM";
+		$sql .= "   `kwl_contact`,";
+		$sql .= "   `kwl_anderobjectbezoek_contact`";
+		$sql .= " WHERE";
+		$sql .= "   `kwl_contact`.`contact_id` = `kwl_anderobjectbezoek_contact`.`contact_id` AND";
+		$sql .= "   `kwl_anderobjectbezoek_contact`.`anderobjectbezoek_id` = ?";
+		$sql .= " ORDER BY";
+		$sql .= "   `kwl_contact`.`contact_id` ASC";
+
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getresult($stmt);
+			} else {
+				throw new Exception($mysqli->error);
+			}
+			$stmt->close();
+		}
+		
+		return $result;		
+	}
+	
     function save($vo) {
 		if ($mysqli = newMysqli()) {
 

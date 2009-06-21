@@ -50,13 +50,13 @@
 			direction="horizontal">
 			<components:ContactSelector
 				id="invullerContactSelector"
-				contact_id="{data.invuller_id}" />
+				contact="{data.invuller}" />
 		</mx:FormItem>
 		
 		<mx:FormItem label="Bezoekers">
 			<components:ContactListSelector
 				id="bezoekersContactSelector"
-				contact_ids="{data.bezoeker_ids}" />
+				contactArray="{data.bezoekers}" />
 		</mx:FormItem>
 		
 		<mx:FormItem label="Aanwezigheid">

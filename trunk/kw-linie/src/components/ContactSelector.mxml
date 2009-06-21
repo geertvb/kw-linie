@@ -14,96 +14,38 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 		
-			private var _contact_id: Object;
-			private var _contact_id_set: Boolean;
-			
-			public function set contact_id(contact_id: Object) : void {
-				if (contact_id != _contact_id) {
-					_contact_id = contact_id;
-					_contact_id_set = true;
-					invalidateProperties();
-				}
-			}
-			
-			[Bindable("change")]
-			[Bindable("valueCommit")]
 			public function get contact_id() : Object {
-				return _contact_id;
+				if (contact != null) {
+					return contact.contact_id;
+				} else {
+					return null;
+				}
 			}
 			
 			[Bindable]
-			private var _contact: Object;
-			private var _contact_set: Boolean;
+			public var contact: Object;
 			
-			public function set contact(contact: Object) : void {
-				if (contact != _contact) {
-					_contact = contact;
-					_contact_set = true;
-					invalidateProperties();
-				}
-			}
-			
-			[Bindable("change")]
-			[Bindable("valueCommit")]
-			public function get contact() : Object {
-				return _contact;
-			}
-			
-			override protected function commitProperties(): void {
-				super.commitProperties();
-				if (_contact_id_set) {
-					if (_contact_id != null) {
-						contactService.findById(_contact_id);
-						dispatchEvent(new FlexEvent(FlexEvent.VALUE_COMMIT));
-					}
-				} else if (_contact_set) {
-					if (_contact != null) {
-						_contact_id = _contact.contact_id;
-					}
-				}
-				_contact_id_set = false;
-				_contact_set = false;
+			public function setContact(value: Object) : void {
+				this.contact = value;
 			}
 
-			public function setContact(contact: Object) : void {
-				this.contact = contact;
-				this.contact_id = contact.contact_id;
-			}
-
-			public function click_select_invuller(event: Event) : void {
+			public function click_select_contact(event: Event) : void {
 				var selector: SelectContactPopup = SelectContactPopup.getInstance();
 				selector.select = setContact;
 				selector.open();
 			}
 			
-			public function onResult(event: ResultEvent) : void {
-				this.contact = event.result;
-			}
-			
-			public function onFault(event: FaultEvent) : void {
-				Alert.show(event.fault.faultString);
-			}
-
 		]]>
 	</mx:Script>
-
-	<mx:RemoteObject id="contactService"
-		source="kwl.ContactService" 
-		destination="amfphp">
-		<mx:method 
-			name="findById" 
-			fault="onFault(event)" 
-			result="onResult(event)" />
-    </mx:RemoteObject>
 
 	<mx:HBox>
 		<local:ContactRenderer
 			borderStyle="solid"
 			width="400"
-			data="{_contact}" />
+			data="{contact}" />
 		<mx:Button 
 			label="..." 
-			click="click_select_invuller(event)"/>
+			click="click_select_contact(event)"/>
 	</mx:HBox>
 
 </mx:Canvas>
