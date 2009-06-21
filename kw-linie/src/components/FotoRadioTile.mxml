@@ -24,6 +24,7 @@
 	<mx:RadioButton
 		group="{parentDocument.defaultfotoRBG}"
 		value="{data.foto_id}"
+		selected="{data.foto_id == parentDocument.data.defaultfoto_id}"
 		x="4" y="4"/>
 	
 </mx:Canvas>

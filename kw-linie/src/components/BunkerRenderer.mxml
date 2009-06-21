@@ -7,6 +7,7 @@
 	<mx:HBox horizontalGap="4">
 		
 		<mx:Image
+			source="download_thumb.php?foto_id={data.defaultfoto_id}"
 			width="80" height="60" />
 	
 		<mx:VBox verticalGap="0">
