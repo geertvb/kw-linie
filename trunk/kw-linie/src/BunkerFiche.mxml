@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute"
 	creationComplete="creationComplete();"
 	backgroundColor="#637449" 
 	themeColor="#637449" 
 	backgroundGradientColors="[#637449,#637449]" 
-	xmlns:xyz="mx.rpc.*"
 	xmlns:local="*"
 	xmlns:bunkerFiche="bunkerFiche.*">
 
@@ -19,27 +20,30 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.controls.Alert;
 			
-			public function creationComplete() : void {
+			private function creationComplete() : void {
 				//joomlaUser.send();
 				refreshBunkerGrid();
 			}
 			
-			public function refreshBunkerGrid() : void {
+			private function refreshBunkerGrid() : void {
 				bunkerService.findAll();
 			}
 			
-			public function onFault(event: FaultEvent) : void {
+			private function onFault(event: FaultEvent) : void {
 				Alert.show(event.message.toString());
 			}
 			
-			public function onResult(event: ResultEvent) : void {
-				//Alert.show(event.result.toString());
+			private function click_bewaar(event: Event) : void {
+				bunkerService.save(bind());
+			}
+			
+			private function result_save(event: ResultEvent) : void {
 				refreshBunkerGrid();
 			}
 			
-			public function bunkerGridChange(event: Event) : void {
+			private function bunkerGridChange(event: Event) : void {
 				if (bunkerGrid.selectedItem != null) {
-					bunkerResponder.token = bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
+					bunkerService.findByID(bunkerGrid.selectedItem.bunker_id);
 				}
 			}
 			
@@ -89,16 +93,17 @@
 					null,
 					close_verwijder_alert);
 			}
+			
+			private function result_findByID(event: ResultEvent) : void {
+				_bunker = event.result;
+			}
 
 		]]>
 	</mx:Script>
 	
 	<mx:Object id="_bunker" />
 
-	<mx:ArrayCollection id="bunkers" 
-		source="{bunkerService.findAll.lastResult}"/>
-	
-	<xyz:CallResponder id="bunkerResponder" result="_bunker = event.result" />
+	<mx:ArrayCollection id="bunkers" source="{bunkerService.findAll.lastResult}"/>
 	
 	<mx:HTTPService 
 		id="joomlaUser" 
@@ -110,12 +115,14 @@
 		source="kwl.BunkerService" 
 		destination="amfphp"
 		fault="onFault(event)">
-		<mx:method name="save" result="onResult(event)" />
+		<mx:method name="save" result="result_save(event)" />
 		<mx:method name="create" result="result_create(event)" />
 		<mx:method name="remove" result="result_remove(event)" />
+		<mx:method name="findByID" result="result_findByID(event)" />
     </mx:RemoteObject>
 
 	<mx:VBox width="718">
+	
 		<mx:DataGrid id="bunkerGrid"
 			dataProvider="{bunkers}" 
 			width="100%"
@@ -154,11 +161,12 @@
 			<bunkerFiche:Links id="links" label="Links" data="{_bunker}" />
 			<bunkerFiche:Bescherming id="bescherming" label="Bescherming" data="{_bunker}" />
 			<bunkerFiche:Opmerkingen id="opmerkingen" label="Opmerkingen" data="{_bunker}" />
-			<!--
-			<bunkerFiche:Bezoeken id="bezoeken" label="Bezoeken" data="{_bunker}" />
-			-->
 		</mx:TabNavigator>
-		<mx:Button label="Bewaar" click="bunkerService.save(bind());"/>
+
+		<mx:Button 
+			label="Bewaar" 
+			click="click_bewaar(event)"/>
+
 	</mx:VBox>
 	
 </mx:Application>
