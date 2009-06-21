@@ -10,6 +10,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
 			import mx.rpc.events.FaultEvent;
@@ -18,6 +19,10 @@
 			private var bunkerBezoek: Object;
 		
 			private function creationComplete() : void {
+				refreshBunkerBezoekGrid();
+			}
+			
+			private function refreshBunkerBezoekGrid() : void {
 				bunkerBezoekService.findAll();
 			}
 			
@@ -50,29 +55,62 @@
 				bunkerBezoekService.save(vo);
 			}
 			
-			private function result(event: ResultEvent) : void {
-				Alert.show(event.result.toString());
+			private function result_save(event: ResultEvent) : void {
+				//Alert.show(event.result.toString());
+				refreshBunkerBezoekGrid();
 			}
+
+			private function click_voeg_toe(event: Event) : void {
+				bunkerBezoekService.create();
+			}
+			
+			private function result_create(event: ResultEvent) : void {
+				var newBunkerBunker: Object = new Object();
+				newBunkerBunker.bunkerbezoek_id = event.result;
+				bunkerbezoeken.addItem(newBunkerBunker);
+				bunkerBezoekGrid.selectedItem = newBunkerBunker;
+			}
+
+			private function result_remove(event: ResultEvent) : void {
+				refreshBunkerBezoekGrid();
+			}
+
+			private function close_verwijder_alert(event: CloseEvent) : void {
+				if (event.detail==Alert.YES) {
+					bunkerBezoekService.remove(bunkerBezoekGrid.selectedItem.bunkerbezoek_id);
+    			}
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				Alert.yesLabel = "Ja";
+				Alert.noLabel = "Nee";
+				Alert.show(
+					"Ben je zeker dat je de bunker bezoek fiche wil verwijderen?",
+					"Verwijderen",
+					Alert.YES | Alert.NO,
+					null,
+					close_verwijder_alert);
+			}
+
 		]]>
 	</mx:Script>
-	
-	<mx:Object id="bunker" />
 
+	<mx:ArrayCollection id="bunkerbezoeken" source="{bunkerBezoekService.findAll.lastResult}"/>
+	
 	<mx:RemoteObject id="bunkerBezoekService"
 		source="kwl.BunkerBezoekService" 
 		destination="amfphp"
 		fault="fault(event)">
-		<mx:method
-			name="findByID"
-			result="result_findByID(event)" />
-		<mx:method
-			name="save"
-			result="result(event)" />
+		<mx:method name="findByID" result="result_findByID(event)" />
+		<mx:method name="save" result="result_save(event)" />
+		<mx:method name="remove" result="result_remove(event)" />
+		<mx:method name="create" result="result_create(event)" />
     </mx:RemoteObject>
 	
 	<mx:VBox width="886">
+	
 		<mx:DataGrid id="bunkerBezoekGrid"
-			dataProvider="{bunkerBezoekService.findAll.lastResult}" 
+			dataProvider="{bunkerbezoeken}" 
 			width="100%"
 			selectedIndex="0"
 			valueCommit="bunkerBezoekGridChange(event)"
@@ -84,13 +122,18 @@
 		</mx:DataGrid>
 
 		<mx:HBox>
-			<mx:FormItem label="ID" horizontalAlign="left">
-				<mx:TextInput id="ti_bunker_id" editable="false" width="64" text="{bunker.bunker_id}" />
-			</mx:FormItem>
-			<mx:FormItem label="Nummer" horizontalAlign="left">
-				<mx:TextInput editable="false" width="64" text="{bunker.nummer}" />
-			</mx:FormItem>
+		
+			<mx:Button 
+				label="Voeg toe" 
+				click="click_voeg_toe(event)" />
+
+			<mx:Button 
+				label="Verwijder" 
+				enabled="{bunkerBezoekGrid.selectedIndex >= 0}" 
+				click="click_verwijder(event)"/>
+
 		</mx:HBox>
+		
 		<mx:TabNavigator width="100%" creationPolicy="all" height="512">
 			<tab:Bezoek 
 				id="bezoekView" 
@@ -117,7 +160,9 @@
 				data="{bunkerBezoek}" 
 				label="Fotos" />
 		</mx:TabNavigator>
+		
 		<mx:Button label="Bewaar" click="click_bewaar(event)"/>
+		
 	</mx:VBox>
 
 </mx:Application>
