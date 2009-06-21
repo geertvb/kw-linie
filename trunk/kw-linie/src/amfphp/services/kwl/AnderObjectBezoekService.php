@@ -58,6 +58,7 @@ class AnderObjectBezoekService {
 				$stmt->close();
 			}
 			
+			$result->anderobject = $this->findAnderObject($mysqli, $result->anderobject_id);
 			$result->invuller = $this->findContact($mysqli, $result->invuller_id);
 			$result->bezoekers = $this->findBezoekers($mysqli, $id);
 			
@@ -66,7 +67,21 @@ class AnderObjectBezoekService {
 		
 		return $result;		
 	}
+
+    private function findAnderObject($mysqli, $id) {
+		$sql = "select * from `kwl_anderobject` where `anderobject_id` = ?";
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getSingleResult($stmt);
+			}
+			$stmt->close();
+		}
 		
+		return $result;	
+    }
+    
+
 	private function findContact($mysqli, $id) {
     	$sql = "SELECT";
     	$sql .= "  * ";
@@ -127,6 +142,7 @@ class AnderObjectBezoekService {
 		$sql = "update `kwl_anderobjectbezoek` ";
 		$sql .= "set ";
 		$sql .= "`datum` = ?,"; 
+		$sql .= "`anderobject_id` = ?,"; 
 		$sql .= "`invuller_id` = ?,"; 
 		$sql .= "`aanwezigheid` = ?,"; 
 		$sql .= "`reden_niet_aanwezig` = ?,"; 
@@ -134,8 +150,9 @@ class AnderObjectBezoekService {
 		$sql .= "where `anderobjectbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sisssi', 
+			$stmt->bind_param('siisssi', 
 				$vo["datum"], 
+				$vo["anderobject_id"], 
 				$vo["invuller_id"], 
 				$vo["aanwezigheid"], 
 				$vo["reden_niet_aanwezig"], 

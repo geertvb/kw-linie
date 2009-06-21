@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:components="components.*" >
+	
+	<mx:Script>
+		<![CDATA[
+		
+			public function get anderobject_id() : Object {
+				if (anderObject != null) {
+					return anderObject.anderobject_id;
+				} else {
+					return null;
+				}
+			}
+			
+			[Bindable]
+			public var anderObject: Object;
+			
+			public function setAnderObject(value: Object) : void {
+				this.anderObject = value;
+			}
+
+			public function click_select(event: Event) : void {
+				var selector: SelectAnderObjectPopup = SelectAnderObjectPopup.getInstance();
+				selector.select = setAnderObject;
+				selector.open();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HBox>
+
+		<components:AnderObjectRenderer
+			borderStyle="solid"
+			width="400"
+			data="{anderObject}" />
+
+		<mx:Button 
+			label="..." 
+			click="click_select(event)"/>
+
+	</mx:HBox>
+	
+</mx:Canvas>

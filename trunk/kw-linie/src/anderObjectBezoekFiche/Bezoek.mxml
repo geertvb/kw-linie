@@ -20,6 +20,7 @@
 			public function bind(vo: Object) : void {
 				vo.anderobjectbezoek_id = BindingUtils.textinputToInteger(ti_anderobjectbezoek_id);
 				vo.datum = BindingUtils.dateFieldToDate(df_datum);
+				vo.anderobject_id = anderObjectSelector.anderobject_id;
 				vo.invuller_id = invullerContactSelector.contact_id;
 				vo.bezoeker_ids = bezoekersContactSelector.contact_ids;
 				vo.aanwezigheid = BindingUtils.comboboxToString(cb_aanwezigheid);
@@ -45,9 +46,13 @@
 				id="df_datum"/>
 		</mx:FormItem>
 		
-		<mx:FormItem 
-			label="Invuller" 
-			direction="horizontal">
+		<mx:FormItem label="Ander Object">
+			<components:AnderObjectSelector
+				id="anderObjectSelector"
+				anderObject="{data.anderobject}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Invuller">
 			<components:ContactSelector
 				id="invullerContactSelector"
 				contact="{data.invuller}" />

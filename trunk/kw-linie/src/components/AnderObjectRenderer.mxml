@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="400" 
+	height="60" verticalScrollPolicy="off">
+
+	<mx:HBox horizontalGap="4">
+		
+		<mx:Image
+			width="80" height="60" />
+	
+		<mx:VBox verticalGap="0">
+			<mx:Text text="{data.nummer}, {data.type}"/>
+			<mx:Text text="{data.gemeente} {data.deelgemeente}"/>
+		</mx:VBox>
+
+	</mx:HBox>	
+	
+</mx:Canvas>
