@@ -133,7 +133,7 @@
 
 		<mx:VBox width="186">
 
-			<mx:Label text="Type"  color="#FFFFFF" fontWeight="bold"/>
+			<mx:Label text="Selecteer op bunkertype"  color="#FFFFFF" fontWeight="bold"/>
 			<mx:CheckBox 
 				label="commandobunker" 
 				id="cb_commandobunker" 
