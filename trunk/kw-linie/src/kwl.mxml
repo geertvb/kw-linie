@@ -135,26 +135,41 @@
 
 			<mx:Label text="Selecteer op bunkertype"  color="#FFFFFF" fontWeight="bold"/>
 			<mx:CheckBox 
+				fillColors="[#888800,#888800]"
+				fillAlphas="[1,1]"
+				iconColor="#FFFFFF"
 				label="commandobunker" 
 				id="cb_commandobunker" 
 				valueCommit="filterMarkers();"
 				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 			<mx:CheckBox 
+				fillColors="[#000088,#000088]"
+				fillAlphas="[1,1]"
+				iconColor="#FFFFFF"
 				label="kanaalbunker" 
 				id="cb_kanaalbunker" 
 				valueCommit="filterMarkers();"
 				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 			<mx:CheckBox 
+				fillColors="[#880000,#880000]"
+				fillAlphas="[1,1]"
+				iconColor="#FFFFFF"
 				label="verdediging 1e lijn" 
 				id="cb_verdediging_1e_lijn" 
 				valueCommit="filterMarkers();"
 				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 			<mx:CheckBox 
+				fillColors="[#008800,#008800]"
+				fillAlphas="[1,1]"
+				iconColor="#FFFFFF"
 				label="verdediging 2e lijn" 
 				id="cb_verdediging_2e_lijn" 
 				valueCommit="filterMarkers();"
 				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 			<mx:CheckBox 
+				fillColors="[#000000,#000000]"
+				fillAlphas="[1,1]"
+				iconColor="#FFFFFF"
 				label="verdediging antitankcentrum" 
 				id="cb_verdediging_antitankcentrum" 
 				valueCommit="filterMarkers();"
