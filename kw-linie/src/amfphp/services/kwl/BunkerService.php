@@ -538,7 +538,7 @@ class BunkerService {
     	$sql .= "FROM";
     	$sql .= "  `kwl_bunker`";
     	$sql .= "ORDER BY";
-    	$sql .= "  `bunker_id` ASC";
+    	$sql .= "  `nummer` ASC";
     	return findSQL($sql);
     }
     
