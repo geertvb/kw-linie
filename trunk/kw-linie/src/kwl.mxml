@@ -10,6 +10,8 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.google.maps.overlays.PolylineOptions;
+			import com.google.maps.overlays.Polyline;
 	    	import com.google.maps.controls.MapTypeControl;
 	    	import com.google.maps.controls.PositionControl;
 	    	import com.google.maps.controls.ZoomControl;
@@ -48,14 +50,46 @@
 			
             public function displaymarkers() : void {
 				var bunkers : Array = bunkerResponder.lastResult as Array;
+				var previous: BunkerMarker = null;
+				var line : Polyline;
+				var vertices: Array = new Array();
 				bunkerMarkers = new ArrayCollection();
 				for each (var bunker:Object in bunkers) {
 					if (bunker.lat != null  && bunker.lng != null) {
 						var bunkerMarker: BunkerMarker = new BunkerMarker(bunker);
 	        			map.addOverlay(bunkerMarker.marker);
 	        			bunkerMarkers.addItem(bunkerMarker);
+	        			
+	        			if (previous != null && previous.bunker.code != bunkerMarker.bunker.code) {
+							var lineOptions:PolylineOptions = new PolylineOptions({
+								  strokeStyle: {
+								    thickness: 3,
+								    color: BunkerMarker.bunkerTypeColors[previous.bunker.type]["fillColor"],
+								    alpha: 0.5,
+								    pixelHinting: false
+								  }
+								});
+	        				line = new Polyline(vertices, lineOptions);
+	        				map.addOverlay(line);
+	        				vertices = new Array();
+	        			}
+	        			
+	        			vertices.push(bunkerMarker.latLng);
+	        			
+	        			previous = bunkerMarker;
      				}
 				}
+				lineOptions = new PolylineOptions({
+					  strokeStyle: {
+					    thickness: 3,
+					    color: BunkerMarker.bunkerTypeColors[previous.bunker.type]["fillColor"],
+					    alpha: 0.5,
+					    pixelHinting: false
+					  }
+					});
+				line = new Polyline(vertices, lineOptions);
+				map.addOverlay(line);
+				vertices = new Array();
             }
             
 		    private function onMapReady(event:Event):void {

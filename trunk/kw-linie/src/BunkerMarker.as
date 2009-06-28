@@ -13,7 +13,8 @@ package
 		public var bunkerThumb: BunkerThumb;
 		public var bunker: Object;
 		public var marker: Marker;
-		public var bunkerTypeColors: Object = {
+		public var latLng: LatLng;
+		public static var bunkerTypeColors: Object = {
 			"commandobunker": {strokeColor: 0xDDDD88, fillColor: 0x888800},
 			"kanaalbunker": {strokeColor: 0xDDDD88, fillColor: 0x000088},
 			"verdediging 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x880000},
@@ -23,12 +24,12 @@ package
 		
 		public function createMarker(bunker: Object) : Marker
 		{
-			var latLng: LatLng = new LatLng(bunker.lat, bunker.lng);
+			latLng = new LatLng(bunker.lat, bunker.lng);
 			var marker: Marker = new Marker(latLng,
 				new MarkerOptions({
-						strokeStyle: new StrokeStyle({color: bunkerTypeColors[bunker.type]["strokeColor"]}),
+						strokeStyle: new StrokeStyle({thickness:1, color: bunkerTypeColors[bunker.type]["strokeColor"]}),
 						fillStyle: new FillStyle({color: bunkerTypeColors[bunker.type]["fillColor"]}),
-						radius: 8,
+						radius: 5,
 						hasShadow: true
 					}));
 			return marker;
