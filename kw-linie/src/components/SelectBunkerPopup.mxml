@@ -7,6 +7,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import util.BindingUtils;
 			import mx.core.Application;
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
@@ -15,6 +16,16 @@
 			import components.BunkerRenderer;
 		
 			private static var _instance: SelectBunkerPopup;
+			
+			[Bindable]
+			private static var typeDP: Array = [
+				"",
+				"verdediging 1e lijn",
+				"verdediging 2e lijn",
+				"verdediging antitankcentrum",
+				"kanaalbunker",
+				"commandobunker"
+			];
 			
 			public static function getInstance() : SelectBunkerPopup {
 				if (_instance == null) {
@@ -57,6 +68,20 @@
 				close();
 			}
 			
+			private function bind(vo: Object) : void {
+				vo.type = BindingUtils.textinputToString(ti_type);
+				vo.code = BindingUtils.textinputToString(ti_code);
+				vo.nummer = BindingUtils.textinputToString(ti_nummer);
+				vo.gemeente = BindingUtils.textinputToString(ti_gemeente);
+				vo.deelgemeente = BindingUtils.textinputToString(ti_deelgemeente);
+			}
+			
+			public function click_zoek(event: Event): void {
+				var bunker: Object = new Object();
+				bind(bunker);
+				bunkerService.findByExample(bunker);
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -72,25 +97,30 @@
     
 	<mx:Form>
 		<mx:FormItem label="Type">
-			<mx:TextInput/>
+			<components:ComboBoxEx
+				rowCount="6"
+				dataProvider="{typeDP}" 
+				id="cb_type" />
+			<mx:TextInput id="ti_type" />
 		</mx:FormItem>
 		<mx:FormItem label="Code">
-			<mx:TextInput/>
+			<mx:TextInput id="ti_code"/>
 		</mx:FormItem>
 		<mx:FormItem label="Nummer">
-			<mx:TextInput/>
+			<mx:TextInput id="ti_nummer"/>
 		</mx:FormItem>
 		<mx:FormItem label="Gemeente">
-			<mx:TextInput/>
+			<mx:TextInput id="ti_gemeente"/>
 		</mx:FormItem>
 		<mx:FormItem label="Deelgemeente">
-			<mx:TextInput/>
+			<mx:TextInput id="ti_deelgemeente"/>
 		</mx:FormItem>
 	</mx:Form>
 	
 	<mx:HBox width="100%">
 		<mx:Button
-			label="Zoek" />
+			label="Zoek" 
+			click="click_zoek(event)"/>
 	</mx:HBox>
 	
 	<mx:List id="bunkerList"
