@@ -53,13 +53,24 @@ package components
 				for (var i:int=0; i<this.dataProvider.length; i++) {
 					var item: Object = this.dataProvider[i];
 					
-					if (item[_valueField] == _selectedValue || ObjectUtil.compare(item[_valueField], _selectedValue, 1) == 0) {
+					var v: * = getField(item, _valueField);
+					if (v == _selectedValue || ObjectUtil.compare(v, _selectedValue, 1) == 0) {
 						this.selectedIndex = i;
 						return;
 					}
 				}
 				this.selectedIndex = -1;
 			}
+		}
+		
+		public function getField(item: *, fieldname: String) : * {
+			if (typeof(item) == "object") {
+	            try {
+	            	item = item[fieldname];
+	            } catch(e:Error) {
+	            }
+	        }
+			return item;
 		}
 
 	} 
