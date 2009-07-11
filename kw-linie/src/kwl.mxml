@@ -29,6 +29,8 @@
 			
 			private const ALLEMAAL: String = "[ALLE]";
 			
+			private var gemeenteBuf: String = ALLEMAAL;
+			
 			[Bindable]
 			public var typeLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
 			
@@ -153,6 +155,7 @@
 		    		var g: String = o.gemeente;
 		    		if (g != null && g != gemeenteFilter.selectedValue) {
 		    			gemeenteFilter.selectedValue = g;
+		    			gemeenteBuf = g;
 		    		}
 		    	}
 		    	deelgemeenteLijst.refresh();
@@ -160,6 +163,7 @@
 		    
 		    private function gemeente_onChangeHandler(event: Event) : void {
 		    	var g: String = gemeenteFilter.selectedValue as String;
+    			gemeenteBuf = g;
 		    	if (ALLEMAAL != g) {
 		    		var dg: Object = deelgemeenteFilter.selectedItem;
 		    		if (dg != ALLEMAAL && dg.gemeente != g) {
@@ -194,7 +198,7 @@
 	    			return 0;
 	    		}
 	    		
-	    		if (o.gemeente == gemeenteFilter.selectedValue) {
+	    		if (o.gemeente == gemeenteBuf) {
 	    			return 1;
 	    		} else {
 	    			return 2;
