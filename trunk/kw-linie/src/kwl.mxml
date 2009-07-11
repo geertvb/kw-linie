@@ -6,12 +6,13 @@
 	layout="absolute"
 	backgroundColor="#637449" 
 	themeColor="#637449" 
-	backgroundGradientColors="[#637449,#637449]" xmlns:utils="com.hillelcoren.utils.*">
+	backgroundGradientColors="[#637449,#637449]" xmlns:utils="com.hillelcoren.utils.*" xmlns:components="components.*">
 
 	<mx:Script>
 		<![CDATA[
 			import com.google.maps.overlays.PolylineOptions;
 			import com.google.maps.overlays.Polyline;
+			import referenceData.Gemeente;
 	    	import com.google.maps.controls.MapTypeControl;
 	    	import com.google.maps.controls.PositionControl;
 	    	import com.google.maps.controls.ZoomControl;
@@ -72,13 +73,13 @@
 	        				line = new Polyline(vertices, lineOptions);
 	        				map.addOverlay(line);
 	        				vertices = new Array();
-	        			}
+     				}
 	        			
 	        			vertices.push(bunkerMarker.latLng);
 	        			
 	        			previous = bunkerMarker;
-     				}
 				}
+            }
 				lineOptions = new PolylineOptions({
 					  strokeStyle: {
 					    thickness: 3,
@@ -137,6 +138,16 @@
 		    	var result : ArrayCollection = new ArrayCollection(source);
 		    	result.addItemAt(ALLEMAAL, 0);
 		    	return result;
+		    }
+		    
+		    private function deelgemeente_onChangeHandler(event: Event) : void {
+		    	var dg: String = deelgemeenteFilter.selectedLabel;
+		    	if (ALLEMAAL != dg) {
+		    		var g: String = Gemeente.deelgemeenteGemeente[dg];
+		    		if (g != null && g != gemeenteFilter.selectedLabel) {
+		    			gemeenteFilter.selectedValue = g;
+		    		}
+		    	}
 		    }
 		    
 		]]>
@@ -220,14 +231,15 @@
 				rowCount="8"></mx:ComboBox>
 
 			<mx:Label text="Gemeente"  color="#FFFFFF" fontWeight="bold"/>
-			<mx:ComboBox id="gemeenteFilter"
+			<components:ComboBoxEx id="gemeenteFilter"
 				width="186"
 				maxWidth="186"
 				dataProvider="{gemeenteLijst}"
 				selectedIndex="0"
 				labelField="gemeente"
+				valueField="gemeente"
 				valueCommit="filterMarkers();"
-				rowCount="8"></mx:ComboBox>
+				rowCount="8"></components:ComboBoxEx>
 				
 			<mx:Label text="Deelgemeente"  color="#FFFFFF" fontWeight="bold"/>
 			<mx:ComboBox id="deelgemeenteFilter"
@@ -237,6 +249,7 @@
 				selectedIndex="0"
 				labelField="deelgemeente"
 				valueCommit="filterMarkers();"
+				change="deelgemeente_onChangeHandler(event)"
 				rowCount="8"></mx:ComboBox>
 				
 		</mx:VBox>
