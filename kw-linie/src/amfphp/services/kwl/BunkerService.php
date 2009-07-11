@@ -94,11 +94,6 @@ class BunkerService {
 		return findSQL("select distinct `code` from `kwl_bunker` where `code` is not null order by `code` asc");
 	}
 	
-	function findGemeentes() {
-		$sql = "SELECT distinct `gemeente` FROM `kwl_bunker` WHERE `gemeente` is not null order by `gemeente` asc";
-		return findSQL($sql);
-	}
-	
 	/*
 	function findDocumenten($id) {
 		$sql = "SELECT `document_id`, `bunker_id`, `omschrijving`, `filename`, `mimetype`, `size` FROM `kwl_document` WHERE `bunker_id` = ? order by `document_id` asc";
@@ -133,9 +128,35 @@ class BunkerService {
 	}
 	*/
 	
+	function findGemeentes() {
+		$sql = array();
+		$sql[] = "SELECT distinct";
+		$sql[] = "  `gemeente`";
+		$sql[] = "FROM";
+		$sql[] = "  `kwl_bunker`";
+		$sql[] = "WHERE";
+		$sql[] = "  `gemeente` is not null AND";
+		$sql[] = "  `gemeente` <> '' AND";
+		$sql[] = "  `gemeente` <> '?'";
+		$sql[] = "ORDER BY";
+		$sql[] = "  `gemeente` ASC";
+		return findSQL(implode(" ", $sql));
+	}
+	
 	function findDeelgemeentes() {
-		$sql = "SELECT distinct `deelgemeente` FROM `kwl_bunker` WHERE `deelgemeente` is not null order by `deelgemeente` asc";
-		return findSQL($sql);
+		$sql = array();
+		$sql[] = "SELECT distinct";
+		$sql[] = "  `deelgemeente`,";
+		$sql[] = "  `gemeente`";
+		$sql[] = "FROM";
+		$sql[] = "  `kwl_bunker`";
+		$sql[] = "WHERE";
+		$sql[] = "  `deelgemeente` is not null AND";
+		$sql[] = "  `deelgemeente` <> '' AND";
+		$sql[] = "  `deelgemeente` <> '?'";
+		$sql[] = "ORDER BY";
+		$sql[] = "  `deelgemeente` ASC";
+		return findSQL(implode(" ", $sql));
 	}
 
 	function findByID($id) {
