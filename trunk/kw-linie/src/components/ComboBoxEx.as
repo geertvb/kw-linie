@@ -29,7 +29,9 @@ package components
 		[Bindable("change")]
 		[Bindable("valueCommit")]
 		public function get selectedValue() : Object {
-			if (this.selectedItem && this._valueField) {
+			if (this.selectedItem is String) {
+				return this.selectedItem;
+			} else if (this.selectedItem && this._valueField) {
 				return this.selectedItem[this._valueField];
 			} else {
 				return null;

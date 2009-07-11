@@ -6,13 +6,14 @@
 	layout="absolute"
 	backgroundColor="#637449" 
 	themeColor="#637449" 
-	backgroundGradientColors="[#637449,#637449]" xmlns:utils="com.hillelcoren.utils.*" xmlns:components="components.*">
+	backgroundGradientColors="[#637449,#637449]" 
+	xmlns:utils="com.hillelcoren.utils.*" 
+	xmlns:components="components.*">
 
 	<mx:Script>
 		<![CDATA[
 			import com.google.maps.overlays.PolylineOptions;
 			import com.google.maps.overlays.Polyline;
-			import referenceData.Gemeente;
 	    	import com.google.maps.controls.MapTypeControl;
 	    	import com.google.maps.controls.PositionControl;
 	    	import com.google.maps.controls.ZoomControl;
@@ -38,7 +39,7 @@
 			public var gemeenteLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
 			
 			[Bindable]
-			public var deelgemeenteLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
+			public var emptyList: Array = [ALLEMAAL];
 			
 			public function creationComplete() : void {
 				bunkerResponder.token = bunkerService.findAll();
@@ -134,22 +135,95 @@
 		    	}
 		    }
 		    
-		    private function filterLijst(source: Array) : ArrayCollection {
-		    	var result : ArrayCollection = new ArrayCollection(source);
-		    	result.addItemAt(ALLEMAAL, 0);
+		    private function filterLijst(source: Array, ac: ArrayCollection = null) : ArrayCollection {
+		    	var result : ArrayCollection;
+		    	if (ac == null) {
+		    		result = new ArrayCollection();
+		    	} else {
+		    		result = ac;
+		    	}
+		    	source.unshift(ALLEMAAL);
+		    	result.source = source;
 		    	return result;
 		    }
 		    
 		    private function deelgemeente_onChangeHandler(event: Event) : void {
-		    	var dg: String = deelgemeenteFilter.selectedLabel;
-		    	if (ALLEMAAL != dg) {
-		    		var g: String = Gemeente.deelgemeenteGemeente[dg];
-		    		if (g != null && g != gemeenteFilter.selectedLabel) {
+		    	var o: Object = deelgemeenteFilter.selectedItem;
+		    	if (ALLEMAAL != o) {
+		    		var g: String = o.gemeente;
+		    		if (g != null && g != gemeenteFilter.selectedValue) {
 		    			gemeenteFilter.selectedValue = g;
 		    		}
 		    	}
+		    	deelgemeenteLijst.refresh();
 		    }
 		    
+		    private function gemeente_onChangeHandler(event: Event) : void {
+		    	var g: String = gemeenteFilter.selectedValue as String;
+		    	if (ALLEMAAL != g) {
+		    		var dg: Object = deelgemeenteFilter.selectedItem;
+		    		if (dg != ALLEMAAL && dg.gemeente != g) {
+		    			deelgemeenteFilter.selectedIndex = 0;
+		    		}
+		    	}
+		    	deelgemeenteLijst.refresh();
+		    }
+		    
+		    private function fieldValue(o: Object, fieldName: String) : String {
+		    	if (o == null) {
+		    		return null;
+		    	} else if (o is String) {
+		    		return o as String;
+		    	} else {
+		    		return o[fieldName];
+		    	}
+		    }
+		    
+		    private function deelgemeenteCompare(a:Object, b:Object, fields:Array=null) : int {
+		    	var result: int = compareValues(gemeenteValue(a), gemeenteValue(b));
+		    	if (result != 0) {
+		    		return result;
+		    	}
+		    	result = compareValues(fieldValue(a, "deelgemeente"), fieldValue(b, "deelgemeente"));
+		    	return result;
+		    }
+		    
+		    private function gemeenteValue(o: Object) : int {
+	    		// Special values
+	    		if (o == ALLEMAAL) {
+	    			return 0;
+	    		}
+	    		
+	    		if (o.gemeente == gemeenteFilter.selectedValue) {
+	    			return 1;
+	    		} else {
+	    			return 2;
+	    		}
+		    }
+		    
+		    private function compareValues(a:Object, b:Object):int {
+	            if (a == null && b == null)
+	                return 0;
+	            if (a == null)
+	                return 1;
+				if (b == null)
+					return -1;
+				if (a < b)
+					return -1;
+				if (a > b)
+					return 1;
+				return 0;
+	        }
+	        
+	        public function deelgemeenteKleur(item: Object) : int {
+	        	var result: int = 0x000000;
+	        	if (gemeenteFilter.selectedItem != ALLEMAAL &&
+	        		item != ALLEMAAL && item.gemeente != gemeenteFilter.selectedValue) {
+	        		result = 0xCCCCCC;
+	        	}
+	        	return result;
+	        }
+
 		]]>
 	</mx:Script>
 	
@@ -161,12 +235,22 @@
 
 	<xyz:CallResponder id="gemeenteResponder" result="gemeenteLijst = filterLijst(gemeenteResponder.lastResult);"/>
 
-	<xyz:CallResponder id="deelgemeenteResponder" result="deelgemeenteLijst = filterLijst(deelgemeenteResponder.lastResult);"/>
+	<xyz:CallResponder id="deelgemeenteResponder" result="deelgemeenteLijst = filterLijst(deelgemeenteResponder.lastResult, deelgemeenteLijst);"/>
 
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService"
 		destination="amfphp">
     </mx:RemoteObject>
+    
+    <mx:Sort 
+    	id="deelgemeenteSort" 
+    	compareFunction="deelgemeenteCompare">
+    </mx:Sort>
+    
+    <mx:ArrayCollection 
+    	id="deelgemeenteLijst" 
+    	source="{emptyList}"
+    	sort="{deelgemeenteSort}" />
 
 	<mx:HBox horizontalGap="10">
 
@@ -239,6 +323,7 @@
 				labelField="gemeente"
 				valueField="gemeente"
 				valueCommit="filterMarkers();"
+				change="gemeente_onChangeHandler(event)"
 				rowCount="8"></components:ComboBoxEx>
 				
 			<mx:Label text="Deelgemeente"  color="#FFFFFF" fontWeight="bold"/>
@@ -250,7 +335,13 @@
 				labelField="deelgemeente"
 				valueCommit="filterMarkers();"
 				change="deelgemeente_onChangeHandler(event)"
-				rowCount="8"></mx:ComboBox>
+				rowCount="8">
+				<mx:itemRenderer>
+					<mx:Component>
+						<mx:Label color="{outerDocument.deelgemeenteKleur(data)}" text="{data is String ? data : data.deelgemeente}" />
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:ComboBox>
 				
 		</mx:VBox>
 
