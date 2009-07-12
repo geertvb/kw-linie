@@ -29,7 +29,7 @@ package
 				new MarkerOptions({
 						strokeStyle: new StrokeStyle({thickness:1, color: bunkerTypeColors[bunker.type]["strokeColor"]}),
 						fillStyle: new FillStyle({color: bunkerTypeColors[bunker.type]["fillColor"]}),
-						radius: 5,
+						radius: 4,
 						hasShadow: true
 					}));
 			return marker;
