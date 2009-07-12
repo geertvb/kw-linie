@@ -20,6 +20,9 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.controls.Alert;
 			
+			[Bindable]
+			public var _bunker: Object;
+			
 			private function creationComplete() : void {
 				//joomlaUser.send();
 				refreshBunkerGrid();
@@ -38,7 +41,14 @@
 			}
 			
 			private function result_save(event: ResultEvent) : void {
-				refreshBunkerGrid();
+				//refreshBunkerGrid();
+				var b: Object = event.result;
+				for (var i: int=0; i<bunkers.length; i++) {
+					if (bunkers.getItemAt(i).bunker_id == b.bunker_id) {
+						bunkers.setItemAt(b, i);
+						break;
+					}
+				}
 			}
 			
 			private function bunkerGridChange(event: Event) : void {
@@ -101,8 +111,6 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Object id="_bunker" />
-
 	<mx:ArrayCollection id="bunkers" source="{bunkerService.findAll.lastResult}"/>
 	
 	<mx:HTTPService 
