@@ -256,7 +256,7 @@
     	source="{emptyList}"
     	sort="{deelgemeenteSort}" />
 
-	<mx:HBox horizontalGap="10">
+	<mx:HBox horizontalGap="5">
 
 		<maps:Map id="map"
 			width="512" height="640"
@@ -264,88 +264,97 @@
 			mapevent_mapready="onMapReady(event)">
 		</maps:Map>
 
-		<mx:VBox width="186">
+		<mx:VBox>
 
-			<mx:Label text="Selecteer op bunkertype"  color="#FFFFFF" fontWeight="bold"/>
-			<mx:CheckBox 
-				fillColors="[#888800,#888800]"
-				fillAlphas="[1,1]"
-				iconColor="#FFFFFF"
-				label="commandobunker" 
-				id="cb_commandobunker" 
-				valueCommit="filterMarkers();"
-				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
-			<mx:CheckBox 
-				fillColors="[#000088,#000088]"
-				fillAlphas="[1,1]"
-				iconColor="#FFFFFF"
-				label="kanaalbunker" 
-				id="cb_kanaalbunker" 
-				valueCommit="filterMarkers();"
-				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
-			<mx:CheckBox 
-				fillColors="[#880000,#880000]"
-				fillAlphas="[1,1]"
-				iconColor="#FFFFFF"
-				label="verdediging 1e lijn" 
-				id="cb_verdediging_1e_lijn" 
-				valueCommit="filterMarkers();"
-				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
-			<mx:CheckBox 
-				fillColors="[#008800,#008800]"
-				fillAlphas="[1,1]"
-				iconColor="#FFFFFF"
-				label="verdediging 2e lijn" 
-				id="cb_verdediging_2e_lijn" 
-				valueCommit="filterMarkers();"
-				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
-			<mx:CheckBox 
-				fillColors="[#000000,#000000]"
-				fillAlphas="[1,1]"
-				iconColor="#FFFFFF"
-				label="verdediging antitankcentrum" 
-				id="cb_verdediging_antitankcentrum" 
-				valueCommit="filterMarkers();"
-				selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+			<mx:Label text="Selecteer op"  color="#FFFFFF" fontWeight="bold" width="100%" textAlign="center" fontSize="14"/>
+			<mx:Label text="Bunker type:"  color="#FFFFFF" fontWeight="bold"/>
+			<mx:VBox paddingLeft="8">
+				<mx:CheckBox 
+					fillColors="[#888800,#888800]"
+					fillAlphas="[1,1]"
+					iconColor="#FFFFFF"
+					label="commandobunker" 
+					id="cb_commandobunker" 
+					valueCommit="filterMarkers();"
+					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					fillColors="[#000088,#000088]"
+					fillAlphas="[1,1]"
+					iconColor="#FFFFFF"
+					label="kanaalbunker" 
+					id="cb_kanaalbunker" 
+					valueCommit="filterMarkers();"
+					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					fillColors="[#880000,#880000]"
+					fillAlphas="[1,1]"
+					iconColor="#FFFFFF"
+					label="verdediging 1e lijn" 
+					id="cb_verdediging_1e_lijn" 
+					valueCommit="filterMarkers();"
+					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					fillColors="[#008800,#008800]"
+					fillAlphas="[1,1]"
+					iconColor="#FFFFFF"
+					label="verdediging 2e lijn" 
+					id="cb_verdediging_2e_lijn" 
+					valueCommit="filterMarkers();"
+					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					fillColors="[#000000,#000000]"
+					fillAlphas="[1,1]"
+					iconColor="#FFFFFF"
+					label="verdediging antitankcentrum" 
+					id="cb_verdediging_antitankcentrum" 
+					valueCommit="filterMarkers();"
+					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+			</mx:VBox>
 
-			<mx:Label text="Code"  color="#FFFFFF" fontWeight="bold"/>
-			<mx:ComboBox id="codeFilter" 
-				width="186"
-				maxWidth="186"
-				dataProvider="{codeLijst}"
-				selectedIndex="0"
-				labelField="code"
-				valueCommit="filterMarkers();"
-				rowCount="8"></mx:ComboBox>
+			<mx:Label text="Bunker code:" color="#FFFFFF" fontWeight="bold"/>
+			<mx:HBox paddingLeft="8" width="100%">
+				<mx:ComboBox id="codeFilter"
+					width="180"
+					maxWidth="180"
+					dataProvider="{codeLijst}"
+					selectedIndex="0"
+					labelField="code"
+					valueCommit="filterMarkers();"
+					rowCount="8"></mx:ComboBox>
+			</mx:HBox>
 
-			<mx:Label text="Gemeente"  color="#FFFFFF" fontWeight="bold"/>
-			<components:ComboBoxEx id="gemeenteFilter"
-				width="186"
-				maxWidth="186"
-				dataProvider="{gemeenteLijst}"
-				selectedIndex="0"
-				labelField="gemeente"
-				valueField="gemeente"
-				valueCommit="filterMarkers();"
-				change="gemeente_onChangeHandler(event)"
-				rowCount="8"></components:ComboBoxEx>
+			<mx:Label text="Gemeente:"  color="#FFFFFF" fontWeight="bold"/>
+			<mx:HBox paddingLeft="8" width="100%">
+				<components:ComboBoxEx id="gemeenteFilter"
+					width="180"
+					maxWidth="180"
+					dataProvider="{gemeenteLijst}"
+					selectedIndex="0"
+					labelField="gemeente"
+					valueField="gemeente"
+					valueCommit="filterMarkers();"
+					change="gemeente_onChangeHandler(event)"
+					rowCount="8"></components:ComboBoxEx>
+			</mx:HBox>
 				
-			<mx:Label text="Deelgemeente"  color="#FFFFFF" fontWeight="bold"/>
-			<mx:ComboBox id="deelgemeenteFilter"
-				width="186"
-				maxWidth="186"
-				dataProvider="{deelgemeenteLijst}"
-				selectedIndex="0"
-				labelField="deelgemeente"
-				valueCommit="filterMarkers();"
-				change="deelgemeente_onChangeHandler(event)"
-				rowCount="8">
-				<mx:itemRenderer>
-					<mx:Component>
-						<mx:Label color="{outerDocument.deelgemeenteKleur(data)}" text="{data is String ? data : data.deelgemeente}" />
-					</mx:Component>
-				</mx:itemRenderer>
-			</mx:ComboBox>
+			<mx:Label text="Deelgemeente:"  color="#FFFFFF" fontWeight="bold"/>
+			<mx:HBox paddingLeft="8" width="100%">
+				<mx:ComboBox id="deelgemeenteFilter"
+					width="180"
+					maxWidth="180"
+					dataProvider="{deelgemeenteLijst}"
+					selectedIndex="0"
+					labelField="deelgemeente"
+					valueCommit="filterMarkers();"
+					change="deelgemeente_onChangeHandler(event)"
+					rowCount="8">
+					<mx:itemRenderer>
+						<mx:Component>
+							<mx:Label color="{outerDocument.deelgemeenteKleur(data)}" text="{data is String ? data : data.deelgemeente}" />
+						</mx:Component>
+					</mx:itemRenderer>
+				</mx:ComboBox>
+			</mx:HBox>
 				
 		</mx:VBox>
 
