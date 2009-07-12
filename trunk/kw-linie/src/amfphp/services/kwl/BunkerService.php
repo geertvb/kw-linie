@@ -300,7 +300,8 @@ class BunkerService {
 			
 			$mysqli->close();
 		}
-		return true;
+		
+		return $bunker;
 	}
 	
 	private function updateDocumenten($vo, $mysqli) {
@@ -611,6 +612,7 @@ class BunkerService {
     	$sql .= "FROM";
     	$sql .= "  `kwl_bunker`";
     	$sql .= "ORDER BY";
+    	$sql .= "  `type` ASC,";
     	$sql .= "  `nummer` ASC";
     	return findSQL($sql);
     }
