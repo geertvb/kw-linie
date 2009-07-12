@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	creationComplete="creationComplete()"
 	xmlns:rpc="mx.rpc.*"
-	xmlns:components="components.*" xmlns:coo="coo.*">
+	xmlns:components="components.*" xmlns:coo="coo.*" xmlns:local="*">
 
 	<mx:Script>
 		<![CDATA[
@@ -68,6 +68,20 @@
 				ti_lat.text = latLng.lat().toString();
 				ti_lng.text = latLng.lng().toString();
 			}
+			
+			public function findAddress() : void {
+				var lat: Number = Number(ti_lat.text);
+				var lng: Number = Number(ti_lng.text);
+				var latLng: LatLng = new LatLng(lat, lng);
+				geocode.findAddress(latLng);
+			}
+			
+			public function updateAddress(address: Object) : void {
+				cb_gemeente.selectedValue = address["LocalityName"];
+				cb_deelgemeente.selectedValue = address["DependentLocalityName"];
+				ti_straat.text = address["ThoroughfareName"];
+				//bunker.postcode = address["PostalCodeNumber"];
+			}
 		]]>
 	</mx:Script>
 
@@ -100,6 +114,8 @@
         domain="int"/>
         
 	<coo:Lambert72Coo id="lambert72coo" />
+	
+	<local:Geocode id="geocode" f="updateAddress" />
 
 	<mx:Form x="0" y="0" width="100%" height="100%">
 	
@@ -141,6 +157,7 @@
 			<mx:Button 
 				enabled="{isValidLatLng(ti_lat.text, ti_lng.text)}"
 				icon="@Embed(source='assets/up.png')" />
+			<mx:Button label="Adres" click="findAddress()"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Google lat" direction="horizontal">
