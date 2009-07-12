@@ -3,10 +3,11 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	creationComplete="creationComplete()"
 	xmlns:rpc="mx.rpc.*"
-	xmlns:components="components.*">
+	xmlns:components="components.*" xmlns:coo="coo.*">
 
 	<mx:Script>
 		<![CDATA[
+			import mx.events.ValidationResultEvent;
 			import com.google.maps.LatLng;
 			import util.BindingUtils;
 			import mx.managers.PopUpManager;
@@ -44,8 +45,29 @@
 				bunker.kadaster = BindingUtils.textAreaToString(ti_kadaster);
 			}
 			
-
+			public function isValidLambert(x: String, y: String) : Boolean {
+				if ((x == null) || (y == null)) return false;
+				var xv: int = int(x);
+				var yv: int = int(y);
+				if ((xv<=100000) || (xv>=300000)) return false;
+				if ((yv<=100000) || (yv>=300000)) return false;
+				return true;
+			}
 			
+			public function isValidLatLng(lat: String, lng: String) : Boolean {
+				if ((lat == null) || (lng == null)) return false;
+				var latv: Number = Number(lat);
+				var lngv: Number = Number(lng);
+				if ((latv<=45) || (latv>=55)) return false;
+				if ((lngv<=0) || (lngv>=10)) return false;
+				return true;
+			}
+			
+			public function convertToLatLng() : void {
+				var latLng: LatLng = lambert72coo.convert(new Number(ti_x.text), new Number(ti_y.text));
+				ti_lat.text = latLng.lat().toString();
+				ti_lng.text = latLng.lng().toString();
+			}
 		]]>
 	</mx:Script>
 
@@ -60,6 +82,7 @@
     <mx:ArrayCollection id="deelgemeentes" source="{deelgemeenteResponder.lastResult}" />
 
     <mx:NumberValidator 
+    	id="x_validator"
         source="{ti_x}"
         property="text" 
         minValue="100000"
@@ -68,12 +91,15 @@
         domain="int"/>
 
     <mx:NumberValidator 
+    	id="y_validator"
         source="{ti_y}"
         property="text" 
         minValue="100000"
         maxValue="300000"
         required="false"
         domain="int"/>
+        
+	<coo:Lambert72Coo id="lambert72coo" />
 
 	<mx:Form x="0" y="0" width="100%" height="100%">
 	
@@ -112,6 +138,9 @@
 			<mx:FormItem label="Lambert 72 y" labelWidth="100">
 				<mx:TextInput id="ti_y" width="128" text="{data.y}" />
 			</mx:FormItem>
+			<mx:Button 
+				enabled="{isValidLatLng(ti_lat.text, ti_lng.text)}"
+				icon="@Embed(source='assets/up.png')" />
 		</mx:FormItem>
 		
 		<mx:FormItem label="Google lat" direction="horizontal">
@@ -119,6 +148,10 @@
 			<mx:FormItem label="Google lng" labelWidth="100">
 				<mx:TextInput id="ti_lng" width="128" text="{data.lng}" />
 			</mx:FormItem>
+			<mx:Button 
+				click="convertToLatLng()"
+				enabled="{isValidLambert(ti_x.text, ti_y.text)}"
+				icon="@Embed(source='assets/down.png')" />
 			<mx:Button label="kaart" click="kaart_click()" />
 		</mx:FormItem>
 		
