@@ -17,7 +17,7 @@ package referenceData
 				{type: "verdediging 1e lijn"},
 				{type: "verdediging 2e lijn"},
 				{type: "verdediging antitankcentrum"},
-				{type: "kanaalbunker"},
+				{type: "bruggenhoofd mechelen"},
 				{type: "commando 1e lijn"},
 				{type: "commando 2e lijn"},
 				{type: "connectiekamer"}
