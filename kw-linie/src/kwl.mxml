@@ -122,7 +122,7 @@
 		    	result ||= (type == "commando 1e lijn") && cb_commando_1e_lijn.selected;
 		    	result ||= (type == "commando 2e lijn") && cb_commando_2e_lijn.selected;
 		    	result ||= (type == "connectiekamer") && cb_connectiekamer.selected;
-		    	result ||= (type == "kanaalbunker") && cb_kanaalbunker.selected;
+		    	result ||= (type == "bruggenhoofd mechelen") && cb_bruggenhoofd_mechelen.selected;
 		    	result ||= (type == "verdediging 1e lijn") && cb_verdediging_1e_lijn.selected;
 		    	result ||= (type == "verdediging 2e lijn") && cb_verdediging_2e_lijn.selected;
 		    	result ||= (type == "verdediging antitankcentrum") && cb_verdediging_antitankcentrum.selected;
@@ -309,8 +309,8 @@
 					fillColors="[#000088,#000088]"
 					fillAlphas="[1,1]"
 					iconColor="#FFFFFF"
-					label="kanaalbunker" 
-					id="cb_kanaalbunker" 
+					label="bruggenhoofd mechelen" 
+					id="cb_bruggenhoofd_mechelen" 
 					valueCommit="filterMarkers();"
 					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 				<mx:CheckBox 
