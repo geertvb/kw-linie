@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="160" height="170"
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	height="170"
 	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off">
 
@@ -17,4 +17,4 @@
 		<mx:Label text="x:{bunker.x} y:{bunker.y}"/>
 	</mx:VBox>
 
-</mx:Canvas>
+</mx:HBox>
