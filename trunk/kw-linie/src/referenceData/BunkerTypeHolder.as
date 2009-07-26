@@ -18,7 +18,8 @@ package referenceData
 				{type: "verdediging 2e lijn"},
 				{type: "verdediging antitankcentrum"},
 				{type: "kanaalbunker"},
-				{type: "commandobunker"}
+				{type: "commando 1e lijn"},
+				{type: "commando 2e lijn"},
 			];
 			
 			return result;

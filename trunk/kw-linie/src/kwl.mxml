@@ -64,7 +64,9 @@
 	        			map.addOverlay(bunkerMarker.marker);
 	        			bunkerMarkers.addItem(bunkerMarker);
 	        			
-	        			if (previous != null && previous.bunker.code != bunkerMarker.bunker.code) {
+	        			if (previous != null 
+	        				&& (previous.bunker.type != bunkerMarker.bunker.type
+	        				|| previous.bunker.code != bunkerMarker.bunker.code)) {
 							var lineOptions:PolylineOptions = new PolylineOptions({
 								  strokeStyle: {
 								    thickness: 3,
@@ -117,7 +119,8 @@
 		    
 		    private function filterTypeMarkers(type: String) : Boolean {
 		    	var result : Boolean = false;
-		    	result ||= (type == "commandobunker") && cb_commandobunker.selected;
+		    	result ||= (type == "commando 1e lijn") && cb_commando_1e_lijn.selected;
+		    	result ||= (type == "commando 2e lijn") && cb_commando_2e_lijn.selected;
 		    	result ||= (type == "kanaalbunker") && cb_kanaalbunker.selected;
 		    	result ||= (type == "verdediging 1e lijn") && cb_verdediging_1e_lijn.selected;
 		    	result ||= (type == "verdediging 2e lijn") && cb_verdediging_2e_lijn.selected;
@@ -273,8 +276,16 @@
 					fillColors="[#888800,#888800]"
 					fillAlphas="[1,1]"
 					iconColor="#FFFFFF"
-					label="commandobunker" 
-					id="cb_commandobunker" 
+					label="commando 1e lijn" 
+					id="cb_commando_1e_lijn" 
+					valueCommit="filterMarkers();"
+					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					fillColors="[#888800,#888800]"
+					fillAlphas="[1,1]"
+					iconColor="#FFFFFF"
+					label="commando 2e lijn" 
+					id="cb_commando_2e_lijn" 
 					valueCommit="filterMarkers();"
 					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 				<mx:CheckBox 
