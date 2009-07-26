@@ -138,15 +138,9 @@
 		    
 		    private function filterMarkers() : void {
 		    	for each (var bunkerMarker: BunkerMarker in bunkerMarkers) {
-		    		var bunker: Object = bunkerMarker.bunker;
-		    		var visible: Boolean = true;
-		    		visible &&= filterTypeMarkers(bunker.type);
-		    		visible &&= filterAanwezigheid(bunker.aanwezig);
-		    		visible &&= codeFilter.selectedIndex<=0 || (bunker.code == codeFilter.selectedLabel);
-		    		visible &&= gemeenteFilter.selectedIndex<=0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
-		    		visible &&= deelgemeenteFilter.selectedIndex<=0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
-		    		bunkerMarker.marker.visible = visible;
+		    		bunkerMarker.marker.visible = filterBunker(bunkerMarker.bunker);
 		    	}
+		    	bunkerCollection.refresh();
 		    }
 		    
 		    private function filterLijst(source: Array, ac: ArrayCollection = null) : ArrayCollection {
@@ -239,9 +233,24 @@
 	        	}
 	        	return result;
 	        }
+	        
+	        public function filterBunker(bunker: Object) : Boolean {
+	        	var visible: Boolean = true;
+	    		visible &&= filterTypeMarkers(bunker.type);
+	    		visible &&= filterAanwezigheid(bunker.aanwezig);
+	    		visible &&= codeFilter.selectedIndex<=0 || (bunker.code == codeFilter.selectedLabel);
+	    		visible &&= gemeenteFilter.selectedIndex<=0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
+	    		visible &&= deelgemeenteFilter.selectedIndex<=0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
+	    		return visible;
+	        }
 
 		]]>
 	</mx:Script>
+	
+	<mx:ArrayCollection
+		id="bunkerCollection"
+		filterFunction="filterBunker"
+		source="{bunkerResponder.lastResult}" />
 	
 	<xyz:CallResponder id="bunkerResponder" result="bunkerResponderResult(event)" />
 	
@@ -270,11 +279,79 @@
 
 	<mx:HBox horizontalGap="5">
 
-		<maps:Map id="map"
-			width="512" height="640"
-			key="ABQIAAAAL4gDNG8jsapnfnIxxSbmXBQgfeSkNN7qNgPfoxJaK42Uxer2KxS2iBxqn9eykR2TxIcr6N3_pEWP1A"
-			mapevent_mapready="onMapReady(event)">
-		</maps:Map>
+		<mx:VBox>
+
+			<mx:ToggleButtonBar 
+				dataProvider="{vs_bunkers}" />
+
+			<mx:ViewStack id="vs_bunkers">
+				<mx:Canvas label="Kaart">
+					<maps:Map id="map"
+						width="512" height="640"
+						key="ABQIAAAAL4gDNG8jsapnfnIxxSbmXBQgfeSkNN7qNgPfoxJaK42Uxer2KxS2iBxqn9eykR2TxIcr6N3_pEWP1A"
+						mapevent_mapready="onMapReady(event)">
+					</maps:Map>
+				</mx:Canvas>
+				<mx:Canvas label="Lijst" 
+					horizontalScrollPolicy="off"
+					verticalScrollPolicy="off">
+					<mx:DataGrid 
+						dataProvider="{bunkerCollection}"
+						x="0" y="0" 
+						rowCount="5"
+						width="100%">
+						<mx:columns>
+							<mx:DataGridColumn headerText="Foto" width="160" sortable="false">
+				                <mx:itemRenderer>
+				                    <mx:Component>
+				                        <mx:VBox 
+				                        	width="160" height="120"
+				                            horizontalAlign="center" verticalAlign="middle" >
+				                            <mx:Image source="download_thumb.php?foto_id={data.defaultfoto_id}"/>
+				                        </mx:VBox>
+				                    </mx:Component>
+				                </mx:itemRenderer>
+							</mx:DataGridColumn>
+							<mx:DataGridColumn headerText="Info" sortable="false">
+				                <mx:itemRenderer>
+				                    <mx:Component>
+				                        <mx:VBox>
+				                            <mx:Form 
+				                            	paddingLeft="4" paddingTop="0" paddingRight="0" paddingBottom="0"
+				                            	verticalGap="0" horizontalGap="0" indicatorGap="4">
+				                            	<mx:FormItem label="Uniek nummer:">
+				                            		<mx:Text text="{data.bunker_id}"/>
+				                            	</mx:FormItem>
+				                            	<mx:FormItem label="Type:">
+				                            		<mx:Text text="{data.type}"/>
+				                            	</mx:FormItem>
+				                            	<mx:FormItem label="Nummer:">
+				                            		<mx:Text text="{data.nummer}"/>
+				                            	</mx:FormItem>
+				                            	<mx:FormItem label="Gemeente:">
+				                            		<mx:Text text="{data.gemeente}"/>
+				                            	</mx:FormItem>
+				                            	<mx:FormItem label="Deelgemeente:">
+				                            		<mx:Text text="{data.deelgemeente}"/>
+				                            	</mx:FormItem>
+				                            	<mx:FormItem label="x:" direction="horizontal">
+				                            		<mx:Text text="{data.x}"/>
+					                            	<mx:FormItem label="y:">
+					                            		<mx:Text text="{data.y}"/>
+					                            	</mx:FormItem>
+				                            	</mx:FormItem>
+				                            </mx:Form>
+				                        </mx:VBox>
+				                    </mx:Component>
+				                </mx:itemRenderer>
+							</mx:DataGridColumn>
+						</mx:columns>
+					</mx:DataGrid>
+					
+				</mx:Canvas>
+			</mx:ViewStack>
+
+		</mx:VBox>
 
 		<mx:VBox>
 
