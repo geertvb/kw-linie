@@ -8,8 +8,12 @@ package
 	import com.google.maps.styles.FillStyle;
 	import com.google.maps.styles.StrokeStyle;
 	
+	import mx.controls.Alert;
+	import mx.core.Application;
+	
 	public class BunkerMarker
 	{
+
 		public var bunkerThumb: BunkerThumb;
 		public var bunker: Object;
 		public var marker: Marker;
@@ -47,10 +51,16 @@ package
 
 		public function click(event:MapMouseEvent) : void {
 			bunkerThumb.bunker = bunker;
+			Application.application.sizer.addChild(bunkerThumb);
+            bunkerThumb.validateSize(true);
+                
+			var w: int = bunkerThumb.measuredWidth;
+			bunkerThumb.width = w;
+
 			marker.openInfoWindow(
 				new InfoWindowOptions({
 						customContent: bunkerThumb,
-						width: bunkerThumb.width,
+						width: w,
 						drawDefaultFrame:true
 					}));
 		}
