@@ -20,6 +20,7 @@ package referenceData
 				{type: "kanaalbunker"},
 				{type: "commando 1e lijn"},
 				{type: "commando 2e lijn"},
+				{type: "connectiekamer"}
 			];
 			
 			return result;

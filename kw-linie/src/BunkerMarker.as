@@ -17,6 +17,7 @@ package
 		public static var bunkerTypeColors: Object = {
 			"commando 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800},
 			"commando 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800},
+			"connectiekamer": {strokeColor: 0xDDDD88, fillColor: 0x008888},
 			"kanaalbunker": {strokeColor: 0xDDDD88, fillColor: 0x000088},
 			"verdediging 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x880000},
 			"verdediging 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x008800},
