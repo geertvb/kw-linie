@@ -121,6 +121,7 @@
 		    	var result : Boolean = false;
 		    	result ||= (type == "commando 1e lijn") && cb_commando_1e_lijn.selected;
 		    	result ||= (type == "commando 2e lijn") && cb_commando_2e_lijn.selected;
+		    	result ||= (type == "connectiekamer") && cb_connectiekamer.selected;
 		    	result ||= (type == "kanaalbunker") && cb_kanaalbunker.selected;
 		    	result ||= (type == "verdediging 1e lijn") && cb_verdediging_1e_lijn.selected;
 		    	result ||= (type == "verdediging 2e lijn") && cb_verdediging_2e_lijn.selected;
@@ -294,6 +295,14 @@
 					iconColor="#FFFFFF"
 					label="commando 2e lijn" 
 					id="cb_commando_2e_lijn" 
+					valueCommit="filterMarkers();"
+					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					fillColors="[#008888,#008888]"
+					fillAlphas="[1,1]"
+					iconColor="#FFFFFF"
+					label="connectiekamer" 
+					id="cb_connectiekamer" 
 					valueCommit="filterMarkers();"
 					selected="true" color="#FFFFFF" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
 				<mx:CheckBox 

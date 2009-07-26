@@ -40,6 +40,10 @@ package referenceData
 				{code: "Te"},
 				{code: "Th"},
 				{code: "TPM"},
+				{code: "VA"},
+				{code: "VB"},
+				{code: "VC"},
+				{code: "VD"},
 				{code: "We"}
 			];
 			
