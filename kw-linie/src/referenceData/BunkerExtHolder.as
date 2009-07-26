@@ -14,6 +14,10 @@ package referenceData
 			result = new Object();
 			result.data = [
 				{ext: ""},
+				{ext: "1"},
+				{ext: "2"},
+				{ext: "/1"},
+				{ext: "b"},
 				{ext: "bis"}
 			];
 			
