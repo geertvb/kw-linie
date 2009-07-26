@@ -277,7 +277,10 @@
     	source="{emptyList}"
     	sort="{deelgemeenteSort}" />
 
-	<mx:HBox horizontalGap="5">
+	<mx:VBox id="sizer" x="16" y="48" width="100%">
+	</mx:VBox>
+
+	<mx:HBox x="0" y="0" horizontalGap="5">
 
 		<mx:VBox>
 
