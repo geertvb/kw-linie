@@ -128,11 +128,19 @@
 		    	return result;
 		    }
 		    
+		    private function filterAanwezigheid(aanwezig: Boolean) : Boolean {
+		    	var result : Boolean = false;
+		    	result ||= aanwezig && cb_aanwezig.selected;
+		    	result ||= !aanwezig && cb_afwezig.selected;
+		    	return result;
+		    }
+		    
 		    private function filterMarkers() : void {
 		    	for each (var bunkerMarker: BunkerMarker in bunkerMarkers) {
 		    		var bunker: Object = bunkerMarker.bunker;
 		    		var visible: Boolean = true;
 		    		visible &&= filterTypeMarkers(bunker.type);
+		    		visible &&= filterAanwezigheid(bunker.aanwezig);
 		    		visible &&= codeFilter.selectedIndex<=0 || (bunker.code == codeFilter.selectedLabel);
 		    		visible &&= gemeenteFilter.selectedIndex<=0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
 		    		visible &&= deelgemeenteFilter.selectedIndex<=0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
@@ -366,6 +374,26 @@
 					</mx:itemRenderer>
 				</mx:ComboBox>
 			</mx:HBox>
+
+			<mx:Label text="Aan- en afwezigheid:"  color="#FFFFFF" fontWeight="bold"/>
+			<mx:VBox paddingLeft="8">
+				<mx:CheckBox 
+					label="aanwezig" 
+					id="cb_aanwezig" 
+					valueCommit="filterMarkers();"
+					selected="true" 
+					color="#FFFFFF" 
+					textRollOverColor="#FFFFFF" 
+					textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					label="afwezig" 
+					id="cb_afwezig" 
+					valueCommit="filterMarkers();"
+					selected="true" 
+					color="#FFFFFF" 
+					textRollOverColor="#FFFFFF" 
+					textSelectedColor="#FFFFFF"/>
+			</mx:VBox>
 				
 		</mx:VBox>
 
