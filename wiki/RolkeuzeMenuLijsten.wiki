@@ -4,3 +4,4 @@ BunkerBezoekFiche > Elementen > Schietgaten
 
  * Affuit: Type
  * Affuit: Toestand
+ * Observatiesleuf: Toestand
