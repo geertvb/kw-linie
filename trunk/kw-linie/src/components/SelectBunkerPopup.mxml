@@ -8,6 +8,8 @@
 	<mx:Script>
 		<![CDATA[
 			import util.BindingUtils;
+			import referenceData.BunkerCodeHolder;
+			import referenceData.BunkerTypeHolder;
 			import mx.core.Application;
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
@@ -15,17 +17,13 @@
 			import mx.rpc.events.ResultEvent;
 			import components.BunkerRenderer;
 		
-			private static var _instance: SelectBunkerPopup;
-			
 			[Bindable]
-			private static var typeDP: Array = [
-				"",
-				"verdediging 1e lijn",
-				"verdediging 2e lijn",
-				"verdediging antitankcentrum",
-				"kanaalbunker",
-				"commandobunker"
-			];
+			private var types: Object = BunkerTypeHolder.getInstance2();
+
+			[Bindable]
+			private var codes: Object = BunkerCodeHolder.getInstance2();
+
+			private static var _instance: SelectBunkerPopup;
 			
 			public static function getInstance() : SelectBunkerPopup {
 				if (_instance == null) {
@@ -69,8 +67,8 @@
 			}
 			
 			private function bind(vo: Object) : void {
-				vo.type = BindingUtils.textinputToString(ti_type);
-				vo.code = BindingUtils.textinputToString(ti_code);
+				vo.type = BindingUtils.comboBoxExToString(cb_type);
+				vo.code = BindingUtils.comboBoxExToString(cb_code);
 				vo.nummer = BindingUtils.textinputToString(ti_nummer);
 				vo.gemeente = BindingUtils.textinputToString(ti_gemeente);
 				vo.deelgemeente = BindingUtils.textinputToString(ti_deelgemeente);
@@ -97,14 +95,20 @@
     
 	<mx:Form>
 		<mx:FormItem label="Type">
-			<components:ComboBoxEx
-				rowCount="6"
-				dataProvider="{typeDP}" 
-				id="cb_type" />
-			<mx:TextInput id="ti_type" />
+			<components:ComboBoxEx 
+				id="cb_type"
+				dataProvider="{types.data}" 
+				labelField="label"
+				valueField="type"
+				width="200"/>
 		</mx:FormItem>
 		<mx:FormItem label="Code">
-			<mx:TextInput id="ti_code"/>
+			<components:ComboBoxEx 
+				id="cb_code"
+				dataProvider="{codes.data}" 
+				labelField="label"
+				valueField="code"
+				width="200"/>
 		</mx:FormItem>
 		<mx:FormItem label="Nummer">
 			<mx:TextInput id="ti_nummer"/>
