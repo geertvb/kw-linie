@@ -31,7 +31,12 @@
 				map.addControl(new ZoomControl());
 				map.addControl(new PositionControl());
 				map.addControl(new MapTypeControl());
-				map.setCenter(latLng,13, MapType.NORMAL_MAP_TYPE);
+				if (latLng.lat() == 0 || latLng.lng() == 0) {
+					latLng = new LatLng(50.97652410041966, 4.5602220120386106);
+					map.setCenter(latLng, 10, MapType.NORMAL_MAP_TYPE);
+				} else {
+					map.setCenter(latLng,13, MapType.NORMAL_MAP_TYPE);
+				}
 				marker = new Marker(latLng,
 				new MarkerOptions({
 						strokeStyle: new StrokeStyle({color: 0xDDDD88}),
