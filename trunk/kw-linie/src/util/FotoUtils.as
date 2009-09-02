@@ -6,6 +6,8 @@ package util
 	import flash.net.URLVariables;
 	import flash.net.navigateToURL;
 	
+	import mx.core.Application;
+	
 	public class FotoUtils
 	{
 		
@@ -26,7 +28,9 @@ package util
 			parameters.foto_id = foto_id;
 
 			var request: URLRequest = new URLRequest();
-			request.url = "download_foto.php";
+			var appUrl: String = Application.application.url;
+			var i: int = appUrl.lastIndexOf("/");
+			request.url = appUrl.substring(0,i+1) + "download_foto.php";
 			request.method = URLRequestMethod.GET;
 			request.data = parameters;
 
