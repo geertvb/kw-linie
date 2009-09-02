@@ -111,13 +111,13 @@
 	<mx:VBox width="718">
 		<mx:DataGrid id="anderObjectBezoekGrid"
 			dataProvider="{anderObjectBezoeken}" 
-			width="100%"
 			selectedIndex="0"
 			valueCommit="anderObjectBezoekGridChange(event)"
 			change="anderObjectBezoekGridChange(event)">
 			<mx:columns>
-				<mx:DataGridColumn dataField="anderobjectbezoek_id" headerText="ID" width="40" />
-				<mx:DataGridColumn dataField="datum" headerText="Datum" width="64" />
+				<mx:DataGridColumn dataField="anderobjectbezoek_id" headerText="ID" width="40" visible="false"/>
+				<mx:DataGridColumn dataField="datum" headerText="Datum" width="80" />
+				<mx:DataGridColumn dataField="anderobject_id" headerText="Object ID" width="80" />
 			</mx:columns>
 		</mx:DataGrid>
 

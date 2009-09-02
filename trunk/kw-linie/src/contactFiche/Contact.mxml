@@ -39,7 +39,7 @@
     </mx:RemoteObject>
 
 	<mx:Form x="0" y="0">
-		<mx:FormItem label="ID">
+		<mx:FormItem label="ID" visible="false" includeInLayout="false">
 			<mx:TextInput width="64" id="ti_contact_id" text="{data.contact_id}" editable="false"/>
 		</mx:FormItem>
 		<mx:FormItem label="Naam">
