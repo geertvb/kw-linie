@@ -29,7 +29,7 @@
 	</mx:Script>
 
 	<mx:Form x="0" y="0">
-		<mx:FormItem label="Uniek ID">
+		<mx:FormItem label="Uniek ID" visible="false" includeInLayout="false">
 			<mx:TextInput 
 				id="ti_bunkerbezoek_id"
 				editable="false" 

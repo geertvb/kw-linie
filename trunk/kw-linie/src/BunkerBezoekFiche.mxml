@@ -111,13 +111,12 @@
 	
 		<mx:DataGrid id="bunkerBezoekGrid"
 			dataProvider="{bunkerbezoeken}" 
-			width="100%"
 			selectedIndex="0"
 			valueCommit="bunkerBezoekGridChange(event)"
 			change="bunkerBezoekGridChange(event)">
 			<mx:columns>
-				<mx:DataGridColumn dataField="bunkerbezoek_id" headerText="ID" width="40" />
-				<mx:DataGridColumn dataField="datum" headerText="Datum" width="64" />
+				<mx:DataGridColumn dataField="datum" headerText="Datum" width="80" />
+				<mx:DataGridColumn dataField="bunker_id" headerText="Bunker ID" width="80" />
 			</mx:columns>
 		</mx:DataGrid>
 
