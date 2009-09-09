@@ -1,6 +1,8 @@
 package coo{
 	import com.google.maps.LatLng;
 	
+	import flash.geom.Point;
+	
 	
 	public class Lambert72Coo {
 		public var a: Number = 6378388.0;
@@ -49,6 +51,18 @@ package coo{
 				currentPhi = Math.PI/2 - 2 * Math.atan(t * Math.pow((1 - this.e * Math.sin(previousPhi)) / (1 + this.e * Math.sin(previousPhi)), this.e/2));
 			}
 			return new LatLng(currentPhi * 180 / Math.PI, lambda * 180 / Math.PI);
+		}
+		
+		public function invConvert(latLng: LatLng) : Point {
+			var phi: Number = latLng.lat() / 180.0 * Math.PI;
+			var lambda: Number = latLng.lng() / 180.0 * Math.PI;
+			
+			var t: Number = Math.tan(Math.PI / 4 - phi / 2) / Math.pow((1 - e * Math.sin(phi)) / (1 + e * Math.sin(phi)), e / 2);
+			var r: Number = a * g * Math.pow(t, n);
+			var theta: Number = n * (lambda - lambda0);
+			var x: Number = x0 + r * Math.sin(theta);
+			var y: Number = y0 + r0 - r * Math.cos(theta);
+			return new Point(x, y);
 		}
 	}
 
