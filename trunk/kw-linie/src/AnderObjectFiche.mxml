@@ -15,6 +15,9 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			[Bindable]
+			public var fltr: Object = new Object();
+			
 			public function creationComplete() : void {
 				refreshGrid();
 			}
@@ -95,10 +98,31 @@
 					null,
 					close_verwijder_alert);
 			}
+
+			public function filter(fieldname: String, fieldvalue: String) : void {
+				//Alert.show("filter " + fieldname + " = " + fieldvalue);
+				fltr[fieldname] = fieldvalue;
+				andereObjecten.refresh();
+			}
+			
+			public function filterItems(item: Object) : Boolean {
+				for (var fieldname:String in fltr) {
+					var needle: String = fltr[fieldname];
+					if (needle != null && needle.length > 0) {
+						var v: String = "" + item[fieldname];
+						if (v.toLowerCase().indexOf(needle.toLowerCase()) < 0) {
+							return false;
+						}
+					}
+				}  
+				return true;
+			}
+			
 		]]>
 	</mx:Script>
 	
 	<mx:ArrayCollection id="andereObjecten" 
+		filterFunction="filterItems"
 		source="{anderObjectService.findAll.lastResult}"/>
 	
 	<mx:Object id="anderObject" />
@@ -122,11 +146,91 @@
 			valueCommit="refresh_anderobject()"
 			change="refresh_anderobject()">
 			<mx:columns>
-				<mx:DataGridColumn dataField="anderobject_id" headerText="ID" width="40" />
-				<mx:DataGridColumn dataField="type" headerText="Type" width="128" />
-				<mx:DataGridColumn dataField="gemeente" headerText="Gemeente" />
-				<mx:DataGridColumn dataField="deelgemeente" headerText="Deelgemeente" />
-				<mx:DataGridColumn dataField="straat" headerText="Straat" />
+				<mx:DataGridColumn dataField="anderobject_id" width="40">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="ID" width="100%"/>
+								<mx:TextInput 
+									id="f_anderobject_id"
+									text="{outerDocument.fltr.anderobject_id}"
+									change="outerDocument.filter('anderobject_id', f_anderobject_id.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="type" width="128">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Type" width="100%"/>
+								<mx:TextInput 
+									id="f_type"
+									text="{outerDocument.fltr.type}"
+									change="outerDocument.filter('type', f_type.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="gemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Gemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_gemeente"
+									text="{outerDocument.fltr.gemeente}"
+									change="outerDocument.filter('gemeente', f_gemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="deelgemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Deelgemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_deelgemeente"
+									text="{outerDocument.fltr.deelgemeente}"
+									change="outerDocument.filter('deelgemeente', f_deelgemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="straat">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Straat" width="100%"/>
+								<mx:TextInput 
+									id="f_straat"
+									text="{outerDocument.fltr.straat}"
+									change="outerDocument.filter('straat', f_straat.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
 			</mx:columns>
 		</mx:DataGrid>
 		
