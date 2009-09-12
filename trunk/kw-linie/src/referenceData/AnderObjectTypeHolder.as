@@ -18,8 +18,10 @@ package referenceData
 				{type: "brug"},
 				{type: "sluis"},
 				{type: "geassocieerd huis"},
+				{type: "cointetelement"},
 				{type: "loopgracht"},
-				{type: "antitankgracht"}
+				{type: "antitankgracht"},
+				{type: "ander"}
 			];
 			
 			return result;
