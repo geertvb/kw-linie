@@ -18,6 +18,9 @@
 			[Bindable]
 			private var bunkerBezoek: Object;
 		
+			[Bindable]
+			public var fltr: Object = new Object();
+			
 			private function creationComplete() : void {
 				refreshBunkerBezoekGrid();
 			}
@@ -91,11 +94,33 @@
 					null,
 					close_verwijder_alert);
 			}
-
+			
+			public function filter(fieldname: String, fieldvalue: String) : void {
+				//Alert.show("filter " + fieldname + " = " + fieldvalue);
+				fltr[fieldname] = fieldvalue;
+				bunkerbezoeken.refresh();
+			}
+			
+			public function filterBezoeken(item: Object) : Boolean {
+				for (var fieldname:String in fltr) {
+					var needle: String = fltr[fieldname];
+					if (needle != null && needle.length > 0) {
+						var v: String = "" + item[fieldname];
+						if (v.toLowerCase().indexOf(needle.toLowerCase()) < 0) {
+							return false;
+						}
+					}
+				}  
+				return true;
+			}
+			
 		]]>
 	</mx:Script>
 
-	<mx:ArrayCollection id="bunkerbezoeken" source="{bunkerBezoekService.findAll.lastResult}"/>
+	<mx:ArrayCollection 
+		id="bunkerbezoeken" 
+		filterFunction="filterBezoeken" 
+		source="{bunkerBezoekService.findAll.lastResult}"/>
 	
 	<mx:RemoteObject id="bunkerBezoekService"
 		source="kwl.BunkerBezoekService" 
@@ -112,11 +137,131 @@
 		<mx:DataGrid id="bunkerBezoekGrid"
 			dataProvider="{bunkerbezoeken}" 
 			selectedIndex="0"
+			width="100%"
 			valueCommit="bunkerBezoekGridChange(event)"
-			change="bunkerBezoekGridChange(event)">
+			change="bunkerBezoekGridChange(event)" 
+			rowCount="6" 
+			headerHeight="50">
 			<mx:columns>
-				<mx:DataGridColumn dataField="datum" headerText="Datum" width="80" />
-				<mx:DataGridColumn dataField="bunker_id" headerText="Bunker ID" width="80" />
+				<mx:DataGridColumn dataField="datum" width="80">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Datum" width="100%"/>
+								<mx:TextInput 
+									id="f_datum"
+									text="{outerDocument.fltr.datum}"
+									change="outerDocument.filter('datum', f_datum.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="invuller_naam">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Invuller" width="100%"/>
+								<mx:TextInput 
+									id="f_invuller_naam"
+									text="{outerDocument.fltr.invuller_naam}"
+									change="outerDocument.filter('invuller_naam', f_invuller_naam.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_id" width="40">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="ID" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_id"
+									text="{outerDocument.fltr.bunker_id}"
+									change="outerDocument.filter('bunker_id', f_bunker_id.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_nummer" width="60">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Nummer" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_nummer"
+									text="{outerDocument.fltr.bunker_nummer}"
+									change="outerDocument.filter('bunker_nummer', f_bunker_nummer.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_type">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Type" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_type"
+									text="{outerDocument.fltr.bunker_type}"
+									change="outerDocument.filter('bunker_type', f_bunker_type.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_gemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Gemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_gemeente"
+									text="{outerDocument.fltr.bunker_gemeente}"
+									change="outerDocument.filter('bunker_gemeente', f_bunker_gemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_deelgemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Deelgemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_deelgemeente"
+									text="{outerDocument.fltr.bunker_deelgemeente}"
+									change="outerDocument.filter('bunker_deelgemeente', f_bunker_deelgemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
 			</mx:columns>
 		</mx:DataGrid>
 

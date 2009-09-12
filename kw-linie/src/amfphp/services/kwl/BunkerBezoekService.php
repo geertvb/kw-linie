@@ -35,13 +35,23 @@ class BunkerBezoekService {
     }
     
 	function findAll() {
-    	$sql = "SELECT";
-    	$sql .= "  * ";
-    	$sql .= "FROM";
-    	$sql .= "  `kwl_bunkerbezoek`";
-    	$sql .= "ORDER BY";
-    	$sql .= "  `bunkerbezoek_id` ASC";
-    	return findSQL($sql);
+		$sql[] = "SELECT ";
+		$sql[] = "  `kwl_bunkerbezoek`.*,";
+		$sql[] = "  `kwl_bunker`.`nummer` as `bunker_nummer`,";
+		$sql[] = "  `kwl_bunker`.`type` as `bunker_type`,";
+		$sql[] = "  `kwl_bunker`.`gemeente` as `bunker_gemeente`,";
+		$sql[] = "  `kwl_bunker`.`deelgemeente` as `bunker_deelgemeente`,";
+		$sql[] = "   CONCAT_WS(' ', `kwl_contact`.`voornaam`,`kwl_contact`.`naam`) as `invuller_naam`";
+		$sql[] = "FROM ";
+		$sql[] = "  `kwl_bunkerbezoek` ";
+		$sql[] = "LEFT JOIN";
+		$sql[] = "  `kwl_bunker` ON (`kwl_bunker`.`bunker_id`=`kwl_bunkerbezoek`.`bunker_id`)";
+		$sql[] = "LEFT JOIN";
+		$sql[] = "  `kwl_contact` ON (`kwl_contact`.`contact_id`=`kwl_bunkerbezoek`.`invuller_id`)";
+		$sql[] = "ORDER BY";
+		$sql[] = "  `kwl_bunkerbezoek`.`datum` DESC";
+		
+    	return findSQL(implode(" ", $sql));
     }
 	
 	function findByID($id) {
