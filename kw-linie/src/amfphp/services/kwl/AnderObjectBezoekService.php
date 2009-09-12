@@ -5,13 +5,22 @@ include_once '../../../mysqliUtils.php';
 class AnderObjectBezoekService {
 
 	function findAll() {
-    	$sql = "SELECT";
-    	$sql .= "  * ";
-    	$sql .= "FROM";
-    	$sql .= "  `kwl_anderobjectbezoek`";
-    	$sql .= "ORDER BY";
-    	$sql .= "  `anderobjectbezoek_id` ASC";
-    	return findSQL($sql);
+		$sql[] = "SELECT ";
+		$sql[] = "  `kwl_anderobjectbezoek`.*,";
+		$sql[] = "  `kwl_anderobject`.`type` as `anderobject_type`,";
+		$sql[] = "  `kwl_anderobject`.`gemeente` as `anderobject_gemeente`,";
+		$sql[] = "  `kwl_anderobject`.`deelgemeente` as `anderobject_deelgemeente`,";
+		$sql[] = "   CONCAT_WS(' ', `kwl_contact`.`voornaam`,`kwl_contact`.`naam`) as `invuller_naam`";
+		$sql[] = "FROM ";
+		$sql[] = "  `kwl_anderobjectbezoek` ";
+		$sql[] = "LEFT JOIN";
+		$sql[] = "  `kwl_anderobject` ON (`kwl_anderobject`.`anderobject_id`=`kwl_anderobjectbezoek`.`anderobject_id`)";
+		$sql[] = "LEFT JOIN";
+		$sql[] = "  `kwl_contact` ON (`kwl_contact`.`contact_id`=`kwl_anderobjectbezoek`.`invuller_id`)";
+		$sql[] = "ORDER BY";
+		$sql[] = "  `kwl_anderobjectbezoek`.`datum` DESC";
+		
+    	return findSQL(implode(" ", $sql));
     }
 
     function remove($id) {

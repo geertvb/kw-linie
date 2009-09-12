@@ -16,6 +16,9 @@
 			import mx.rpc.events.FaultEvent;
 		
 			[Bindable]
+			public var fltr: Object = new Object();
+			
+			[Bindable]
 			private var anderObjectBezoek: Object;
 		
 			private function refreshGrid() : void {
@@ -84,10 +87,32 @@
 					null,
 					close_verwijder_alert);
 			}
+
+			public function filter(fieldname: String, fieldvalue: String) : void {
+				//Alert.show("filter " + fieldname + " = " + fieldvalue);
+				fltr[fieldname] = fieldvalue;
+				anderObjectBezoeken.refresh();
+			}
+			
+			public function filterItems(item: Object) : Boolean {
+				for (var fieldname:String in fltr) {
+					var needle: String = fltr[fieldname];
+					if (needle != null && needle.length > 0) {
+						var v: String = "" + item[fieldname];
+						if (v.toLowerCase().indexOf(needle.toLowerCase()) < 0) {
+							return false;
+						}
+					}
+				}  
+				return true;
+			}
+			
 		]]>
 	</mx:Script>
 
-	<mx:ArrayCollection id="anderObjectBezoeken" 
+	<mx:ArrayCollection 
+		id="anderObjectBezoeken" 
+		filterFunction="filterItems"
 		source="{anderObjectBezoekService.findAll.lastResult}"/>
 	
 	<mx:RemoteObject id="anderObjectBezoekService"
@@ -112,12 +137,115 @@
 		<mx:DataGrid id="anderObjectBezoekGrid"
 			dataProvider="{anderObjectBezoeken}" 
 			selectedIndex="0"
+			width="100%"
 			valueCommit="anderObjectBezoekGridChange(event)"
-			change="anderObjectBezoekGridChange(event)">
+			change="anderObjectBezoekGridChange(event)"
+			headerHeight="50"
+			rowCount="6">
 			<mx:columns>
 				<mx:DataGridColumn dataField="anderobjectbezoek_id" headerText="ID" width="40" visible="false"/>
-				<mx:DataGridColumn dataField="datum" headerText="Datum" width="80" />
-				<mx:DataGridColumn dataField="anderobject_id" headerText="Object ID" width="80" />
+				<mx:DataGridColumn dataField="datum" width="80">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Datum" width="100%"/>
+								<mx:TextInput 
+									id="f_datum"
+									text="{outerDocument.fltr.datum}"
+									change="outerDocument.filter('datum', f_datum.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="invuller_naam">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Invuller" width="100%"/>
+								<mx:TextInput 
+									id="f_invuller_naam"
+									text="{outerDocument.fltr.invuller_naam}"
+									change="outerDocument.filter('invuller_naam', f_invuller_naam.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="anderobject_id" width="80">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Object ID" width="100%"/>
+								<mx:TextInput 
+									id="f_anderobject_id"
+									text="{outerDocument.fltr.anderobject_id}"
+									change="outerDocument.filter('anderobject_id', f_anderobject_id.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="anderobject_type" width="80">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Type" width="100%"/>
+								<mx:TextInput 
+									id="f_anderobject_type"
+									text="{outerDocument.fltr.anderobject_type}"
+									change="outerDocument.filter('anderobject_type', f_anderobject_type.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="anderobject_gemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Gemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_anderobject_gemeente"
+									text="{outerDocument.fltr.anderobject_gemeente}"
+									change="outerDocument.filter('anderobject_gemeente', f_anderobject_gemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="anderobject_deelgemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Deelgemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_anderobject_deelgemeente"
+									text="{outerDocument.fltr.anderobject_deelgemeente}"
+									change="outerDocument.filter('anderobject_deelgemeente', f_anderobject_deelgemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
 			</mx:columns>
 		</mx:DataGrid>
 
