@@ -5,6 +5,7 @@
 		<mx:Object label="Niet bekeken" />
 		<mx:Object label="Geheel ondergronds" />
 		<mx:Object label="Gedeeltelijk ondergronds" />
+		<mx:Object label="Bovengronds" />
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_expositie">
