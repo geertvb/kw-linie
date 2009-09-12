@@ -8,9 +8,9 @@
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_affuit_toestand">
-		<mx:Object label="toestand 1" />
-		<mx:Object label="toestand 2" />
-		<mx:Object label="toestand 3" />
+		<mx:Object label="aanwezig" />
+		<mx:Object label="afwezig" />
+		<mx:Object label="enkel standvoet aanwezig" />
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_observatiesleuf_toestand">
@@ -20,9 +20,8 @@
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_affuit_type">
-		<mx:Object label="type 1" />
-		<mx:Object label="type 2" />
-		<mx:Object label="type 3" />
+		<mx:Object label="Chardome" />
+		<mx:Object label="Andere" />
 	</mx:ArrayCollection>
 	
 	<mx:Script>
