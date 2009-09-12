@@ -161,7 +161,9 @@
 			width="100%"
 			selectedIndex="0"
 			valueCommit="bunkerGridChange(event)"
-			change="bunkerGridChange(event)" rowCount="6" headerHeight="50">
+			change="bunkerGridChange(event)" 
+			rowCount="6" 
+			headerHeight="50">
 			<mx:columns>
 				<mx:DataGridColumn dataField="bunker_id" width="40">
 					<mx:headerRenderer>
