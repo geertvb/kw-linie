@@ -797,7 +797,7 @@ class BunkerBezoekService {
 			$sql .= "   `schootsveld`,";
 			$sql .= "   `afsluitluik_buitenzijde_aanwezig`,";
 			$sql .= "   `afsluitluik_bedieningsketting_aanwezig`,";
-			$sql .= "   `afsluitluik_binnenzijde_aanwezig`,";
+			//$sql .= "   `afsluitluik_binnenzijde_aanwezig`,";
 
 			$sql .= "   `affuit_aanwezig`,";
 			$sql .= "   `affuit_type`,";
@@ -820,12 +820,13 @@ class BunkerBezoekService {
 			$sql .= " ) VALUES (";
 			$sql .= "   ?,";
 			$sql .= "   ?,";
+			$sql .= "   ?,";
 			
 			$sql .= "   ?,";
 			$sql .= "   ?,";
 			$sql .= "   ?,";
 			$sql .= "   ?,";
-			$sql .= "   ?,";
+			//$sql .= "   ?,";
 
 			$sql .= "   ?,";
 			$sql .= "   ?,";
@@ -843,9 +844,8 @@ class BunkerBezoekService {
 			$sql .= "   ?,";
 			$sql .= "   ?,";
 			$sql .= "   ?,";
-			$sql .= "   ?,";
-
 			$sql .= "   ?";
+
 			$sql .= " ) ON DUPLICATE KEY UPDATE";
 			$sql .= " `niet_bekeken` = VALUES(`niet_bekeken`),";
 
@@ -853,7 +853,7 @@ class BunkerBezoekService {
 			$sql .= " `schootsveld` = VALUES(`schootsveld`),";
 			$sql .= " `afsluitluik_buitenzijde_aanwezig` = VALUES(`afsluitluik_buitenzijde_aanwezig`),";
 			$sql .= " `afsluitluik_bedieningsketting_aanwezig` = VALUES(`afsluitluik_bedieningsketting_aanwezig`),";
-			$sql .= " `afsluitluik_binnenzijde_aanwezig` = VALUES(`afsluitluik_binnenzijde_aanwezig`),";
+			//$sql .= " `afsluitluik_binnenzijde_aanwezig` = VALUES(`afsluitluik_binnenzijde_aanwezig`),";
 			
 			$sql .= " `affuit_aanwezig` = VALUES(`affuit_aanwezig`),";
 			$sql .= " `affuit_type` = VALUES(`affuit_type`),";
@@ -875,7 +875,7 @@ class BunkerBezoekService {
 			
 			if ($stmt = $mysqli->prepare($sql)) {
 				foreach ($schietgaten as $schietgat) {
-					$stmt->bind_param('iiisiiiiissiiisiiiiiiis', 
+					$stmt->bind_param('iiisiiiissiiisiiiiiiis', 
 						$bunkerbezoek_id, 
 						$schietgat["schietgat_nummer"], 
 						$schietgat["niet_bekeken"],
@@ -884,7 +884,7 @@ class BunkerBezoekService {
 						$schietgat["schootsveld"],
 						$schietgat["afsluitluik_buitenzijde_aanwezig"],
 						$schietgat["afsluitluik_bedieningsketting_aanwezig"],
-						$schietgat["afsluitluik_binnenzijde_aanwezig"],
+						//$schietgat["afsluitluik_binnenzijde_aanwezig"],
 
 						$schietgat["affuit_aanwezig"],
 						$schietgat["affuit_type"],

@@ -33,7 +33,7 @@
 				vo.schootsveld = BindingUtils.textinputToInteger(ti_schootsveld);
 				vo.afsluitluik_buitenzijde_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_buitenzijde_aanwezig);
 				vo.afsluitluik_bedieningsketting_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_bedieningsketting_aanwezig);
-				vo.afsluitluik_binnenzijde_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_binnenzijde_aanwezig);
+				vo.afsluitluik_binnenzijde_aanwezig = false; //BindingUtils.checkboxToBoolean(cb_afsluitluik_binnenzijde_aanwezig);
 				vo.affuit_aanwezig = BindingUtils.checkboxToBoolean(cb_affuit_aanwezig);
 				vo.affuit_type = BindingUtils.comboBoxExToString(cb_affuit_type);
 				vo.affuit_toestand = BindingUtils.comboBoxExToString(cb_affuit_toestand);
@@ -93,10 +93,12 @@
 				id="cb_afsluitluik_bedieningsketting_aanwezig"
 				selected="{data.afsluitluik_bedieningsketting_aanwezig}"
 				label="Bedieningsketting"/>
+			<!--
 			<mx:CheckBox 
 				id="cb_afsluitluik_binnenzijde_aanwezig"
 				selected="{data.afsluitluik_binnenzijde_aanwezig}"
 				label="Binnenzijde aanwezig"/>
+			-->
 		</mx:FormItem>
 
 		<mx:FormItem label="Affuit">
