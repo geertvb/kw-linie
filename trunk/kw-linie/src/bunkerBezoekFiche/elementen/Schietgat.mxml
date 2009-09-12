@@ -20,6 +20,7 @@
 
 	<mx:ArrayCollection id="dp_affuit_type">
 		<mx:Object label="Chardome" />
+		<mx:Object label="Squifflet-opstelling" />
 		<mx:Object label="Andere" />
 	</mx:ArrayCollection>
 	
