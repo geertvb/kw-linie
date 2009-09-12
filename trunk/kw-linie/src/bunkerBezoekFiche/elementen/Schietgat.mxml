@@ -14,9 +14,8 @@
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_observatiesleuf_toestand">
-		<mx:Object label="toestand 1" />
-		<mx:Object label="toestand 2" />
-		<mx:Object label="toestand 3" />
+		<mx:Object label="dichtgemetst" />
+		<mx:Object label="open" />
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_affuit_type">
