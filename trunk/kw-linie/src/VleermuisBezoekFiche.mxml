@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 	
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute"
+	backgroundColor="#637449" 
+	themeColor="#637449" 
+	creationComplete="refreshGrid()"
+	backgroundGradientColors="[#637449,#637449]" 
+	xmlns:tab="vleermuisBezoekFiche.*"
+	xmlns:local="*">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			private var idfield: String = "vleermuisbezoek_id";
+			
+			[Bindable]
+			private var item: Object;
+			
+			[Bindable]
+			public var filterFields: Object = new Object();
+			
+			private function creationComplete() : void {
+				refreshGrid();
+			}
+			
+			private function refreshGrid() : void {
+				service.findAll();
+			}
+			
+			private function gridChange(event : Event) : void {
+				if (grid.selectedItem != null) {
+					service.findByID(grid.selectedItem[idfield]);
+				}
+			}
+			
+			private function fault(event: FaultEvent) : void {
+				Alert.show(event.fault.faultString);
+			}
+			
+			private function result_findByID(event: ResultEvent) : void {
+				item = event.result;
+			}
+			
+			private function bind(vo: Object) : void {
+				bezoekView.bind(vo);
+				vleermuizenView.bind(vo);
+				opmerkingenView.bind(vo);
+			}
+			
+			private function click_bewaar(event: Event) : void {
+				var vo: Object = new Object();
+				bind(vo);
+				service.save(vo);
+			}
+			
+			private function result_save(event: ResultEvent) : void {
+				//Alert.show("" + event.result);
+				refreshGrid();
+			}
+			
+			private function click_voeg_toe(event: Event) : void {
+				service.create();
+			}
+			
+			private function result_create(event: ResultEvent) : void {
+				var newItem: Object = new Object();
+				newItem[idfield] = event.result;
+				items.addItem(newItem);
+				grid.selectedItem = newItem;
+			}
+			
+			private function result_remove(event: ResultEvent) : void {
+				refreshGrid();
+			}
+			
+			private function close_verwijder_alert(event: CloseEvent) : void {
+				if (event.detail==Alert.YES) {
+					service.remove(grid.selectedItem[idfield]);
+				}
+			}
+			
+			private function click_verwijder(event: Event) : void {
+				Alert.yesLabel = "Ja";
+				Alert.noLabel = "Nee";
+				Alert.show(
+					"Ben je zeker dat je de fiche wil verwijderen?",
+					"Verwijderen",
+					Alert.YES | Alert.NO,
+					null,
+					close_verwijder_alert);
+			}
+			
+			public function setFilterField(fieldname: String, fieldvalue: String) : void {
+				//Alert.show("filter " + fieldname + " = " + fieldvalue);
+				filterFields[fieldname] = fieldvalue;
+				items.refresh();
+			}
+			
+			public function filterItem(item: Object) : Boolean {
+				for (var fieldname:String in filterFields) {
+					var needle: String = filterFields[fieldname];
+					if (needle != null && needle.length > 0) {
+						var v: String = "" + item[fieldname];
+						if (v.toLowerCase().indexOf(needle.toLowerCase()) < 0) {
+							return false;
+						}
+					}
+				}  
+				return true;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:ArrayCollection 
+		id="items" 
+		filterFunction="filterItem" 
+		source="{service.findAll.lastResult}"/>
+	
+	<mx:RemoteObject 
+		id="service"
+		source="kwl.VleermuisBezoekService" 
+		destination="amfphp"
+		fault="fault(event)">
+		<mx:method name="findByID" result="result_findByID(event)" />
+		<mx:method name="save" result="result_save(event)" />
+		<mx:method name="remove" result="result_remove(event)" />
+		<mx:method name="create" result="result_create(event)" />
+	</mx:RemoteObject>
+	
+	<mx:VBox width="886">
+		
+		<mx:DataGrid 
+			id="grid"
+			dataProvider="{items}" 
+			selectedIndex="0"
+			width="100%"
+			valueCommit="gridChange(event)"
+			change="gridChange(event)" 
+			rowCount="6" 
+			headerHeight="50">
+			<mx:columns>
+				<mx:DataGridColumn dataField="datum" width="80">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Datum" width="100%"/>
+								<mx:TextInput 
+									id="f_datum"
+									text="{outerDocument.filterFields.datum}"
+									change="outerDocument.setFilterField('datum', f_datum.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="invuller_naam">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Invuller" width="100%"/>
+								<mx:TextInput 
+									id="f_invuller_naam"
+									text="{outerDocument.filterFields.invuller_naam}"
+									change="outerDocument.setFilterField('invuller_naam', f_invuller_naam.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_id" width="40">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="ID" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_id"
+									text="{outerDocument.filterFields.bunker_id}"
+									change="outerDocument.setFilterField('bunker_id', f_bunker_id.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_nummer" width="60">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Nummer" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_nummer"
+									text="{outerDocument.filterFields.bunker_nummer}"
+									change="outerDocument.setFilterField('bunker_nummer', f_bunker_nummer.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_type">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Type" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_type"
+									text="{outerDocument.filterFields.bunker_type}"
+									change="outerDocument.setFilterField('bunker_type', f_bunker_type.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_gemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Gemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_gemeente"
+									text="{outerDocument.filterFields.bunker_gemeente}"
+									change="outerDocument.setFilterField('bunker_gemeente', f_bunker_gemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="bunker_deelgemeente">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:VBox>
+								<mx:Label text="Deelgemeente" width="100%"/>
+								<mx:TextInput 
+									id="f_bunker_deelgemeente"
+									text="{outerDocument.filterFields.bunker_deelgemeente}"
+									change="outerDocument.setFilterField('bunker_deelgemeente', f_bunker_deelgemeente.text)"
+									mouseUp="event.stopImmediatePropagation()"
+									mouseDown="event.stopImmediatePropagation()"
+									click="event.stopImmediatePropagation()"
+									width="100%"/>
+							</mx:VBox>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:DataGridColumn>
+			</mx:columns>
+		</mx:DataGrid>
+		
+		<mx:HBox>
+			
+			<mx:Button 
+				label="Voeg toe" 
+				click="click_voeg_toe(event)" />
+			
+			<mx:Button 
+				label="Verwijder" 
+				enabled="{grid.selectedIndex >= 0}" 
+				click="click_verwijder(event)"/>
+			
+		</mx:HBox>
+		
+		<mx:TabNavigator width="100%" creationPolicy="all" height="512">
+			<tab:Bezoek 
+				id="bezoekView" 
+				label="Bezoek" 
+				data="{item}" />
+			<tab:Vleermuizen
+				id="vleermuizenView"
+				data="{item}" 
+				label="Vleermuizen" />
+			<tab:Opmerkingen
+				id="opmerkingenView"
+				data="{item}" 
+				label="Opmerkingen" />
+		</mx:TabNavigator>
+		
+		<mx:Button 
+			label="Bewaar" 
+			click="click_bewaar(event)"/>
+		
+	</mx:VBox>
+	
+</mx:Application>

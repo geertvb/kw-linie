@@ -1,0 +1,59 @@
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*" 
+	xmlns:local="*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import util.BindingUtils;
+
+			public function bind(vo: Object) : void {
+				vo.vleermuisbezoek_id = BindingUtils.textinputToInteger(ti_vleermuisbezoek_id);
+				vo.bunker_id = bunkerSelector.bunker_id;
+				vo.datum = BindingUtils.dateFieldToDate(df_datum);
+				vo.invuller_id = invullerContactSelector.contact_id;
+				vo.teller_ids = tellersContactSelector.contact_ids;
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:Form x="0" y="0">
+		<mx:FormItem 
+			label="Uniek ID" 
+			visible="false" 
+			includeInLayout="false">
+			<mx:TextInput 
+				id="ti_vleermuisbezoek_id"
+				editable="false" 
+				text="{data.vleermuisbezoek_id}"/>
+		</mx:FormItem>
+	
+		<mx:FormItem label="Datum">
+			<mx:DateField
+				formatString="DD/MM/YYYY"
+				selectedDate="{DateField.stringToDate(data.datum,'YYYY-MM-DD')}"
+				id="df_datum"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Bunker">
+			<components:BunkerSelector
+				id="bunkerSelector"
+				bunker="{data.bunker}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Invuller">
+			<components:ContactSelector
+				id="invullerContactSelector"
+				contact="{data.invuller}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Tellers">
+			<components:ContactListSelector
+				id="tellersContactSelector"
+				contactArray="{data.tellers}" />
+		</mx:FormItem>
+		
+	</mx:Form>
+</mx:Canvas>
