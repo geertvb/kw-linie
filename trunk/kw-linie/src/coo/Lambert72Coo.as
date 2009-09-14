@@ -14,7 +14,8 @@ package coo{
 		public var y0: Number = 5400088.438;
 		public var lambda0: Number = (4.0 + (22.0 / 60.0) + (2.952 / 3600.0)) * Math.PI / 180.0;
 		
-		public var e: Number; 
+		public var e: Number;
+		public var esq: Number;
 		public var m1: Number;
 		public var m2: Number;
 		public var t0: Number;
@@ -29,7 +30,8 @@ package coo{
 		}
 		
 		public function Lambert72Coo() {
-			this.e = Math.sqrt(2 * this.f - Math.pow(this.f, 2));
+			this.esq = 2 * this.f - f*f;
+			this.e = Math.sqrt(this.esq);
 			this.m1 = Math.cos(this.phi1) / Math.sqrt(1 - Math.pow(this.e,2) * Math.pow(Math.sin(this.phi1),2));
 			this.m2 = Math.cos(this.phi2) / Math.sqrt(1 - Math.pow(this.e,2) * Math.pow(Math.sin(this.phi2),2));
 			this.t0 = Math.tan(Math.PI/4 - this.phi0/2) / Math.pow((1 - this.e * Math.sin(this.phi0))/(1 + this.e * Math.sin(this.phi0)),this.e/2);
@@ -64,6 +66,20 @@ package coo{
 			var y: Number = y0 + r0 - r * Math.cos(theta);
 			return new Point(x, y);
 		}
+		
+		public function llh2xyz(lat: Number, lng: Number, height: Number) : Object {
+			var slat: Number = Math.sin(lat / 180.0 * Math.PI);
+			var clat: Number = Math.cos(lat / 180.0 * Math.PI);
+			var slng: Number = Math.sin(lng / 180.0 * Math.PI);
+			var clng: Number = Math.cos(lng / 180.0 * Math.PI);
+			
+			var N: Number = a / Math.pow(1 - esq * slat * slat, 0.5);
+			var x: Number = (N + height) * clat * clng;
+			var y: Number = (N + height) * clat * slng;
+			var z: Number = (N * (1 - esq) + height ) * slat;
+			return {x: x, y: y, z: z};
+		}
+		
 	}
 
 }
