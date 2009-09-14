@@ -88,6 +88,7 @@
 		<mx:FormItem label="Reden">
 			<components:ComboBoxEx 
 				id="cb_toestand_buiten_ontoegankelijk_reden"
+				dataProvider="{dp_toestand_buiten_ontoegankelijk_reden}"
 				labelField="label"
 				valueField="label"
 				selectedValue="{data.toestand_buiten_ontoegankelijk_reden}"
