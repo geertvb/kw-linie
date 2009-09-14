@@ -64,7 +64,8 @@
 			}
 			
 			public function convertToLatLng() : void {
-				var latLng: LatLng = lambert72coo.convert(new Number(ti_x.text), new Number(ti_y.text));
+				var latLng: LatLng = cooConv.lambert2latlng(new Number(ti_x.text), new Number(ti_y.text));
+					//lambert72coo.convert(new Number(ti_x.text), new Number(ti_y.text));
 				ti_lat.text = latLng.lat().toString();
 				ti_lng.text = latLng.lng().toString();
 			}
@@ -123,6 +124,8 @@
         domain="int"/>
         
 	<coo:Lambert72Coo id="lambert72coo" />
+	
+	<coo:CooConv id="cooConv" />
 	
 	<local:Geocode id="geocode" f="updateAddress" />
 
