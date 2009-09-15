@@ -11,6 +11,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import util.Async;
 			import mx.events.CloseEvent;
 			import bunkerFiche.Documenten;
 			import util.BindingUtils;
@@ -25,11 +26,42 @@
 			
 			[Bindable]
 			public var fltr: Object = new Object();
+
+			[Bindable]
+			public var user: Object = {
+				guest: "false",
+				username: "Geert"
+			};
+
+			//public var timer: Timer;
 			
 			private function creationComplete() : void {
 				//joomlaUser.send();
 				refreshBunkerGrid();
+				
+				/*
+				timer_security(null);
+				
+				timer = new Timer(1000 * 60);
+				timer.addEventListener(TimerEvent.TIMER, timer_security);
+				timer.start();
+				*/
 			}
+			
+			/*
+			private function timer_security(event: TimerEvent) : void {
+				trace("timer_security " + event);
+				Async.call(joomlaUser.send(), result_joomlaUser);
+			}
+			
+			private function result_joomlaUser(event : ResultEvent) : void {
+				trace(event + " OK " + event.result);
+			}
+			
+			private function fault_joomlaUser(event : FaultEvent) : void {
+				trace(event + " FAULT " + event.fault);
+			}
+			*/
 			
 			private function refreshBunkerGrid() : void {
 				bunkerService.findAll();
@@ -133,16 +165,24 @@
 		]]>
 	</mx:Script>
 	
+	<!--
+	<mx:Model id="user">{joomlaUser.lastResult}</mx:Model>
+	-->
+	
 	<mx:ArrayCollection 
 		id="bunkers"
 		filterFunction="filterBunkers" 
 		source="{bunkerService.findAll.lastResult}"/>
 	
+	<!--
 	<mx:HTTPService 
 		id="joomlaUser" 
 		url="joomla-user.php" 
 		method="GET" 
-		resultFormat="e4x" />
+		resultFormat="e4x"
+		result="null"
+		fault="fault_joomlaUser(event)" />
+	-->
 	
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService" 
@@ -153,9 +193,9 @@
 		<mx:method name="remove" result="result_remove(event)" />
 		<mx:method name="findByID" result="result_findByID(event)" />
     </mx:RemoteObject>
-
-	<mx:VBox width="718">
 	
+	<mx:VBox width="718">
+		
 		<mx:DataGrid id="bunkerGrid"
 			dataProvider="{bunkers}" 
 			width="100%"
@@ -274,11 +314,12 @@
 		
 			<mx:Button 
 				label="Voeg toe" 
+				enabled="{user.guest == 'false'}"
 				click="click_voeg_toe(event)" />
 
 			<mx:Button 
 				label="Verwijder" 
-				enabled="{bunkerGrid.selectedIndex >= 0}" 
+				enabled="{user.guest == 'false' &amp;&amp; bunkerGrid.selectedIndex >= 0}" 
 				click="click_verwijder(event)"/>
 
 		</mx:HBox>
@@ -296,6 +337,7 @@
 
 		<mx:Button 
 			label="Bewaar" 
+			enabled="{user.guest == 'false'}"
 			click="click_bewaar(event)"/>
 
 	</mx:VBox>
