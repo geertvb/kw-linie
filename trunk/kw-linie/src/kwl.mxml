@@ -59,7 +59,8 @@
 				var vertices: Array = new Array();
 				bunkerMarkers = new ArrayCollection();
 				for each (var bunker:Object in bunkers) {
-					if (bunker.lat != null  && bunker.lng != null) {
+					if (bunker.lat != null && bunker.lat != 0 
+							&& bunker.lng != null && bunker.lng != 0) {
 						var bunkerMarker: BunkerMarker = new BunkerMarker(bunker);
 	        			map.addOverlay(bunkerMarker.marker);
 	        			bunkerMarkers.addItem(bunkerMarker);
