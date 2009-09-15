@@ -55,9 +55,9 @@ package coo{
 			return new LatLng(currentPhi * 180 / Math.PI, lambda * 180 / Math.PI);
 		}
 		
-		public function invConvert(latLng: LatLng) : Point {
-			var phi: Number = latLng.lat() / 180.0 * Math.PI;
-			var lambda: Number = latLng.lng() / 180.0 * Math.PI;
+		public function invConvert(lat: Number, lng: Number) : Point {
+			var phi: Number = lat / 180.0 * Math.PI;
+			var lambda: Number = lng / 180.0 * Math.PI;
 			
 			var t: Number = Math.tan(Math.PI / 4 - phi / 2) / Math.pow((1 - e * Math.sin(phi)) / (1 + e * Math.sin(phi)), e / 2);
 			var r: Number = a * g * Math.pow(t, n);
@@ -78,6 +78,17 @@ package coo{
 			var y: Number = (N + height) * clat * slng;
 			var z: Number = (N * (1 - esq) + height ) * slat;
 			return {x: x, y: y, z: z};
+		}
+		
+		public function xyz2llh(x: Number, y: Number, z: Number) : Object {
+			var p2: Number = x*x + y*y;
+			var p: Number = Math.pow(p2, 0.5);
+			var r: Number = Math.pow(p2 + z*z, 0.5);
+			var u: Number = Math.atan( (z / p) * ((1-f) + (e*e * a / r)) );
+			var lambda: Number = Math.atan(y / x);
+			var phi: Number = Math.atan( ( z * (1-f) + e*e * a * Math.pow(Math.sin(u), 3) ) / ((1-f) * (p - e*e * a * Math.pow(Math.cos(u),3))) );
+			var h: Number = p * Math.cos(phi) + z * Math.sin(phi) - a * Math.pow( (1 - e*e * Math.pow(Math.sin(phi),2)), 0.5);
+			return {lat: phi / Math.PI * 180, lon: lambda / Math.PI * 180, h: h};
 		}
 		
 	}
