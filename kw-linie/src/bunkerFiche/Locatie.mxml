@@ -73,8 +73,7 @@
 			public function convertToLambert() : void {
 				var lat: Number = Number(ti_lat.text);
 				var lng: Number = Number(ti_lng.text);
-				var latLng: LatLng = new LatLng(lat, lng);
-				var p: Point = lambert72coo.invConvert(latLng);
+				var p: Point = lambert72coo.invConvert(lat, lng);
 				ti_x.text = Math.round(p.x).toString();
 				ti_y.text = Math.round(p.y).toString();
 			}
