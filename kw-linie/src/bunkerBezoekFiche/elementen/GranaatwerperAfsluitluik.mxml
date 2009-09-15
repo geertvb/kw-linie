@@ -6,6 +6,9 @@
 		<mx:Object label="1" />
 		<mx:Object label="2" />
 		<mx:Object label="3" />
+		<mx:Object label="4" />
+		<mx:Object label="5" />
+		<mx:Object label="6" />
 	</mx:ArrayCollection>
 	
 	<mx:Script>
