@@ -20,7 +20,7 @@ package coo
 		
 		public function latlng2lambert(lat: Number, lng: Number): Point {
 			var xyz84: Object = wgs84.llh2xyz(lat, lng, 0);
-			var xyz72: Object = mol.invConvert(xyz84.z, xyz84.y, xyz84.z);
+			var xyz72: Object = mol.invConvert(xyz84.x, xyz84.y, xyz84.z);
 			var llh72: Object = lb72.xyz2llh(xyz72.x, xyz72.y, xyz72.z);
 			return lb72.invConvert(llh72.lat, llh72.lng);
 		}
