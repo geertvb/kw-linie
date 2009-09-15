@@ -436,7 +436,7 @@ class AnderObjectService {
 		$sql .= "where `anderobject_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiiiiisi', 
+			$stmt->bind_param('siiiiiisi', 
 				$vo["bescherming_gewestplan"], 
 				$vo["bescherming_landschapsatlas"], 
 				$vo["bescherming_ven_ivon"], 
