@@ -28,13 +28,16 @@
 	</mx:Script>
 
 	<mx:Form x="0" y="0" width="100%" height="100%">
-		<mx:FormItem label="Volgens" width="67%">
+		<mx:FormItem label="Bestemmingstype Gewestplan">
 			<components:ComboBoxEx
+				rowCount="6"
 				id="cb_bescherming_gewestplan"
 				dataProvider="{dp_bescherming_gewestplan}"
 				selectedValue="{data.bescherming_gewestplan}" 
 				labelField="label"
 				valueField="label" />
+		</mx:FormItem>
+		<mx:FormItem label="Bescherming volgens" width="67%">
 			<mx:CheckBox
 				id="cb_bescherming_landschapsatlas"
 				selected="{data.bescherming_landschapsatlas}" 
