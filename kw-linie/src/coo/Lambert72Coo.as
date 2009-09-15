@@ -88,7 +88,7 @@ package coo{
 			var lambda: Number = Math.atan(y / x);
 			var phi: Number = Math.atan( ( z * (1-f) + e*e * a * Math.pow(Math.sin(u), 3) ) / ((1-f) * (p - e*e * a * Math.pow(Math.cos(u),3))) );
 			var h: Number = p * Math.cos(phi) + z * Math.sin(phi) - a * Math.pow( (1 - e*e * Math.pow(Math.sin(phi),2)), 0.5);
-			return {lat: phi / Math.PI * 180, lon: lambda / Math.PI * 180, h: h};
+			return {lat: phi / Math.PI * 180, lng: lambda / Math.PI * 180, h: h};
 		}
 		
 	}
