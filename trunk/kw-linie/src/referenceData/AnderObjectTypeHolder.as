@@ -14,7 +14,7 @@ package referenceData
 			
 			result = new Object();
 			result.data = [
-				{type: "meerpaal"},
+				{type: "ankerpaal"},
 				{type: "brug"},
 				{type: "sluis"},
 				{type: "geassocieerd huis"},
