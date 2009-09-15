@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+
+	<mx:ArrayCollection id="dp_bescherming_gewestplan">
+		<mx:Object label="woongebieden" />
+		<mx:Object label="industriegebieden" />
+		<mx:Object label="agrarische gebieden" />
+		<mx:Object label="groengebieden" />
+		<mx:Object label="recreatiegebieden" />
+		<mx:Object label="gebieden voor gemeenschapsvoorzieningen" />
+	</mx:ArrayCollection>
 
 	<mx:Script>
 		<![CDATA[
 			import util.BindingUtils;
 
 			public function bind(bunker: Object) : void {
-				bunker.bescherming_gewestplan = BindingUtils.checkboxToBoolean(cb_bescherming_gewestplan);
+				bunker.bescherming_gewestplan = BindingUtils.comboBoxExToString(cb_bescherming_gewestplan);
 				bunker.bescherming_landschapsatlas = BindingUtils.checkboxToBoolean(cb_bescherming_landschapsatlas);
 				bunker.bescherming_ven_ivon = BindingUtils.checkboxToBoolean(cb_bescherming_ven_ivon);
 				bunker.bescherming_sbz = BindingUtils.checkboxToBoolean(cb_bescherming_sbz);
@@ -20,10 +29,12 @@
 
 	<mx:Form x="0" y="0" width="100%" height="100%">
 		<mx:FormItem label="Volgens" width="67%">
-			<mx:CheckBox
+			<components:ComboBoxEx
 				id="cb_bescherming_gewestplan"
-				selected="{data.bescherming_gewestplan}" 
-				label="Gewestplan"/>
+				dataProvider="{dp_bescherming_gewestplan}"
+				selectedValue="{data.bescherming_gewestplan}" 
+				labelField="label"
+				valueField="label" />
 			<mx:CheckBox
 				id="cb_bescherming_landschapsatlas"
 				selected="{data.bescherming_landschapsatlas}" 

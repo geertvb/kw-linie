@@ -577,7 +577,7 @@ class BunkerService {
 		$sql .= "where `bunker_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiiiiisi', 
+			$stmt->bind_param('siiiiiisi', 
 				$bunker["bescherming_gewestplan"], 
 				$bunker["bescherming_landschapsatlas"], 
 				$bunker["bescherming_ven_ivon"], 
