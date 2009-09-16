@@ -10,6 +10,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import util.Async;
 			import mx.events.CloseEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
@@ -21,8 +22,30 @@
 			[Bindable]
 			public var fltr: Object = new Object();
 			
+			public var timer: Timer;
+			
 			private function creationComplete() : void {
+				joomlaUser.send();
 				refreshBunkerBezoekGrid();
+				
+				timer_security(null);
+				
+				timer = new Timer(1000 * 60);
+				timer.addEventListener(TimerEvent.TIMER, timer_security);
+				timer.start();
+			}
+			
+			private function timer_security(event: TimerEvent) : void {
+				trace("timer_security " + event);
+				Async.call(joomlaUser.send(), result_joomlaUser);
+			}
+			
+			private function result_joomlaUser(event : ResultEvent) : void {
+				trace(event + " OK " + event.result);
+			}
+			
+			private function fault_joomlaUser(event : FaultEvent) : void {
+				trace(event + " FAULT " + event.fault);
 			}
 			
 			private function refreshBunkerBezoekGrid() : void {
@@ -117,6 +140,16 @@
 		]]>
 	</mx:Script>
 
+	<mx:Model id="user">{joomlaUser.lastResult}</mx:Model>
+	
+	<mx:HTTPService 
+		id="joomlaUser" 
+		url="joomla-user.php" 
+		method="GET" 
+		resultFormat="e4x"
+		result="null"
+		fault="fault_joomlaUser(event)" />
+	
 	<mx:ArrayCollection 
 		id="bunkerbezoeken" 
 		filterFunction="filterBezoeken" 
@@ -269,11 +302,12 @@
 		
 			<mx:Button 
 				label="Voeg toe" 
+				enabled="{user.access == 'read/write'}"
 				click="click_voeg_toe(event)" />
 
 			<mx:Button 
 				label="Verwijder" 
-				enabled="{bunkerBezoekGrid.selectedIndex >= 0}" 
+				enabled="{user.access == 'read/write' &amp;&amp; bunkerBezoekGrid.selectedIndex >= 0}" 
 				click="click_verwijder(event)"/>
 
 		</mx:HBox>
@@ -305,7 +339,10 @@
 				label="Fotos" />
 		</mx:TabNavigator>
 		
-		<mx:Button label="Bewaar" click="click_bewaar(event)"/>
+		<mx:Button 
+			label="Bewaar" 
+			enabled="{user.access == 'read/write'}"
+			click="click_bewaar(event)"/>
 		
 	</mx:VBox>
 
