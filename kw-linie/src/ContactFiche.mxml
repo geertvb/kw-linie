@@ -46,6 +46,7 @@
 			
 			private function bind(contactVO: Object) : void {
 				contactView.bind(contactVO);
+				eigenschappenView.bind(contactVO);
 				opmerkingenView.bind(contactVO);
 			}
 			
@@ -101,6 +102,7 @@
     </mx:RemoteObject>
     
 	<mx:VBox x="10" y="10">
+		
 		<mx:DataGrid
 			id="contactGrid"
 			dataProvider="{contacts}"
@@ -126,6 +128,7 @@
 					dataField="gemeente"/>
 			</mx:columns>
 		</mx:DataGrid>
+		
 		<mx:HBox width="100%" horizontalAlign="center">
 			<mx:Button
 				label="Voeg toe"
@@ -134,11 +137,17 @@
 				label="Verwijder"
 				click="click_verwijder(event)" enabled="true"/>
 		</mx:HBox>
+		
 		<mx:TabNavigator
 			creationPolicy="all">
 			<contactFiche:Contact 
 				id="contactView" 
 				label="Contact"
+				enabled="{contactGrid.selectedIndex >= 0}"
+				data="{contactGrid.selectedItem}" />
+			<contactFiche:Eigenschappen
+				id="eigenschappenView"
+				label="Eigenschappen"
 				enabled="{contactGrid.selectedIndex >= 0}"
 				data="{contactGrid.selectedItem}" />
 			<contactFiche:Opmerkingen
@@ -147,6 +156,7 @@
 				enabled="{contactGrid.selectedIndex >= 0}"
 				data="{contactGrid.selectedItem}" />
 		</mx:TabNavigator>
+		
 		<mx:Button
 			label="Bewaar"
 			enabled="{contactGrid.selectedIndex >= 0}"

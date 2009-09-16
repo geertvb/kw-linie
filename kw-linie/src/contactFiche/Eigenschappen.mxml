@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	creationComplete="gebruikerService.findAll()"
+	xmlns:components="components.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			
+			[Bindable]
+			public var dp_affiliatie: Array = [
+				{label: "Vereniging", affiliatie: "Vereniging"},
+				{label: "Overheid", affiliatie: "Overheid"},
+				{label: "Andere", affiliatie: "Andere"}
+			];
+			
+			[Bindable]
+			public var dp_medewerking: Array = [
+				{label: "Prospectie", medewerking: "Prospectie"},
+				{label: "Getuigenis", medewerking: "Getuigenis"},
+				{label: "Geschiedkundige", medewerking: "Geschiedkundige"},
+				{label: "Algemene interesse", medewerking: "Algemene interesse"},
+				{label: "Andere", medewerking: "Andere"}
+			];
+			
+			[Bindable]
+			public var dp_toegang: Array = [
+				{label: "Publieksversie", toegang: "public"},
+				{label: "Expert, enkel lezen", toegang: "read-only"},
+				{label: "Expert, lezen en schrijven", toegang: "read/write"}
+			];
+
+			public function bind(vo: Object) : void {
+				vo.gebruikersnaam = BindingUtils.comboBoxExToString(cb_gebruikersnaam);
+				vo.affiliatie = BindingUtils.comboBoxExToString(cb_affiliatie);
+				vo.affiliatie_andere = BindingUtils.textinputToString(ti_affiliatie_andere);
+				vo.medewerking = BindingUtils.comboBoxExToString(cb_medewerking);
+				vo.medewerking_andere = BindingUtils.textinputToString(ti_medewerking_andere);
+				vo.toegang = BindingUtils.comboBoxExToString(cb_toegang);
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:RemoteObject
+		id="gebruikerService"
+		source="kwl.GebruikerService" 
+		destination="amfphp">
+	</mx:RemoteObject>
+	
+	<mx:Form x="0" y="0">
+		<mx:FormItem label="Gebruikersnaam">
+			<components:ComboBoxEx 
+				id="cb_gebruikersnaam"
+				dataProvider="{gebruikerService.findAll.lastResult}"
+				labelField="label" 
+				valueField="gebruikersnaam"
+				selectedValue="{data.gebruikersnaam}" />
+		</mx:FormItem>
+		<mx:FormItem label="Affiliatie">
+			<components:ComboBoxEx 
+				id="cb_affiliatie"
+				dataProvider="{dp_affiliatie}"
+				labelField="label" 
+				valueField="affiliatie"
+				selectedValue="{data.affiliatie}" />
+			<mx:TextInput 
+				id="ti_affiliatie_andere"
+				enabled="{cb_affiliatie.selectedItem.affiliatie == 'Andere'}"
+				text="{data.affiliatie_andere}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Medewerking">
+			<components:ComboBoxEx 
+				id="cb_medewerking"
+				dataProvider="{dp_medewerking}"
+				labelField="label"
+				valueField="medewerking"
+				selectedValue="{data.medewerking}"/>
+			<mx:TextInput 
+				id="ti_medewerking_andere"
+				enabled="{cb_medewerking.selectedItem.medewerking == 'Andere'}"
+				text="{data.medewerking_andere}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Toegang">
+			<components:ComboBoxEx 
+				id="cb_toegang"
+				dataProvider="{dp_toegang}"
+				labelField="label"
+				valueField="toegang"
+				selectedValue="{data.toegang}"/>
+		</mx:FormItem>
+	</mx:Form>
+	
+</mx:Canvas>

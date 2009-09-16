@@ -104,6 +104,7 @@ class ContactService {
 		if ($mysqli = newMysqli()) {
 
 			$this->saveContact($contactVO, $mysqli);
+			$this->saveEigenschappen($contactVO, $mysqli);
 			
 			$mysqli->close();
 		}
@@ -171,6 +172,31 @@ class ContactService {
 				$contactVO["gsm"], 
 				$contactVO["email"], 
 				$contactVO["opmerkingen"], 
+				$contactVO["contact_id"]);
+			$stmt->execute();
+			$stmt->close();
+		}
+	}
+    
+	function saveEigenschappen($contactVO, $mysqli) {
+		$sql = "update `kwl_contact` ";
+		$sql .= "set ";
+		$sql .= "`gebruikersnaam` = ?,"; 
+		$sql .= "`affiliatie` = ?,"; 
+		$sql .= "`affiliatie_andere` = ?,"; 
+		$sql .= "`medewerking` = ?,"; 
+		$sql .= "`medewerking_andere` = ?,"; 
+		$sql .= "`toegang` = ? "; 
+		$sql .= "where `contact_id` = ?";
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('ssssssi', 
+				$contactVO["gebruikersnaam"], 
+				$contactVO["affiliatie"], 
+				$contactVO["affiliatie_andere"], 
+				$contactVO["medewerking"], 
+				$contactVO["medewerking_andere"], 
+				$contactVO["toegang"], 
 				$contactVO["contact_id"]);
 			$stmt->execute();
 			$stmt->close();
