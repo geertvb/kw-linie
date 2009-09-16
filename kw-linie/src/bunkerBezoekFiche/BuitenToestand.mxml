@@ -7,6 +7,11 @@
 		<mx:Object label="Neen" />
 	</mx:ArrayCollection>
 
+	<mx:ArrayCollection id="dp_bedreigingen">
+		<mx:Object label="Afbraak" />
+		<mx:Object label="Andere" />
+	</mx:ArrayCollection>
+	
 	<mx:ArrayCollection id="dp_toestand_buiten_ontoegankelijk_reden">
 		<mx:Object label="Niet bekeken" />
 		<mx:Object label="Dichtgemetst" />
@@ -25,10 +30,12 @@
 				vo.toestand_buiten_beschadiging_latere_datum = BindingUtils.checkboxToBoolean(cb_toestand_buiten_beschadiging_latere_datum);
 				vo.toestand_buiten_beschadiging_natuurlijk = BindingUtils.checkboxToBoolean(cb_toestand_buiten_beschadiging_natuurlijk);
 				vo.toestand_buiten_andere = BindingUtils.checkboxToBoolean(cb_atb_andere);
-				vo.toestand_buiten_andere_tekst = BindingUtils.textinputToString(ti_toestand_buiten_andere_tekst);
-				
+				vo.toestand_buiten_andere_tekst = BindingUtils.textinputToString(ti_toestand_buiten_andere_tekst);			
 				vo.toestand_buiten_toegankelijk = BindingUtils.comboboxToString(cb_toegankelijk);
 				vo.toestand_buiten_ontoegankelijk_reden = BindingUtils.comboboxToString(cb_toestand_buiten_ontoegankelijk_reden);
+				vo.bedreigingen_niet_bekeken = BindingUtils.checkboxToBoolean(cb_bedreigingen_niet_bekeken);
+				vo.bedreigingen = BindingUtils.comboBoxExToString(cb_bedreigingen);
+				vo.bedreigingen_andere = BindingUtils.textinputToString(ti_bedreigingen_andere);
 			}
 		]]>
 	</mx:Script>
@@ -76,6 +83,25 @@
 				enabled="{!(cb_nb_algemeneToestandBuiten.selected || !cb_atb_andere.selected)}"/>
 		</mx:FormItem>
 		
+		<mx:FormItem label="Bedreigingen">
+			<mx:CheckBox
+				label="Niet bekeken"
+				id="cb_bedreigingen_niet_bekeken"
+				selected="{data.bedreigingen_niet_bekeken}" />
+			<components:ComboBoxEx
+				rowCount="9" 
+				labelField="label"
+				valueField="label"
+				selectedValue="{data.bedreigingen}"
+				dataProvider="{dp_bedreigingen}"
+				enabled="{!cb_bedreigingen_niet_bekeken.selected}"
+				id="cb_bedreigingen" />
+			<mx:TextInput
+				id="ti_bedreigingen_andere"
+				text="{data.bedreigingen_andere}" 
+				enabled="{!cb_bedreigingen_niet_bekeken.selected &amp;&amp; cb_bedreigingen.selectedValue == 'Andere'}" />
+		</mx:FormItem>
+
 		<mx:FormItem label="Toegankelijk">
 			<components:ComboBoxEx
 				id="cb_toegankelijk"
