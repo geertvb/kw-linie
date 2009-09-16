@@ -280,7 +280,7 @@
 			
 		</mx:HBox>
 		
-		<mx:TabNavigator width="100%" creationPolicy="all" height="512">
+		<mx:TabNavigator width="100%" creationPolicy="all" height="400">
 			<tab:Bezoek 
 				id="bezoekView" 
 				label="Bezoek" 

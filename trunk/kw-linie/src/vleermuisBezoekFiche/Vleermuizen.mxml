@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 	
 	<mx:Script>
 		<![CDATA[
@@ -28,10 +28,12 @@
 	<mx:ArrayCollection 
 		id="items"
 		source="{data.aantallen}" />
-	
+
+	<mx:VBox y="0" x="10">
+		
 	<mx:DataGrid 
 		id="grid"
-		rowCount="6" 
+		rowCount="12" 
 		editable="true"
 		dataProvider="{items}">
 		<mx:columns>
@@ -98,6 +100,6 @@
 			click="click_verwijder(event)" />
 	</mx:HBox>
 	
+	</mx:VBox>
 	
-	
-</mx:VBox>
+</mx:Canvas>

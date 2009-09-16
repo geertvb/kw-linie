@@ -19,7 +19,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:Form x="0" y="0">
+	<mx:Form x="10" y="0" paddingLeft="0" paddingTop="0" paddingRight="0" paddingBottom="0">
 		<mx:FormItem 
 			label="Uniek ID" 
 			visible="false" 
