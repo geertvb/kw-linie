@@ -52,10 +52,27 @@
 				deelgemeenteResponder.token = bunkerService.findDeelgemeentes();
 			}
 			
+			private function drawPoly(vertices: Array, type: String) : void {
+				if (vertices.length > 1) {
+					var lineOptions:PolylineOptions = new PolylineOptions({
+						strokeStyle: {
+							thickness: 3,
+							color: BunkerMarker.bunkerTypeColors[type]["fillColor"],
+							alpha: 0.5,
+							pixelHinting: false
+						}
+					});
+					if (BunkerMarker.bunkerTypeColors[type]["closed"]) {
+						vertices.push(vertices[0]);
+					}
+					var polyLine: Polyline = new Polyline(vertices, lineOptions);
+					map.addOverlay(polyLine);
+				}
+			}
+			
             public function displaymarkers() : void {
 				var bunkers : Array = bunkerResponder.lastResult as Array;
 				var previous: BunkerMarker = null;
-				var line : Polyline;
 				var vertices: Array = new Array();
 				bunkerMarkers = new ArrayCollection();
 				for each (var bunker:Object in bunkers) {
@@ -68,35 +85,16 @@
 	        			if (previous != null 
 	        				&& (previous.bunker.type != bunkerMarker.bunker.type
 	        				|| previous.bunker.code != bunkerMarker.bunker.code)) {
-							var lineOptions:PolylineOptions = new PolylineOptions({
-								  strokeStyle: {
-								    thickness: 3,
-								    color: BunkerMarker.bunkerTypeColors[previous.bunker.type]["fillColor"],
-								    alpha: 0.5,
-								    pixelHinting: false
-								  }
-								});
-	        				line = new Polyline(vertices, lineOptions);
-	        				map.addOverlay(line);
+							drawPoly(vertices, previous.bunker.type);
 	        				vertices = new Array();
-     				}
+     					}
 	        			
 	        			vertices.push(bunkerMarker.latLng);
 	        			
 	        			previous = bunkerMarker;
-				}
-            }
-				lineOptions = new PolylineOptions({
-					  strokeStyle: {
-					    thickness: 3,
-					    color: BunkerMarker.bunkerTypeColors[previous.bunker.type]["fillColor"],
-					    alpha: 0.5,
-					    pixelHinting: false
-					  }
-					});
-				line = new Polyline(vertices, lineOptions);
-				map.addOverlay(line);
-				vertices = new Array();
+					}
+            	}
+				drawPoly(vertices, previous.bunker.type);
             }
             
 		    private function onMapReady(event:Event):void {
