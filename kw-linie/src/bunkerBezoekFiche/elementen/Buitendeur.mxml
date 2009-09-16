@@ -9,6 +9,7 @@
 	<mx:ArrayCollection id="dp_toestand">
 		<mx:Object label="Goed" />
 		<mx:Object label="Slecht" />
+		<mx:Object label="Dichtgemetseld" />
 	</mx:ArrayCollection>
 
 	<mx:Script>
