@@ -4,13 +4,14 @@
 	layout="absolute"
 	backgroundColor="#637449" 
 	themeColor="#637449" 
-	creationComplete="refreshGrid()"
+	creationComplete="creationComplete()"
 	backgroundGradientColors="[#637449,#637449]" 
 	xmlns:tab="vleermuisBezoekFiche.*"
 	xmlns:local="*">
 	
 	<mx:Script>
 		<![CDATA[
+			import util.Async;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.rpc.events.FaultEvent;
@@ -24,8 +25,30 @@
 			[Bindable]
 			public var filterFields: Object = new Object();
 			
+			public var timer: Timer;
+			
 			private function creationComplete() : void {
+				joomlaUser.send();
 				refreshGrid();
+				
+				timer_security(null);
+				
+				timer = new Timer(1000 * 60);
+				timer.addEventListener(TimerEvent.TIMER, timer_security);
+				timer.start();
+			}
+			
+			private function timer_security(event: TimerEvent) : void {
+				trace("timer_security " + event);
+				Async.call(joomlaUser.send(), result_joomlaUser);
+			}
+			
+			private function result_joomlaUser(event : ResultEvent) : void {
+				trace(event + " OK " + event.result);
+			}
+			
+			private function fault_joomlaUser(event : FaultEvent) : void {
+				trace(event + " FAULT " + event.fault);
 			}
 			
 			private function refreshGrid() : void {
@@ -116,6 +139,16 @@
 			
 		]]>
 	</mx:Script>
+	
+	<mx:Model id="user">{joomlaUser.lastResult}</mx:Model>
+	
+	<mx:HTTPService 
+		id="joomlaUser" 
+		url="joomla-user.php" 
+		method="GET" 
+		resultFormat="e4x"
+		result="null"
+		fault="fault_joomlaUser(event)" />
 	
 	<mx:ArrayCollection 
 		id="items" 
@@ -271,11 +304,12 @@
 			
 			<mx:Button 
 				label="Voeg toe" 
+				enabled="{user.access == 'read/write'}"
 				click="click_voeg_toe(event)" />
 			
 			<mx:Button 
 				label="Verwijder" 
-				enabled="{grid.selectedIndex >= 0}" 
+				enabled="{user.access == 'read/write' &amp;&amp; grid.selectedIndex >= 0}" 
 				click="click_verwijder(event)"/>
 			
 		</mx:HBox>
@@ -297,6 +331,7 @@
 		
 		<mx:Button 
 			label="Bewaar" 
+			enabled="{user.access == 'read/write'}"
 			click="click_bewaar(event)"/>
 		
 	</mx:VBox>
