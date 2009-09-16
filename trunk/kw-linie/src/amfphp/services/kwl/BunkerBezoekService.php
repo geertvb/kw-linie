@@ -519,6 +519,9 @@ class BunkerBezoekService {
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
+		$sql .= "   `bedreigingen_niet_bekeken` = ?,"; 
+		$sql .= "   `bedreigingen` = ?,"; 
+		$sql .= "   `bedreigingen_andere` = ?,"; 
 		$sql .= "   `toestand_buiten_niet_bekeken` = ?,"; 
 		$sql .= "   `toestand_buiten_goed` = ?,"; 
 		$sql .= "   `toestand_buiten_betonrot` = ?,"; 
@@ -533,7 +536,10 @@ class BunkerBezoekService {
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiiiiisssi', 
+			$stmt->bind_param('issiiiiiiisssi', 
+				$vo["bedreigingen_niet_bekeken"], 
+				$vo["bedreigingen"], 
+				$vo["bedreigingen_andere"], 
 				$vo["toestand_buiten_niet_bekeken"], 
 				$vo["toestand_buiten_goed"], 
 				$vo["toestand_buiten_betonrot"], 
