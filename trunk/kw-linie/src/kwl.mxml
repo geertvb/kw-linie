@@ -311,7 +311,10 @@
 				                        <mx:VBox 
 				                        	width="160" height="120"
 				                            horizontalAlign="center" verticalAlign="middle" >
-				                            <mx:Image source="download_thumb.php?foto_id={data.defaultfoto_id}"/>
+				                            <mx:Image 
+												source="download_thumb.php?foto_id={data.defaultfoto_id}"
+												ioError="BunkerThumb.image_ioError(event)"
+												httpStatus="BunkerThumb.image_httpStatus(event)" />
 				                        </mx:VBox>
 				                    </mx:Component>
 				                </mx:itemRenderer>
