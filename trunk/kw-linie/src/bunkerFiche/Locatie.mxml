@@ -25,8 +25,8 @@
 					BindingUtils.textinputToFloat(ti_lat) as Number,
 					BindingUtils.textinputToFloat(ti_lng) as Number);
 				mapPopup.addEventListener("ok", function () : void {
-					ti_lat.text = mapPopup.latLng.lat().toString();
-					ti_lng.text = mapPopup.latLng.lng().toString();
+					ti_lat.text = latLngFormatter.format(mapPopup.latLng.lat());
+					ti_lng.text = latLngFormatter.format(mapPopup.latLng.lng());
 				});
 				PopUpManager.addPopUp(mapPopup,this,true);
 				PopUpManager.centerPopUp(mapPopup);
