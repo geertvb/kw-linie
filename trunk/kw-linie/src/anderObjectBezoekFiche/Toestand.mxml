@@ -42,7 +42,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:Form x="0" y="0">
+	<mx:Form x="0" y="0" paddingTop="0" paddingBottom="0">
 	
 		<mx:FormItem label="Toestand">
 			<mx:CheckBox

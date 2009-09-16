@@ -31,7 +31,7 @@
 		]]>
 	</mx:Script>
 
-	<mx:Form x="0" y="0">
+	<mx:Form x="0" y="0" paddingTop="0" paddingBottom="0">
 		<mx:FormItem label="Uniek ID" visible="false" includeInLayout="false">
 			<mx:TextInput 
 				id="ti_anderobjectbezoek_id"
@@ -74,7 +74,8 @@
 		</mx:FormItem>
 		
 		<mx:FormItem 
-			label="Reden" 
+			label="Reden"
+			direction="horizontal"
 			enabled="{cb_aanwezigheid.selectedValue == 'Neen'}">
 			<components:ComboBoxEx
 				id="cb_reden_niet_aanwezig"
@@ -82,14 +83,12 @@
 				valueField="reden_niet_aanwezig"
 				selectedValue="{data.reden_niet_aanwezig}"
 				dataProvider="{redenNietAanwezigList.data}"/>
-		</mx:FormItem>
-		
-		<mx:FormItem>
 			<mx:TextInput
 				id="ti_reden_niet_aanwezig_tekst"
 				text="{data.reden_niet_aanwezig_tekst}"
 				enabled="{cb_reden_niet_aanwezig.enabled &amp;&amp; cb_reden_niet_aanwezig.selectedValue == 'Andere'}"/>
 		</mx:FormItem>
+		
 		
 	</mx:Form>
 </mx:Canvas>
