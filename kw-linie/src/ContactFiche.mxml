@@ -12,6 +12,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import util.Async;
+			import mx.rpc.events.FaultEvent;
 			import mx.collections.ArrayCollection;
 			import mx.rpc.events.ResultEvent;
 			import mx.controls.Alert;
@@ -21,8 +23,29 @@
 			
 			private var contactID: *;
 		
+			public var timer: Timer;
+			
 			private function creationComplete() : void {
+				joomlaUser.send();
 				refreshContactGrid(); 
+				timer_security(null);
+				
+				timer = new Timer(1000 * 60);
+				timer.addEventListener(TimerEvent.TIMER, timer_security);
+				timer.start();
+			}
+			
+			private function timer_security(event: TimerEvent) : void {
+				trace("timer_security " + event);
+				Async.call(joomlaUser.send(), result_joomlaUser);
+			}
+			
+			private function result_joomlaUser(event : ResultEvent) : void {
+				trace(event + " OK " + event.result);
+			}
+			
+			private function fault_joomlaUser(event : FaultEvent) : void {
+				trace(event + " FAULT " + event.fault);
 			}
 			
 			private function refreshContactGrid() : void {
@@ -83,6 +106,16 @@
 		]]>
 	</mx:Script>
 
+	<mx:Model id="user">{joomlaUser.lastResult}</mx:Model>
+	
+	<mx:HTTPService 
+		id="joomlaUser" 
+		url="joomla-user.php" 
+		method="GET" 
+		resultFormat="e4x"
+		result="null"
+		fault="fault_joomlaUser(event)" />
+	
 	<mx:RemoteObject
 		id="contactService"
 		source="kwl.ContactService" 
@@ -129,13 +162,15 @@
 			</mx:columns>
 		</mx:DataGrid>
 		
-		<mx:HBox width="100%" horizontalAlign="center">
+		<mx:HBox width="100%">
 			<mx:Button
 				label="Voeg toe"
+				enabled="{user.access == 'read/write'}"
 				click="click_voeg_toe(event)"/>
 			<mx:Button
 				label="Verwijder"
-				click="click_verwijder(event)" enabled="true"/>
+				enabled="{user.access == 'read/write' &amp;&amp; contactGrid.selectedIndex >= 0}" 
+				click="click_verwijder(event)"/>
 		</mx:HBox>
 		
 		<mx:TabNavigator
@@ -159,7 +194,7 @@
 		
 		<mx:Button
 			label="Bewaar"
-			enabled="{contactGrid.selectedIndex >= 0}"
+			enabled="{user.access == 'read/write' &amp;&amp; contactGrid.selectedIndex >= 0}"
 			click="click_bewaar(event)"/>
 		
 	</mx:VBox>
