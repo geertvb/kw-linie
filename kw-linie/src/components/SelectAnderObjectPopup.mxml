@@ -7,6 +7,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import util.BindingUtils;
+			import referenceData.AnderObjectTypeHolder;
 			import mx.core.Application;
 			import mx.managers.PopUpManager;
 			import mx.controls.Alert;
@@ -14,6 +16,9 @@
 			import mx.rpc.events.ResultEvent;
 			import components.AnderObjectRenderer;
 		
+			[Bindable]
+			private var types: Object = AnderObjectTypeHolder.getInstance2();
+
 			private static var _instance: SelectAnderObjectPopup;
 			
 			public static function getInstance() : SelectAnderObjectPopup {
@@ -57,6 +62,19 @@
 				close();
 			}
 			
+			private function bind(vo: Object) : void {
+				vo.type = BindingUtils.comboBoxExToString(cb_type);
+				vo.anderobject_id = BindingUtils.textinputToString(ti_id);
+				vo.gemeente = BindingUtils.textinputToString(ti_gemeente);
+				vo.deelgemeente = BindingUtils.textinputToString(ti_deelgemeente);
+			}
+			
+			public function click_zoek(event: Event): void {
+				var vo: Object = new Object();
+				bind(vo);
+				anderObjectService.findByExample(vo);
+			}
+
 		]]>
 	</mx:Script>
 	
@@ -72,22 +90,28 @@
     
 	<mx:Form>
 		<mx:FormItem label="Type">
-			<mx:TextInput/>
+			<components:ComboBoxEx 
+				id="cb_type"
+				dataProvider="{types.data}" 
+				labelField="label"
+				valueField="type"
+				width="200"/>
 		</mx:FormItem>
-		<mx:FormItem label="Nummer">
-			<mx:TextInput/>
+		<mx:FormItem label="ID">
+			<mx:TextInput id="ti_id"/>
 		</mx:FormItem>
 		<mx:FormItem label="Gemeente">
-			<mx:TextInput/>
+			<mx:TextInput id="ti_gemeente"/>
 		</mx:FormItem>
 		<mx:FormItem label="Deelgemeente">
-			<mx:TextInput/>
+			<mx:TextInput id="ti_deelgemeente"/>
 		</mx:FormItem>
 	</mx:Form>
 	
 	<mx:HBox width="100%">
 		<mx:Button
-			label="Zoek" />
+			label="Zoek" 
+			click="click_zoek(event)"/>
 	</mx:HBox>
 	
 	<mx:List id="anderObjectList"
