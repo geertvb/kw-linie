@@ -27,7 +27,7 @@
 						Image(event.target).source = bunkerke;
 						break;
 					default:
-						Alert.show(event.toString(), event.status.toString());
+						//Alert.show(event.toString(), event.status.toString());
 						break;
 				}
 			}
