@@ -69,10 +69,11 @@
 		<mx:HBox width="100%" horizontalAlign="center">
 			<mx:Button
 				label="Voeg toe"
+				enabled="{parentDocument.user.access == 'read/write'}"
 				click="click_voeg_toe(event)" />
 			<mx:Button
 				label="Verwijder"
-				enabled="{contactGrid.selectedIndex >= 0}"
+				enabled="{parentDocument.user.access == 'read/write' &amp;&amp; contactGrid.selectedIndex >= 0}"
 				click="click_verwijder(event)" />
 		</mx:HBox>
 		
