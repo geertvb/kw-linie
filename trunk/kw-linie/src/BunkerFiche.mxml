@@ -27,28 +27,27 @@
 			[Bindable]
 			public var fltr: Object = new Object();
 
+			/*
 			[Bindable]
 			public var user: Object = {
 				guest: "false",
 				username: "Geert"
 			};
+			*/
 
-			//public var timer: Timer;
+			public var timer: Timer;
 			
 			private function creationComplete() : void {
-				//joomlaUser.send();
+				joomlaUser.send();
 				refreshBunkerGrid();
 				
-				/*
 				timer_security(null);
 				
 				timer = new Timer(1000 * 60);
 				timer.addEventListener(TimerEvent.TIMER, timer_security);
 				timer.start();
-				*/
 			}
 			
-			/*
 			private function timer_security(event: TimerEvent) : void {
 				trace("timer_security " + event);
 				Async.call(joomlaUser.send(), result_joomlaUser);
@@ -61,7 +60,6 @@
 			private function fault_joomlaUser(event : FaultEvent) : void {
 				trace(event + " FAULT " + event.fault);
 			}
-			*/
 			
 			private function refreshBunkerGrid() : void {
 				bunkerService.findAll();
@@ -165,16 +163,13 @@
 		]]>
 	</mx:Script>
 	
-	<!--
 	<mx:Model id="user">{joomlaUser.lastResult}</mx:Model>
-	-->
 	
 	<mx:ArrayCollection 
 		id="bunkers"
 		filterFunction="filterBunkers" 
 		source="{bunkerService.findAll.lastResult}"/>
 	
-	<!--
 	<mx:HTTPService 
 		id="joomlaUser" 
 		url="joomla-user.php" 
@@ -182,7 +177,6 @@
 		resultFormat="e4x"
 		result="null"
 		fault="fault_joomlaUser(event)" />
-	-->
 	
 	<mx:RemoteObject id="bunkerService"
 		source="kwl.BunkerService" 
@@ -314,12 +308,12 @@
 		
 			<mx:Button 
 				label="Voeg toe" 
-				enabled="{user.guest == 'false'}"
+				enabled="{user.access == 'read/write'}"
 				click="click_voeg_toe(event)" />
 
 			<mx:Button 
 				label="Verwijder" 
-				enabled="{user.guest == 'false' &amp;&amp; bunkerGrid.selectedIndex >= 0}" 
+				enabled="{user.access == 'read/write' &amp;&amp; bunkerGrid.selectedIndex >= 0}" 
 				click="click_verwijder(event)"/>
 
 		</mx:HBox>
@@ -337,7 +331,7 @@
 
 		<mx:Button 
 			label="Bewaar" 
-			enabled="{user.guest == 'false'}"
+			enabled="{user.access == 'read/write'}"
 			click="click_bewaar(event)"/>
 
 	</mx:VBox>
