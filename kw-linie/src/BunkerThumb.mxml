@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-	height="170"
+	height="190"
 	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off">
 
@@ -41,7 +41,10 @@
 		<mx:Label text="{bunker.nummer}" textAlign="center" width="140" fontWeight="bold"/>
 		<mx:Image source="download_thumb.php?foto_id={bunker.defaultfoto_id}"
 			ioError="image_ioError(event)"
-			httpStatus="image_httpStatus(event)" />
+			httpStatus="image_httpStatus(event)"
+			width="128"
+			height="96"
+			scaleContent="false"/>
 		<mx:Label text="Type: {bunker.type}"/>
 		<mx:Label text="Gemeente: {bunker.gemeente}"/>
 		<mx:Label text="Deelgemeente: {bunker.deelgemeente}"/>
