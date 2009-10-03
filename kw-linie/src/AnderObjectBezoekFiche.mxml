@@ -79,6 +79,7 @@
 				var index: int = anderObjectBezoeken.getItemIndex(anderObjectBezoekGrid.selectedItem);
 				var anderobjectbezoek: Object = event.result;
 				anderObjectBezoeken.setItemAt(anderobjectbezoek, index);
+				anderObjectBezoekGrid.selectedItem = anderobjectbezoek;
 			}
 			
 			private function result_create(event: ResultEvent) : void {

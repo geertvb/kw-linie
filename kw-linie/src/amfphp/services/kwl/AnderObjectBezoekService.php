@@ -142,9 +142,33 @@ class AnderObjectBezoekService {
 			$this->updateBezoekers($vo, $mysqli);
 			$this->saveToestand($vo, $mysqli);
 			
+			$sql = <<<SQL
+SELECT
+  `kwl_anderobjectbezoek`.*,
+  `kwl_anderobject`.`type` as `anderobject_type`,
+  `kwl_anderobject`.`gemeente` as `anderobject_gemeente`,
+  `kwl_anderobject`.`deelgemeente` as `anderobject_deelgemeente`,
+   CONCAT_WS(' ', `kwl_contact`.`voornaam`,`kwl_contact`.`naam`) as `invuller_naam`
+FROM
+  `kwl_anderobjectbezoek`
+LEFT JOIN
+  `kwl_anderobject` ON (`kwl_anderobject`.`anderobject_id`=`kwl_anderobjectbezoek`.`anderobject_id`)
+LEFT JOIN
+  `kwl_contact` ON (`kwl_contact`.`contact_id`=`kwl_anderobjectbezoek`.`invuller_id`)
+WHERE
+  `kwl_anderobjectbezoek`.`anderobjectbezoek_id` = ?
+SQL;
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $vo["anderobjectbezoek_id"]);
+				if ($stmt->execute()) {
+					$result = getSingleResult($stmt);
+				}
+				$stmt->close();
+			}
+			
 			$mysqli->close();
 		}
-		return $vo;
+		return $result;
 	}
 		
 	private function saveBezoek($vo, $mysqli) {
