@@ -311,9 +311,33 @@ class BunkerBezoekService {
 			$this->saveVerluchtingspijpen($vo, $mysqli);
 			$this->updateSchietgaten($vo, $mysqli);
 			
+			$sql = <<<SQL
+SELECT
+  `kwl_bunkerbezoek`.*,
+  `kwl_bunker`.`nummer` as `bunker_nummer`,
+  `kwl_bunker`.`type` as `bunker_type`,
+  `kwl_bunker`.`gemeente` as `bunker_gemeente`,
+  `kwl_bunker`.`deelgemeente` as `bunker_deelgemeente`,
+   CONCAT_WS(' ', `kwl_contact`.`voornaam`,`kwl_contact`.`naam`) as `invuller_naam`
+FROM
+  `kwl_bunkerbezoek`
+LEFT JOIN
+  `kwl_bunker` ON (`kwl_bunker`.`bunker_id`=`kwl_bunkerbezoek`.`bunker_id`)
+LEFT JOIN
+  `kwl_contact` ON (`kwl_contact`.`contact_id`=`kwl_bunkerbezoek`.`invuller_id`)
+WHERE
+  `kwl_bunkerbezoek`.`bunkerbezoek_id` = ?
+SQL;
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $vo["bunkerbezoek_id"]);
+				if ($stmt->execute()) {
+					$result = getSingleResult($stmt);
+				}
+				$stmt->close();
+			}			
 			$mysqli->close();
 		}
-		return true;
+		return $result;
 	}
 
 	private function saveCamouflage($vo, $mysqli) {

@@ -21,8 +21,16 @@
 		
 			[Bindable]
 			public var fltr: Object = new Object();
+				
+			private var filterFields: ArrayCollection = new ArrayCollection();
 			
 			public var timer: Timer;
+			
+			public function registerFilterField(filterField: Object) : void {
+				if (!filterFields.contains(filterField)) {
+					filterFields.addItem(filterField);
+				}
+			}
 			
 			private function creationComplete() : void {
 				joomlaUser.send();
@@ -82,11 +90,16 @@
 			}
 			
 			private function result_save(event: ResultEvent) : void {
-				//Alert.show(event.result.toString());
-				refreshBunkerBezoekGrid();
+				var bunkerbezoek: Object = event.result;
+
+				var index: int = bunkerbezoeken.getItemIndex(bunkerBezoekGrid.selectedItem);
+				bunkerbezoeken.setItemAt(bunkerbezoek, index);
+				bunkerBezoekGrid.selectedItem = bunkerbezoek;
+				bunkerBezoekGrid.scrollToIndex(bunkerBezoekGrid.selectedIndex);
 			}
 
 			private function click_voeg_toe(event: Event) : void {
+				clearfilter();
 				bunkerBezoekService.create();
 			}
 			
@@ -95,6 +108,7 @@
 				newBunkerBunker.bunkerbezoek_id = event.result;
 				bunkerbezoeken.addItem(newBunkerBunker);
 				bunkerBezoekGrid.selectedItem = newBunkerBunker;
+				bunkerBezoekGrid.scrollToIndex(bunkerBezoekGrid.selectedIndex);
 			}
 
 			private function result_remove(event: ResultEvent) : void {
@@ -121,6 +135,16 @@
 			public function filter(fieldname: String, fieldvalue: String) : void {
 				//Alert.show("filter " + fieldname + " = " + fieldvalue);
 				fltr[fieldname] = fieldvalue;
+				bunkerbezoeken.refresh();
+			}
+			
+			public function clearfilter() : void {
+				for each (var filterField:Object in filterFields) {
+					filterField.text = "";
+				}
+				for (var ff: String in fltr) {
+					fltr[ff] = "";
+				}
 				bunkerbezoeken.refresh();
 			}
 			
@@ -184,6 +208,7 @@
 								<mx:TextInput 
 									id="f_datum"
 									text="{outerDocument.fltr.datum}"
+									initialize="outerDocument.registerFilterField(f_datum)"
 									change="outerDocument.filter('datum', f_datum.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -201,6 +226,7 @@
 								<mx:TextInput 
 									id="f_invuller_naam"
 									text="{outerDocument.fltr.invuller_naam}"
+									initialize="outerDocument.registerFilterField(f_invuller_naam)"
 									change="outerDocument.filter('invuller_naam', f_invuller_naam.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -218,6 +244,7 @@
 								<mx:TextInput 
 									id="f_bunker_id"
 									text="{outerDocument.fltr.bunker_id}"
+									initialize="outerDocument.registerFilterField(f_bunker_id)"
 									change="outerDocument.filter('bunker_id', f_bunker_id.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -235,6 +262,7 @@
 								<mx:TextInput 
 									id="f_bunker_nummer"
 									text="{outerDocument.fltr.bunker_nummer}"
+									initialize="outerDocument.registerFilterField(f_bunker_nummer)"
 									change="outerDocument.filter('bunker_nummer', f_bunker_nummer.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -252,6 +280,7 @@
 								<mx:TextInput 
 									id="f_bunker_type"
 									text="{outerDocument.fltr.bunker_type}"
+									initialize="outerDocument.registerFilterField(f_bunker_type)"
 									change="outerDocument.filter('bunker_type', f_bunker_type.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -269,6 +298,7 @@
 								<mx:TextInput 
 									id="f_bunker_gemeente"
 									text="{outerDocument.fltr.bunker_gemeente}"
+									initialize="outerDocument.registerFilterField(f_bunker_gemeente)"
 									change="outerDocument.filter('bunker_gemeente', f_bunker_gemeente.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -286,6 +316,7 @@
 								<mx:TextInput 
 									id="f_bunker_deelgemeente"
 									text="{outerDocument.fltr.bunker_deelgemeente}"
+									initialize="outerDocument.registerFilterField(f_bunker_deelgemeente)"
 									change="outerDocument.filter('bunker_deelgemeente', f_bunker_deelgemeente.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -309,7 +340,7 @@
 				label="Verwijder" 
 				enabled="{user.access == 'read/write' &amp;&amp; bunkerBezoekGrid.selectedIndex >= 0}" 
 				click="click_verwijder(event)"/>
-
+			
 		</mx:HBox>
 		
 		<mx:TabNavigator width="100%" creationPolicy="all" height="512">
