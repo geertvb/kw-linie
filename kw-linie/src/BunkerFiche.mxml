@@ -26,15 +26,25 @@
 			
 			[Bindable]
 			public var fltr: Object = new Object();
+			
+			private var filterFields: ArrayCollection = new ArrayCollection();
 
-			/*
-			[Bindable]
-			public var user: Object = {
-				guest: "false",
-				username: "Geert"
-			};
-			*/
-
+			public function registerFilterField(filterField: Object) : void {
+				if (!filterFields.contains(filterField)) {
+					filterFields.addItem(filterField);
+				}
+			}
+			
+			public function clearfilter() : void {
+				for each (var filterField:Object in filterFields) {
+					filterField.text = "";
+				}
+				for (var ff: String in fltr) {
+					fltr[ff] = "";
+				}
+				bunkers.refresh();
+			}
+			
 			public var timer: Timer;
 			
 			private function creationComplete() : void {
@@ -106,6 +116,7 @@
 			}
 			
 			private function click_voeg_toe(event: Event) : void {
+				clearfilter();
 				bunkerService.create();
 			}
 			
@@ -207,6 +218,7 @@
 								<mx:TextInput 
 									id="f_bunker_id"
 									text="{outerDocument.fltr.bunker_id}"
+									initialize="outerDocument.registerFilterField(f_bunker_id)"
 									change="outerDocument.filter('bunker_id', f_bunker_id.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -224,6 +236,7 @@
 								<mx:TextInput 
 									id="f_nummer"
 									text="{outerDocument.fltr.nummer}"
+									initialize="outerDocument.registerFilterField(f_nummer)"
 									change="outerDocument.filter('nummer', f_nummer.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -241,6 +254,7 @@
 								<mx:TextInput 
 									id="f_type"
 									text="{outerDocument.fltr.type}"
+									initialize="outerDocument.registerFilterField(f_type)"
 									change="outerDocument.filter('type', f_type.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -258,6 +272,7 @@
 								<mx:TextInput 
 									id="f_gemeente"
 									text="{outerDocument.fltr.gemeente}"
+									initialize="outerDocument.registerFilterField(f_gemeente)"
 									change="outerDocument.filter('gemeente', f_gemeente.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -275,6 +290,7 @@
 								<mx:TextInput 
 									id="f_deelgemeente"
 									text="{outerDocument.fltr.deelgemeente}"
+									initialize="outerDocument.registerFilterField(f_deelgemeente)"
 									change="outerDocument.filter('deelgemeente', f_deelgemeente.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
@@ -292,6 +308,7 @@
 								<mx:TextInput 
 									id="f_straat"
 									text="{outerDocument.fltr.straat}"
+									initialize="outerDocument.registerFilterField(f_straat)"
 									change="outerDocument.filter('straat', f_straat.text)"
 									mouseUp="event.stopImmediatePropagation()"
 									mouseDown="event.stopImmediatePropagation()"
