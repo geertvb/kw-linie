@@ -92,6 +92,9 @@
 						break;
 					}
 				}
+				
+				bunkerGrid.selectedItem = b;
+				bunkerGrid.scrollToIndex(bunkerGrid.selectedIndex);
 			}
 			
 			private function bunkerGridChange(event: Event) : void {
