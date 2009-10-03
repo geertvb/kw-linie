@@ -125,6 +125,7 @@
 				newBunker.bunker_id = event.result;
 				bunkers.addItem(newBunker);
 				bunkerGrid.selectedItem = newBunker;
+				bunkerGrid.scrollToIndex(bunkerGrid.selectedIndex);
 			}
 
 			private function result_remove(event: ResultEvent) : void {
