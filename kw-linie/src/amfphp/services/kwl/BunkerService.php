@@ -298,10 +298,26 @@ class BunkerService {
 			$this->updateFotos($bunker, $mysqli);
 			$this->updateDocumenten($bunker, $mysqli);
 			
+			$sql = <<<SQL
+SELECT
+  *
+FROM
+  `kwl_bunker`
+WHERE
+  `bunker_id` = ?
+SQL;
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $bunker["bunker_id"]);
+				if ($stmt->execute()) {
+					$result = getSingleResult($stmt);
+				}
+				$stmt->close();
+			}
+			
 			$mysqli->close();
 		}
 		
-		return $bunker;
+		return $result;
 	}
 	
 	private function updateDocumenten($vo, $mysqli) {
