@@ -12,6 +12,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import referenceData.BunkerCodeHolder;
 			import com.google.maps.overlays.PolylineOptions;
 			import com.google.maps.overlays.Polyline;
 	    	import com.google.maps.controls.MapTypeControl;
@@ -27,7 +28,7 @@
 			
 			public var bunkerMarkers: ArrayCollection;
 			
-			private const ALLEMAAL: String = "[ALLE]";
+			private const ALLEMAAL: String = "Alle";
 			
 			private var gemeenteBuf: String = ALLEMAAL;
 			
@@ -35,7 +36,8 @@
 			public var typeLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
 			
 			[Bindable]
-			public var codeLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
+			public var codeLijst: ArrayCollection = new ArrayCollection(BunkerCodeHolder.getInstance2().data);
+			
 			
 			[Bindable]
 			public var gemeenteLijst: ArrayCollection = new ArrayCollection([ALLEMAAL]);
@@ -47,7 +49,7 @@
 				bunkerResponder.token = bunkerService.findAll();
 
 				typeResponder.token = bunkerService.findTypes();
-				codeResponder.token = bunkerService.findCodes();
+				//codeResponder.token = bunkerService.findCodes();
 				gemeenteResponder.token = bunkerService.findGemeentes();
 				deelgemeenteResponder.token = bunkerService.findDeelgemeentes();
 			}
@@ -237,7 +239,7 @@
 	        	var visible: Boolean = true;
 	    		visible &&= filterTypeMarkers(bunker.type);
 	    		visible &&= filterAanwezigheid(bunker.aanwezig);
-	    		visible &&= codeFilter.selectedIndex<=0 || (bunker.code == codeFilter.selectedLabel);
+	    		visible &&= codeFilter.selectedIndex<=0 || (bunker.code == codeFilter.selectedValue);
 	    		visible &&= gemeenteFilter.selectedIndex<=0 || (bunker.gemeente == gemeenteFilter.selectedLabel);
 	    		visible &&= deelgemeenteFilter.selectedIndex<=0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
 	    		return visible;
@@ -255,7 +257,9 @@
 	
 	<xyz:CallResponder id="typeResponder" result="typeLijst = filterLijst(typeResponder.lastResult);"/>
 
+	<!--
 	<xyz:CallResponder id="codeResponder" result="codeLijst = filterLijst(codeResponder.lastResult);"/>
+	-->
 
 	<xyz:CallResponder id="gemeenteResponder" result="gemeenteLijst = filterLijst(gemeenteResponder.lastResult);"/>
 
@@ -423,14 +427,15 @@
 
 			<mx:Label text="Bunker code:" color="#FFFFFF" fontWeight="bold"/>
 			<mx:HBox paddingLeft="8" width="100%">
-				<mx:ComboBox id="codeFilter"
+				<components:ComboBoxEx id="codeFilter"
 					width="180"
 					maxWidth="180"
 					dataProvider="{codeLijst}"
 					selectedIndex="0"
-					labelField="code"
+					labelField="label"
+					valueField="code"
 					valueCommit="filterMarkers();"
-					rowCount="8"></mx:ComboBox>
+					rowCount="8"></components:ComboBoxEx>
 			</mx:HBox>
 
 			<mx:Label text="Gemeente:"  color="#FFFFFF" fontWeight="bold"/>
