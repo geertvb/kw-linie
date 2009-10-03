@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	width="512" height="140" xmlns:local="*">
+
+	<mx:Script>
+		<![CDATA[
+			public function click_upload() : void {
+				data.omschrijving = ti_omschrijving.text;
+				data.upload();
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HBox>
+		
+		<local:BitmapHolder
+			width="128"
+			height="96"
+			source="{data.thumbnail}"/>
+	
+		<mx:VBox>
+			<mx:Form
+				paddingBottom="0"
+				paddingLeft="0"
+				paddingRight="0"
+				paddingTop="0">
+				<mx:FormItem label="Omschrijving">
+					<mx:TextInput 
+						id="ti_omschrijving" 
+						textAlign="left"
+						width="320"/>
+				</mx:FormItem>
+				<mx:FormItem label="Bestandsnaam">
+					<mx:Text text="{data.fileReference.name}" />
+				</mx:FormItem>
+				<mx:FormItem label="Afbeeldinggrootte">
+					<mx:Text text="{data.realWidth} x {data.realHeight} pixels" />
+				</mx:FormItem>
+				<mx:FormItem label="Bestandsgrootte">
+					<mx:Text text="{data.fileReference.size} bytes" />
+				</mx:FormItem>
+			</mx:Form>
+			
+		</mx:VBox>
+
+	</mx:HBox>
+	
+	<mx:HBox>
+		
+		<mx:Button 
+			label="Upload" 
+			click="click_upload();"
+			enabled="{data.readyForUpload &amp;&amp; ti_omschrijving.text != ''}" />
+		
+		<mx:Button 
+			label="Cancel" 
+			enabled="{data.uploading}" />
+		
+		<mx:ProgressBar 
+			labelPlacement="center"
+			visible="{data.done || data.uploading}"
+			mode="event"
+			source="{data.fileReference}" />
+
+	</mx:HBox>
+	
+</mx:VBox>
