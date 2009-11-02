@@ -129,34 +129,32 @@ class BunkerService {
 	*/
 	
 	function findGemeentes() {
-		$sql = array();
-		$sql[] = "SELECT distinct";
-		$sql[] = "  `gemeente`";
-		$sql[] = "FROM";
-		$sql[] = "  `kwl_bunker`";
-		$sql[] = "WHERE";
-		$sql[] = "  `gemeente` is not null AND";
-		$sql[] = "  `gemeente` <> '' AND";
-		$sql[] = "  `gemeente` <> '?'";
-		$sql[] = "ORDER BY";
-		$sql[] = "  `gemeente` ASC";
-		return findSQL(implode(" ", $sql));
+		$sql = <<<SQL1
+SELECT DISTINCT
+  `gemeente`
+FROM
+  `kwl_deelgemeente` 
+WHERE
+  `kwlinie` = 1
+ORDER BY
+  `gemeente` ASC
+SQL1;
+		return findSQL($sql);
 	}
 	
 	function findDeelgemeentes() {
-		$sql = array();
-		$sql[] = "SELECT distinct";
-		$sql[] = "  `deelgemeente`,";
-		$sql[] = "  `gemeente`";
-		$sql[] = "FROM";
-		$sql[] = "  `kwl_bunker`";
-		$sql[] = "WHERE";
-		$sql[] = "  `deelgemeente` is not null AND";
-		$sql[] = "  `deelgemeente` <> '' AND";
-		$sql[] = "  `deelgemeente` <> '?'";
-		$sql[] = "ORDER BY";
-		$sql[] = "  `deelgemeente` ASC";
-		return findSQL(implode(" ", $sql));
+		$sql = <<<SQL2
+SELECT DISTINCT
+  `deelgemeente`,
+  `gemeente`
+FROM
+  `kwl_deelgemeente`
+WHERE
+  `kwlinie` = 1
+ORDER BY
+  `deelgemeente` ASC
+SQL2;
+		return findSQL($sql);
 	}
 
 	function findByID($id) {
