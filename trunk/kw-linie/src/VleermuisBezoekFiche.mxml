@@ -71,6 +71,7 @@
 			
 			private function bind(vo: Object) : void {
 				bezoekView.bind(vo);
+				maatregelenView.bind(vo);
 				vleermuizenView.bind(vo);
 				opmerkingenView.bind(vo);
 			}
@@ -319,6 +320,10 @@
 				id="bezoekView" 
 				label="Bezoek" 
 				data="{item}" />
+			<tab:Maatregelen
+				id="maatregelenView"
+				data="{item}" 
+				label="Maatregelen" />
 			<tab:Vleermuizen
 				id="vleermuizenView"
 				data="{item}" 

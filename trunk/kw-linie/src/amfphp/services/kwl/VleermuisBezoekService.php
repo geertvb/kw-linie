@@ -5,23 +5,24 @@ include_once '../../../mysqliUtils.php';
 class VleermuisBezoekService {
 
 	function findAll() {
-		$sql[] = "SELECT ";
-		$sql[] = "  `kwl_vleermuisbezoek`.*,";
-		$sql[] = "  `kwl_bunker`.`nummer` as `bunker_nummer`,";
-		$sql[] = "  `kwl_bunker`.`type` as `bunker_type`,";
-		$sql[] = "  `kwl_bunker`.`gemeente` as `bunker_gemeente`,";
-		$sql[] = "  `kwl_bunker`.`deelgemeente` as `bunker_deelgemeente`,";
-		$sql[] = "   CONCAT_WS(' ', `kwl_contact`.`voornaam`,`kwl_contact`.`naam`) as `invuller_naam`";
-		$sql[] = "FROM ";
-		$sql[] = "  `kwl_vleermuisbezoek` ";
-		$sql[] = "LEFT JOIN";
-		$sql[] = "  `kwl_bunker` ON (`kwl_bunker`.`bunker_id`=`kwl_vleermuisbezoek`.`bunker_id`)";
-		$sql[] = "LEFT JOIN";
-		$sql[] = "  `kwl_contact` ON (`kwl_contact`.`contact_id`=`kwl_vleermuisbezoek`.`invuller_id`)";
-		$sql[] = "ORDER BY";
-		$sql[] = "  `kwl_vleermuisbezoek`.`datum` DESC";
-		
-    	return findSQL(implode(" ", $sql));
+		$sql = <<<SQL1
+SELECT
+  `kwl_vleermuisbezoek`.*,
+  `kwl_bunker`.`nummer` as `bunker_nummer`,
+  `kwl_bunker`.`type` as `bunker_type`,
+  `kwl_bunker`.`gemeente` as `bunker_gemeente`,
+  `kwl_bunker`.`deelgemeente` as `bunker_deelgemeente`,
+   CONCAT_WS(' ', `kwl_contact`.`voornaam`,`kwl_contact`.`naam`) as `invuller_naam`
+FROM
+  `kwl_vleermuisbezoek`
+LEFT JOIN
+  `kwl_bunker` ON (`kwl_bunker`.`bunker_id`=`kwl_vleermuisbezoek`.`bunker_id`)
+LEFT JOIN
+  `kwl_contact` ON (`kwl_contact`.`contact_id`=`kwl_vleermuisbezoek`.`invuller_id`)
+ORDER BY
+  `kwl_vleermuisbezoek`.`datum` DESC
+SQL1;
+    	return findSQL($sql);
     }
 
     function remove($id) {
@@ -165,6 +166,7 @@ class VleermuisBezoekService {
 		if ($mysqli = newMysqli()) {
 
 			$this->saveBezoek($vo, $mysqli);
+			$this->saveMaatregelen($vo, $mysqli);
 			$this->updateTellers($vo, $mysqli);
 			$this->updateAantallen($vo, $mysqli);
 			
@@ -173,6 +175,50 @@ class VleermuisBezoekService {
 		return $vo;
 	}
 		
+	private function saveMaatregelen($vo, $mysqli) {
+		$sql = <<<SQL3
+update
+  `kwl_vleermuisbezoek`
+set
+  `maatregelen_bekeken` = ?,
+  `openingen_dichtgemetst` = ?,
+  `dakbedekking` = ?,
+  `water_ingebracht` = ?,
+  `deuren_aangebracht` = ?,
+  `replica_origineel` = ?,
+  `bakstenen_opgehangen` = ?,
+  `houten_planken_opgehangen` = ?,
+  `aarde_tegen_buitenmuren_aangebracht` = ?,
+  `datalogger_thermometer_aanwezig` = ? 
+where
+  `vleermuisbezoek_id` = ?
+SQL3;
+		
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('iiiiiiiiiii', 
+				$vo["maatregelen_bekeken"], 
+				$vo["openingen_dichtgemetst"], 
+				$vo["dakbedekking"], 
+				$vo["water_ingebracht"], 
+				$vo["deuren_aangebracht"], 
+				$vo["replica_origineel"], 
+				$vo["bakstenen_opgehangen"], 
+				$vo["houten_planken_opgehangen"], 
+				$vo["aarde_tegen_buitenmuren_aangebracht"], 
+				$vo["datalogger_thermometer_aanwezig"], 
+				$vo["vleermuisbezoek_id"]);
+			if ($stmt->execute()) {
+				// Just execute
+			} else {
+				throw new Exception($mysqli->error);
+			}
+			$stmt->close();
+		} else {
+			throw new Exception($mysqli->error);
+		}
+		return $sql;
+	}
+
 	private function saveBezoek($vo, $mysqli) {
 		$sql = "update `kwl_vleermuisbezoek` ";
 		$sql .= "set ";
