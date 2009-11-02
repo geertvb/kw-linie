@@ -170,9 +170,34 @@ SQL1;
 			$this->updateTellers($vo, $mysqli);
 			$this->updateAantallen($vo, $mysqli);
 			
+			$sql = <<<SQL2
+SELECT
+  `kwl_vleermuisbezoek`.*,
+  `kwl_bunker`.`nummer` as `bunker_nummer`,
+  `kwl_bunker`.`type` as `bunker_type`,
+  `kwl_bunker`.`gemeente` as `bunker_gemeente`,
+  `kwl_bunker`.`deelgemeente` as `bunker_deelgemeente`,
+   CONCAT_WS(' ', `kwl_contact`.`voornaam`,`kwl_contact`.`naam`) as `invuller_naam`
+FROM
+  `kwl_vleermuisbezoek`
+LEFT JOIN
+  `kwl_bunker` ON (`kwl_bunker`.`bunker_id`=`kwl_vleermuisbezoek`.`bunker_id`)
+LEFT JOIN
+  `kwl_contact` ON (`kwl_contact`.`contact_id`=`kwl_vleermuisbezoek`.`invuller_id`)
+WHERE
+  `kwl_vleermuisbezoek`.`vleermuisbezoek_id` = ?
+SQL2;
+			if ($stmt = $mysqli->prepare($sql)) {
+				$stmt->bind_param('i', $vo["vleermuisbezoek_id"]);
+				if ($stmt->execute()) {
+					$result = getSingleResult($stmt);
+				}
+				$stmt->close();
+			}			
+			
 			$mysqli->close();
 		}
-		return $vo;
+		return $result;
 	}
 		
 	private function saveMaatregelen($vo, $mysqli) {
