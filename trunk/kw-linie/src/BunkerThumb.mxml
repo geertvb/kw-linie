@@ -8,7 +8,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
+			import util.FotoUtils;
 			
 			[Embed(source="bunker.jpg")]
 			[Bindable]
@@ -32,6 +32,13 @@
 				}
 			}
 			
+
+			public static function image_clickHandler(image: Image, foto_id:int):void {
+				if (image.source != bunkerke) {
+					FotoUtils.navigateTo(foto_id);
+				}
+			}
+
 		]]>
 	</mx:Script>
 
@@ -39,9 +46,11 @@
 		paddingLeft="5" paddingTop="0" paddingRight="5" paddingBottom="5" 
 		verticalGap="0">
 		<mx:Label text="{bunker.nummer}" textAlign="center" width="140" fontWeight="bold"/>
-		<mx:Image source="download_thumb.php?foto_id={bunker.defaultfoto_id}"
+		<mx:Image id="image1"
+			source="download_thumb.php?foto_id={bunker.defaultfoto_id}"
 			ioError="image_ioError(event)"
 			httpStatus="image_httpStatus(event)"
+			click="image_clickHandler(image1, bunker.defaultfoto_id)"
 			width="128"
 			height="96"
 			scaleContent="false"/>
