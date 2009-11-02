@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Script>
+		<![CDATA[
+			import util.BindingUtils;
+			
+			public function bind(vo: Object) : void {
+				vo.maatregelen_bekeken = BindingUtils.checkboxToBoolean(cb_maatregelen_bekeken);
+				
+				vo.openingen_dichtgemetst = BindingUtils.checkboxToBoolean(cb_openingen_dichtgemetst);
+				vo.dakbedekking = BindingUtils.checkboxToBoolean(cb_dakbedekking);
+				vo.water_ingebracht = BindingUtils.checkboxToBoolean(cb_water_ingebracht);
+				vo.deuren_aangebracht = BindingUtils.checkboxToBoolean(cb_deuren_aangebracht);
+				vo.replica_origineel = BindingUtils.checkboxToBoolean(cb_replica_origineel);
+				vo.bakstenen_opgehangen = BindingUtils.checkboxToBoolean(cb_bakstenen_opgehangen);
+				vo.houten_planken_opgehangen = BindingUtils.checkboxToBoolean(cb_houten_planken_opgehangen);
+				vo.aarde_tegen_buitenmuren_aangebracht = BindingUtils.checkboxToBoolean(cb_aarde_tegen_buitenmuren_aangebracht);
+				vo.datalogger_thermometer_aanwezig = BindingUtils.checkboxToBoolean(cb_datalogger_thermometer_aanwezig);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox>
+		<mx:Form>
+			
+			<mx:FormItem label="Bekeken">
+				<mx:CheckBox
+					id="cb_maatregelen_bekeken"
+					selected="{data.maatregelen_bekeken}" />
+			</mx:FormItem>
+
+			<mx:FormItem label="Maatregelen" enabled="{cb_maatregelen_bekeken.selected}">
+				<mx:CheckBox 
+					id="cb_openingen_dichtgemetst"
+					selected="{data.openingen_dichtgemetst}"
+					label="Openingen dichtgemetst"/>
+				<mx:CheckBox 
+					id="cb_dakbedekking"
+					selected="{data.dakbedekking}"
+					label="Dakbedekking"/>
+				<mx:CheckBox 
+					id="cb_water_ingebracht"
+					selected="{data.water_ingebracht}"
+					label="Water ingebracht"/>
+				<mx:CheckBox 
+					id="cb_deuren_aangebracht"
+					selected="{data.deuren_aangebracht}"
+					label="Deuren aangebracht"/>
+				<mx:CheckBox 
+					id="cb_replica_origineel"
+					selected="{data.replica_origineel}"
+					label="Replica origineel"
+					enabled="{cb_deuren_aangebracht.selected}" paddingLeft="20"/>
+				<mx:CheckBox 
+					id="cb_bakstenen_opgehangen"
+					selected="{data.bakstenen_opgehangen}"
+					label="Bakstenen opgehangen"/>
+				<mx:CheckBox 
+					id="cb_houten_planken_opgehangen"
+					selected="{data.houten_planken_opgehangen}"
+					label="Houten planken opgehangen"/>
+				<mx:CheckBox 
+					id="cb_aarde_tegen_buitenmuren_aangebracht"
+					selected="{data.aarde_tegen_buitenmuren_aangebracht}"
+					label="Aarde tegen buitenmuren aangebracht"/>
+				<mx:CheckBox 
+					id="cb_datalogger_thermometer_aanwezig"
+					selected="{data.datalogger_thermometer_aanwezig}"
+					label="Datalogger/thermometer aanwezig"/>
+			</mx:FormItem>
+			
+		</mx:Form>
+	</mx:VBox>
+
+</mx:Canvas>
