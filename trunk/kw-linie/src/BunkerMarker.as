@@ -19,13 +19,13 @@ package
 		public var marker: Marker;
 		public var latLng: LatLng;
 		public static var bunkerTypeColors: Object = {
-			"commando 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false},
-			"commando 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false},
-			"connectiekamer": {strokeColor: 0xDDDD88, fillColor: 0x008888, closed: false},
-			"bruggenhoofd mechelen": {strokeColor: 0xDDDD88, fillColor: 0x000088, closed: false},
-			"verdediging 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x880000, closed: false},
-			"verdediging 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x008800, closed: false},
-			"verdediging antitankcentrum": {strokeColor: 0xDDDD88, fillColor: 0x000000, closed: true}
+			"commando 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false, visible: true},
+			"commando 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false, visible: true},
+			"connectiekamer": {strokeColor: 0xDDDD88, fillColor: 0x008888, closed: false, visible: false},
+			"bruggenhoofd mechelen": {strokeColor: 0xDDDD88, fillColor: 0x000088, closed: false, visible: true},
+			"verdediging 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x880000, closed: false, visible: true},
+			"verdediging 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x008800, closed: false, visible: true},
+			"verdediging antitankcentrum": {strokeColor: 0xDDDD88, fillColor: 0x000000, closed: true, visible: true}
 		}
 		
 		public function createMarker(bunker: Object) : Marker

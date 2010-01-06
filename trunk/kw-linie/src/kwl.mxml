@@ -12,19 +12,21 @@
 
 	<mx:Script>
 		<![CDATA[
-			import referenceData.BunkerCodeHolder;
-			import com.google.maps.overlays.PolylineOptions;
+			import com.google.maps.LatLng;
+			import com.google.maps.Map;
+			import com.google.maps.MapEvent;
+			import com.google.maps.MapType;
+			import com.google.maps.controls.MapTypeControl;
+			import com.google.maps.controls.PositionControl;
+			import com.google.maps.controls.ZoomControl;
 			import com.google.maps.overlays.Polyline;
-	    	import com.google.maps.controls.MapTypeControl;
-	    	import com.google.maps.controls.PositionControl;
-	    	import com.google.maps.controls.ZoomControl;
-		    import com.google.maps.LatLng;
-		    import com.google.maps.Map;
-		    import com.google.maps.MapEvent;
-		    import com.google.maps.MapType;
+			import com.google.maps.overlays.PolylineOptions;
+			
 			import mx.collections.ArrayCollection;
-			import mx.rpc.events.ResultEvent;
 			import mx.rpc.CallResponder;
+			import mx.rpc.events.ResultEvent;
+			
+			import referenceData.BunkerCodeHolder;
 			
 			public var bunkerMarkers: ArrayCollection;
 			
@@ -49,13 +51,14 @@
 				bunkerResponder.token = bunkerService.findAll();
 
 				typeResponder.token = bunkerService.findTypes();
+				verbindingResponder.token = bunkerService.findVerbindingen();
 				//codeResponder.token = bunkerService.findCodes();
 				gemeenteResponder.token = bunkerService.findGemeentes();
 				deelgemeenteResponder.token = bunkerService.findDeelgemeentes();
 			}
 			
 			private function drawPoly(vertices: Array, type: String) : void {
-				if (vertices.length > 1) {
+				if (vertices.length > 1 && BunkerMarker.bunkerTypeColors[type]["visible"]) {
 					var lineOptions:PolylineOptions = new PolylineOptions({
 						strokeStyle: {
 							thickness: 3,
@@ -73,30 +76,37 @@
 			}
 			
             public function displaymarkers() : void {
-				var bunkers : Array = bunkerResponder.lastResult as Array;
-				var previous: BunkerMarker = null;
-				var vertices: Array = new Array();
-				bunkerMarkers = new ArrayCollection();
-				for each (var bunker:Object in bunkers) {
-					if (bunker.lat != null && bunker.lat != 0 
-							&& bunker.lng != null && bunker.lng != 0) {
-						var bunkerMarker: BunkerMarker = new BunkerMarker(bunker);
-	        			map.addOverlay(bunkerMarker.marker);
-	        			bunkerMarkers.addItem(bunkerMarker);
-	        			
-	        			if (previous != null 
-	        				&& (previous.bunker.type != bunkerMarker.bunker.type
-	        				|| previous.bunker.code != bunkerMarker.bunker.code)) {
-							drawPoly(vertices, previous.bunker.type);
-	        				vertices = new Array();
-     					}
-	        			
-	        			vertices.push(bunkerMarker.latLng);
-	        			
-	        			previous = bunkerMarker;
-					}
-            	}
-				drawPoly(vertices, previous.bunker.type);
+				
+				if (bunkerResponder.lastResult
+					&& verbindingResponder.lastResult
+					&& map.isLoaded()) {
+				
+					var bunkers : Array = bunkerResponder.lastResult as Array;
+					var previous: BunkerMarker = null;
+					var vertices: Array = new Array();
+					bunkerMarkers = new ArrayCollection();
+					for each (var bunker:Object in bunkers) {
+						if (bunker.lat != null && bunker.lat != 0 
+								&& bunker.lng != null && bunker.lng != 0) {
+							var bunkerMarker: BunkerMarker = new BunkerMarker(bunker);
+		        			map.addOverlay(bunkerMarker.marker);
+		        			bunkerMarkers.addItem(bunkerMarker);
+		        			
+		        			if (previous != null 
+		        				&& (previous.bunker.type != bunkerMarker.bunker.type
+		        				|| previous.bunker.code != bunkerMarker.bunker.code)) {
+								drawPoly(vertices, previous.bunker.type);
+		        				vertices = new Array();
+	     					}
+		        			
+		        			vertices.push(bunkerMarker.latLng);
+		        			
+		        			previous = bunkerMarker;
+						}
+	            	}
+					drawPoly(vertices, previous.bunker.type);
+					teken_verbindingen();
+				}
             }
             
 		    private function onMapReady(event:Event):void {
@@ -106,16 +116,8 @@
 				map.addControl(new MapTypeControl());
 				map.setCenter(new LatLng(50.97652410041966, 4.5602220120386106),
 					10, MapType.NORMAL_MAP_TYPE);
-				
-				if (bunkerResponder.lastResult) {
-					displaymarkers();
-				}
-		    }
-		    
-		    private function bunkerResponderResult(event: Event) : void {
-		    	if (map.isLoaded()) {
-					displaymarkers();
-		    	}
+
+				displaymarkers();
 		    }
 		    
 		    private function filterTypeMarkers(type: String) : Boolean {
@@ -244,6 +246,53 @@
 	    		visible &&= deelgemeenteFilter.selectedIndex<=0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel);
 	    		return visible;
 	        }
+			
+			protected function normalizenummer(nummer: String) : String {
+				var result: String = nummer;
+				var pattern:RegExp = /(\s|\/)/gi;
+
+				result = result.replace(pattern, "");
+				result = result.toLowerCase();
+				return result;
+			}
+			
+			protected function getBunkerMarker(nummer: String) : BunkerMarker {
+				for each (var bm: BunkerMarker in bunkerMarkers) {
+					var type: String = bm.bunker.type;
+					if ((type == "connectiekamer" 
+						|| type == "commando 1e lijn"
+						|| type == "commando 2e lijn")
+						
+						&& (normalizenummer(bm.bunker.nummer) == normalizenummer(nummer))) {
+							
+						return bm;
+						
+					}
+				}
+				return null;
+			}
+
+			protected function teken_verbindingen():void
+			{
+				var bm1: BunkerMarker;
+				var bm2: BunkerMarker;
+				for each (var v: Object in verbindingResponder.lastResult) {
+					bm1 = getBunkerMarker(v["van"]);
+					bm2 = getBunkerMarker(v["tot"]);
+					if (bm1 != null && bm2 != null) {
+						var lineOptions:PolylineOptions = new PolylineOptions({
+							strokeStyle: {
+								thickness: 3,
+								color: 0x008888,
+								alpha: 0.5,
+								pixelHinting: false
+							}
+						});
+						var polyLine: Polyline = new Polyline([bm1.latLng, bm2.latLng], lineOptions);
+						map.addOverlay(polyLine);
+					}
+				}
+			}
 
 		]]>
 	</mx:Script>
@@ -253,7 +302,9 @@
 		filterFunction="filterBunker"
 		source="{bunkerResponder.lastResult}" />
 	
-	<xyz:CallResponder id="bunkerResponder" result="bunkerResponderResult(event)" />
+	<xyz:CallResponder id="bunkerResponder" result="displaymarkers()" />
+	
+	<xyz:CallResponder id="verbindingResponder" result="displaymarkers()" />
 	
 	<xyz:CallResponder id="typeResponder" result="typeLijst = filterLijst(typeResponder.lastResult);"/>
 
