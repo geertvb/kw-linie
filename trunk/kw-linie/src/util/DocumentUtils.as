@@ -6,6 +6,8 @@ package util
 	import flash.net.URLVariables;
 	import flash.net.navigateToURL;
 	
+	import mx.core.Application;
+	
 	public class DocumentUtils
 	{
 
@@ -24,7 +26,9 @@ package util
 			parameters.document_id = document_id;
 
 			var request: URLRequest = new URLRequest();
-			request.url = "download_document.php";
+			var appUrl: String = Application.application.url;
+			var i: int = appUrl.lastIndexOf("/");
+			request.url = appUrl.substring(0,i+1) + "download_document.php";
 			request.method = URLRequestMethod.GET;
 			request.data = parameters;
 
