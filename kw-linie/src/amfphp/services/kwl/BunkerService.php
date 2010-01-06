@@ -157,6 +157,19 @@ SQL2;
 		return findSQL($sql);
 	}
 
+	function findVerbindingen() {
+		$sql = <<<SQL3
+SELECT
+  `van`,
+  `tot`
+FROM
+  `kwl_verbinding`
+ORDER BY
+  `kwl_verbinding_id` ASC
+SQL3;
+		return findSQL($sql);
+	}
+
 	function findByID($id) {
 		
 		if ($mysqli = newMysqli()) {
