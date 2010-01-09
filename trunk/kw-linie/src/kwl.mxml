@@ -132,10 +132,13 @@
 		    	return result;
 		    }
 		    
-		    private function filterAanwezigheid(aanwezig: Boolean) : Boolean {
+		    private function filterAanwezigheid(aanwezig: String) : Boolean {
 		    	var result : Boolean = false;
-		    	result ||= aanwezig && cb_aanwezig.selected;
-		    	result ||= !aanwezig && cb_afwezig.selected;
+		    	result ||= aanwezig == 'aanwezig' && cb_aanwezig.selected;
+				result ||= aanwezig == 'afwezig' && cb_afwezig.selected;
+				result ||= aanwezig == 'afgebroken' && cb_afgebroken.selected;
+				result ||= aanwezig == 'nooit gebouwd' && cb_nooit_gebouwd.selected;
+				result ||= aanwezig == '' && cb_onbekend.selected;
 		    	return result;
 		    }
 		    
@@ -526,7 +529,7 @@
 			<mx:Label text="Aan- en afwezigheid:"  color="#FFFFFF" fontWeight="bold"/>
 			<mx:VBox paddingLeft="8">
 				<mx:CheckBox 
-					label="aanwezig" 
+					label="Aanwezig" 
 					id="cb_aanwezig" 
 					valueCommit="filterMarkers();"
 					selected="true" 
@@ -534,8 +537,32 @@
 					textRollOverColor="#FFFFFF" 
 					textSelectedColor="#FFFFFF"/>
 				<mx:CheckBox 
-					label="afwezig" 
+					label="Afwezig" 
 					id="cb_afwezig" 
+					valueCommit="filterMarkers();"
+					selected="true" 
+					color="#FFFFFF" 
+					textRollOverColor="#FFFFFF" 
+					textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					label="Afgebroken" 
+					id="cb_afgebroken" 
+					valueCommit="filterMarkers();"
+					selected="true" 
+					color="#FFFFFF" 
+					textRollOverColor="#FFFFFF" 
+					textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					label="Nooit gebouwd" 
+					id="cb_nooit_gebouwd" 
+					valueCommit="filterMarkers();"
+					selected="true" 
+					color="#FFFFFF" 
+					textRollOverColor="#FFFFFF" 
+					textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox 
+					label="Onbekend" 
+					id="cb_onbekend" 
 					valueCommit="filterMarkers();"
 					selected="true" 
 					color="#FFFFFF" 

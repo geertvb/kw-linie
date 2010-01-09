@@ -496,7 +496,7 @@ SQL;
 		$sql .= "where `bunker_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('ssisssii', 
+			$stmt->bind_param('ssissssi', 
 				$bunker["type"], 
 				$bunker["code"], 
 				$bunker["nr"], 
