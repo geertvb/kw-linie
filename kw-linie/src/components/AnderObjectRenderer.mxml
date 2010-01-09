@@ -5,12 +5,12 @@
 	height="60" verticalScrollPolicy="off">
 
 	<mx:HBox horizontalGap="4">
-		
+		<!--
 		<mx:Image
 			width="80" height="60" />
-	
+		-->
 		<mx:VBox verticalGap="0">
-			<mx:Text text="{data.nummer}, {data.type}"/>
+			<mx:Text text="{data.anderobject_id}, {data.type}"/>
 			<mx:Text text="{data.gemeente} {data.deelgemeente}"/>
 		</mx:VBox>
 
