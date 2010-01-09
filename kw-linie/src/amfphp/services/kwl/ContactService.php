@@ -48,11 +48,11 @@ class ContactService {
     	return findSQL($sql);
 	}
 	
-	function asdf($vo) {
+	function asdf(&$vo) {
 		$conditions = array();
 		$fieldvalues = array();
 		$fieldtypes = "";
-		foreach ($vo as $fieldname => $fieldvalue) {
+		foreach ($vo as $fieldname => &$fieldvalue) {
 			if ($fieldvalue) {
 				if (is_int($fieldvalue)) {
 	                $fieldtype = 'i';
@@ -67,7 +67,7 @@ class ContactService {
 	            }
 			
 				$conditions[] = "$fieldname $operator ?";
-				$fieldvalues[] = $fieldvalue;
+				$fieldvalues[] = &$fieldvalue;
 				$fieldtypes .= $fieldtype;
 			}
 		}
@@ -88,7 +88,9 @@ class ContactService {
     	$sql .= $where;
 		if ($mysqli = newMysqli()) {
 			if ($stmt = $mysqli->prepare($sql)) {
-				call_user_func_array('mysqli_stmt_bind_param', array_merge (array($stmt, $types), $values)); 
+				if (count($values) > 0) {
+					call_user_func_array('mysqli_stmt_bind_param', array_merge (array($stmt, $types), $values));
+				} 
 				if ($stmt->execute()) {
 					$result = getResult($stmt);
 				}
