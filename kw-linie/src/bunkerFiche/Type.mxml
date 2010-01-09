@@ -36,12 +36,20 @@
 				bunker.nr = BindingUtils.numericStepperToInteger(ns_nr);
 				bunker.ext = BindingUtils.comboboxToString(cb_ext);
 				bunker.schietgaten = BindingUtils.comboboxToString(cb_schietgaten);
-				bunker.aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				bunker.aanwezig = BindingUtils.comboBoxExToString(cb_aanwezig);
 				//
 				bunker.nummer = bunkerNummer(bunker.code, bunker.nr, bunker.ext);
 			}
 		]]>
 	</mx:Script>
+	
+	<mx:ArrayCollection id="dp_aanwezig">
+		<mx:Object label="Aanwezig" value="aanwezig" />
+		<mx:Object label="Afwezig" value="afwezig" />
+		<mx:Object label="Afgebroken" value="afgebroken" />
+		<mx:Object label="Nooit gebouwd" value="nooit gebouwd" />
+		<mx:Object label="Onbekend" value="" />
+	</mx:ArrayCollection>
 	
 	<mx:Form x="0" y="0">
 		<mx:FormItem label="Uniek Nummer (ID)">
@@ -95,10 +103,13 @@
 				width="200"/>
 		</mx:FormItem>
 		<mx:FormItem label="Nog aanwezig">
-			<mx:CheckBox 
+			<components:ComboBoxEx 
 				id="cb_aanwezig"
-				label=" "
-				selected="{data.aanwezig}"/>
+				dataProvider="{dp_aanwezig}" 
+				labelField="label"
+				valueField="value"
+				selectedValue="{data.aanwezig}"
+				width="200"/>
 		</mx:FormItem>
 	</mx:Form>
 	
