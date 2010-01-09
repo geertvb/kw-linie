@@ -367,12 +367,26 @@
 				                        <mx:VBox 
 				                        	width="160" height="120"
 				                            horizontalAlign="center" verticalAlign="middle" >
-				                            <mx:Image id="image1"
-												click="BunkerThumb.image_clickHandler(image1, data.defaultfoto_id)"
-												source="download_thumb.php?foto_id={data.defaultfoto_id}"
-												ioError="BunkerThumb.image_ioError(event)"
-												httpStatus="BunkerThumb.image_httpStatus(event)" />
-				                        </mx:VBox>
+											<mx:Canvas
+												width="128"
+												height="96">
+					                            <mx:Image 
+													id="image1"
+													x="0" y="0"
+													click="BunkerThumb.image_clickHandler(image1, data.defaultfoto_id)"
+													source="{BunkerThumb.bunkerImageSource(data)}"
+													ioError="BunkerThumb.image_ioError(event)"
+													httpStatus="BunkerThumb.image_httpStatus(event)" />
+												<mx:Image 
+													x="0" y="0"
+													visible="{data.aanwezig=='afgebroken'}"
+													id="black_ribbon"
+													source="@Embed('assets/black_ribbon.png')"
+													width="128"
+													height="96"
+													scaleContent="false"/>
+											</mx:Canvas>
+										</mx:VBox>
 				                    </mx:Component>
 				                </mx:itemRenderer>
 							</mx:DataGridColumn>
