@@ -42,7 +42,7 @@
 	-->
 	<mx:VBox verticalGap="0">
 		<mx:Label text="{contact.voornaam} {contact.naam}" fontWeight="bold"/>
-		<mx:Label text="{contact.straat} {contact.nummer}, {contact.postcode} {contact.gemeente}"/>
+		<mx:Label text="{contact.straat} {contact.nummer}, {contact.postcode} {contact.gemeente}, {contact.land}"/>
 		<mx:Label text="{contact.email}"/>
 	</mx:VBox>
 	

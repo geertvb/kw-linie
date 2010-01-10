@@ -115,9 +115,9 @@ class ContactService {
 	
 	function create() {
 		$sql = "INSERT INTO `kwl_contact` (";
-		$sql .= "`naam`,`voornaam`,`straat`,`nummer`,`postcode`,`gemeente`";
+		$sql .= "`naam`,`voornaam`,`straat`,`nummer`,`postcode`,`gemeente`,`land`";
 		$sql .= ") values (";
-		$sql .= "'?', '?', '?', '?', '?', '?'";
+		$sql .= "'?', '?', '?', '?', '?', '?', '?'";
 		$sql .= ")";
 		if ($mysqli = newMysqli()) {
 			$mysqli->query($sql);
@@ -156,6 +156,7 @@ class ContactService {
 		$sql .= "`nummer` = ?,"; 
 		$sql .= "`postcode` = ?,"; 
 		$sql .= "`gemeente` = ?,"; 
+		$sql .= "`land` = ?,"; 
 		$sql .= "`telefoon` = ?,"; 
 		$sql .= "`gsm` = ?,"; 
 		$sql .= "`email` = ?,";
@@ -163,13 +164,14 @@ class ContactService {
 		$sql .= "where `contact_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('ssssssssssi', 
+			$stmt->bind_param('sssssssssssi', 
 				$contactVO["naam"], 
 				$contactVO["voornaam"], 
 				$contactVO["straat"], 
 				$contactVO["nummer"], 
 				$contactVO["postcode"], 
 				$contactVO["gemeente"], 
+				$contactVO["land"], 
 				$contactVO["telefoon"], 
 				$contactVO["gsm"], 
 				$contactVO["email"], 
