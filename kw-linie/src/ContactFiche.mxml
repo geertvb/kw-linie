@@ -159,6 +159,9 @@
 				<mx:DataGridColumn
 					headerText="Gemeente"
 					dataField="gemeente"/>
+				<mx:DataGridColumn
+					headerText="Land"
+					dataField="land"/>
 			</mx:columns>
 		</mx:DataGrid>
 		
@@ -174,6 +177,7 @@
 		</mx:HBox>
 		
 		<mx:TabNavigator
+			width="100%"
 			creationPolicy="all">
 			<contactFiche:Contact 
 				id="contactView" 

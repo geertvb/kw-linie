@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off"
 	creationComplete="creationComplete()"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:components="components.*">
@@ -20,10 +22,11 @@
 				contact.straat = BindingUtils.textinputToString(ti_straat);
 				contact.nummer = BindingUtils.textinputToString(ti_nummer);
 				contact.postcode = BindingUtils.textinputToString(ti_postcode);
-				contact.gemeente = BindingUtils.comboboxToString(cb_gemeente);
+				contact.gemeente = rb_land_belgie.selected ? BindingUtils.comboboxToString(cb_gemeente) : BindingUtils.textinputToString(ti_gemeente);
 				contact.telefoon = BindingUtils.textinputToString(ti_telefoon);
 				contact.gsm = BindingUtils.textinputToString(ti_gsm);
-				contact.email = BindingUtils.textinputToString(ti_email);				
+				contact.email = BindingUtils.textinputToString(ti_email);	
+				contact.land = rb_land_belgie.selected ? "België" : BindingUtils.textinputToString(ti_land);
 			}
 			
 
@@ -74,13 +77,43 @@
 				width="64"/>
 			<mx:FormItem label="Gemeente">
 				<components:ComboBoxEx
+					visible="{rb_land_belgie.selected}"
+					includeInLayout="{rb_land_belgie.selected}"
 					dataProvider="{gemeenteService.findAll.lastResult}"
 					prompt=""
 					labelField="naam"
 					valueField="naam"
 					selectedValue="{data.gemeente}"
 					id="cb_gemeente" width="192"/>
+				<mx:TextInput
+					visible="{rb_land_andere.selected}"
+					includeInLayout="{rb_land_andere.selected}"
+					text="{data.gemeente}"
+					id="ti_gemeente" 
+					width="192"/>
 			</mx:FormItem>
+		</mx:FormItem>
+		<mx:FormItem label="Land" direction="vertical">
+			<mx:RadioButtonGroup 
+				id="rbg_land" 
+				selectedValue="{!data.land || data.land == 'België' ? 'belgie' : 'andere'}" />
+			<mx:RadioButton
+				id="rb_land_belgie"
+				group="{rbg_land}"
+				label="België"
+				value="belgie"/>
+			<mx:HBox>
+				<mx:RadioButton
+					id="rb_land_andere"
+					group="{rbg_land}"
+					label="Andere"
+					value="andere"/>
+				<mx:TextInput
+					enabled="{rb_land_andere.selected}"
+					text="{data.land}"
+					id="ti_land" 
+					width="192"/>
+			</mx:HBox>
 		</mx:FormItem>
 		<mx:FormItem label="Telefoon">
 			<mx:TextInput
