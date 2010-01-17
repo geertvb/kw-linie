@@ -10,6 +10,7 @@
 			
 			[Bindable]
 			public var dp_affiliatie: Array = [
+				{label: "", affiliatie: ""},
 				{label: "Vereniging", affiliatie: "Vereniging"},
 				{label: "Overheid", affiliatie: "Overheid"},
 				{label: "Andere", affiliatie: "Andere"}
@@ -17,6 +18,7 @@
 			
 			[Bindable]
 			public var dp_medewerking: Array = [
+				{label: "", medewerking: ""},
 				{label: "Prospectie", medewerking: "Prospectie"},
 				{label: "Getuigenis", medewerking: "Getuigenis"},
 				{label: "Geschiedkundige", medewerking: "Geschiedkundige"},
@@ -26,6 +28,7 @@
 			
 			[Bindable]
 			public var dp_toegang: Array = [
+				{label: "", toegang: ""},
 				{label: "Publieksversie", toegang: "public"},
 				{label: "Expert, enkel lezen", toegang: "read-only"},
 				{label: "Expert, lezen en schrijven", toegang: "read/write"}
@@ -76,6 +79,7 @@
 				dataProvider="{dp_medewerking}"
 				labelField="label"
 				valueField="medewerking"
+				rowCount="6"
 				selectedValue="{data.medewerking}"/>
 			<mx:TextInput 
 				id="ti_medewerking_andere"

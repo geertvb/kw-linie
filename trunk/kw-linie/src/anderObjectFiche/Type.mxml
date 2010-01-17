@@ -15,7 +15,7 @@
 			public function bind(vo: Object) : void {
 				vo.anderobject_id = BindingUtils.textinputToInteger(ti_anderobject_id);
 				vo.type = BindingUtils.comboboxToString(cb_type);
-				vo.aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 			}
 
 		]]>
@@ -38,11 +38,10 @@
 				selectedValue="{data.type}"
 				width="200"/>
 		</mx:FormItem>
-		<mx:FormItem label="Nog aanwezig">
-			<mx:CheckBox 
+		<mx:FormItem label="Aanwezig">
+			<components:Aanwezig
 				id="cb_aanwezig"
-				label=" "
-				selected="{data.aanwezig}"/>
+				value="{data.aanwezig}"/>
 		</mx:FormItem>
 	</mx:Form>
 	

@@ -4,16 +4,8 @@
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.managers.PopUpManager;
-			import referenceData.RedenNietAanwezigHolder;
-			import referenceData.AanwezigheidHolder;
 			import util.BindingUtils;
 
-			[Bindable]
-			private var aanwezigheidList: Object = AanwezigheidHolder.getInstance();
-			
-			[Bindable]
-			private var redenNietAanwezigList: Object = RedenNietAanwezigHolder.getInstance();
-			
 			public function bind(bunkerbezoek: Object) : void {
 				bunkerbezoek.bunkerbezoek_id = BindingUtils.textinputToInteger(ti_bunkerbezoek_id);
 				bunkerbezoek.bunker_id = bunkerSelector.bunker_id;
@@ -28,6 +20,20 @@
 		]]>
 	</mx:Script>
 
+	<mx:ArrayCollection id="dp_aanwezigheid">
+		<mx:Object label="" />
+		<mx:Object label="Ja" />
+		<mx:Object label="Niet zeker" />
+		<mx:Object label="Neen" />
+	</mx:ArrayCollection>
+	
+	<mx:ArrayCollection id="dp_reden_niet_aanwezig">
+		<mx:Object label="" />
+		<mx:Object label="Afgebroken" />
+		<mx:Object label="Verzonken" />
+		<mx:Object label="Andere" />
+	</mx:ArrayCollection>
+	
 	<mx:Form x="0" y="0">
 		<mx:FormItem label="Uniek ID" visible="false" includeInLayout="false">
 			<mx:TextInput 
@@ -64,10 +70,10 @@
 		<mx:FormItem label="Aanwezigheid">
 			<components:ComboBoxEx
 				id="cb_aanwezigheid"
-				labelField="aanwezigheid"
-				valueField="aanwezigheid"
+				labelField="label"
+				valueField="label"
 				selectedValue="{data.aanwezigheid}"
-				dataProvider="{aanwezigheidList.data}" />
+				dataProvider="{dp_aanwezigheid}" />
 		</mx:FormItem>
 		
 		<mx:FormItem 
@@ -76,10 +82,10 @@
 			<mx:HBox>
 				<components:ComboBoxEx
 					id="cb_reden_niet_aanwezig"
-					labelField="reden_niet_aanwezig"
-					valueField="reden_niet_aanwezig"
+					labelField="label"
+					valueField="label"
 					selectedValue="{data.reden_niet_aanwezig}"
-					dataProvider="{redenNietAanwezigList.data}"/>
+					dataProvider="{dp_reden_niet_aanwezig}"/>
 				<mx:TextInput
 					id="ti_reden_niet_aanwezig_tekst"
 					text="{data.reden_niet_aanwezig_tekst}"

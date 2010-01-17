@@ -383,7 +383,7 @@ class AnderObjectService {
 		$sql .= " where `anderobject_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sii', 
+			$stmt->bind_param('ssi', 
 				$vo["type"], 
 				$vo["aanwezig"], 
 				$vo["anderobject_id"]);
