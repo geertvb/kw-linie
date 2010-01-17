@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*">
 
 	<mx:ArrayCollection id="dp_toestand">
+		<mx:Object label="" />
 		<mx:Object label="Open" />
 		<mx:Object label="Dichtgemetst" />
 	</mx:ArrayCollection>
@@ -12,7 +15,7 @@
 			import util.BindingUtils;
 			
 			public function bind(vo: Object) : void {
-				vo.nooduitgang_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.nooduitgang_bekeken = BindingUtils.bekekenToString(bekeken_nooduitgang);
 				vo.nooduitgang_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
 				vo.nooduitgang_toestand = BindingUtils.comboBoxExToString(cb_toestand);
 				vo.nooduitgang_schotbalken_binnenkant_aanwezig = BindingUtils.checkboxToBoolean(cb_schotbalken_binnenkant_aanwezig);
@@ -22,51 +25,56 @@
 		]]>
 	</mx:Script>
 
-	<mx:Form x="0" y="0"
+	<mx:VBox>
+		
+		<mx:HBox width="100%" horizontalAlign="center">
+			<components:Bekeken
+				id="bekeken_nooduitgang"
+				value="{data.nooduitgang_bekeken}"/>
+		</mx:HBox>
+		
+		<mx:Form
+			enabled="{bekeken_nooduitgang.value == 'bekeken'}"
 			paddingBottom="0"
 			paddingLeft="0"
 			paddingRight="0"
 			paddingTop="0">
-			
-		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox
-				id="cb_niet_bekeken"
-				selected="{data.nooduitgang_niet_bekeken}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox
-				id="cb_aanwezig"
-				selected="{data.nooduitgang_aanwezig}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Toestand">
-			<components:ComboBoxEx 
-				id="cb_toestand"
-				dataProvider="{dp_toestand}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.nooduitgang_toestand}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Schotbalken aanwezig">
-			<mx:CheckBox 
-				id="cb_schotbalken_binnenkant_aanwezig"
-				selected="{data.nooduitgang_schotbalken_binnenkant_aanwezig}"
-				label="Binnenkant"/>
-			<mx:CheckBox 
-				id="cb_schotbalken_buitenkant_aanwezig"
-				selected="{data.nooduitgang_schotbalken_buitenkant_aanwezig}"
-				label="Buitenkant"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea 
-				id="ta_opmerkingen"
-				text="{data.nooduitgang_opmerkingen}"
-				width="320"/>
-		</mx:FormItem>
-
-	</mx:Form>
+				
+			<mx:FormItem label="Aanwezig">
+				<mx:CheckBox
+					id="cb_aanwezig"
+					selected="{data.nooduitgang_aanwezig}"/>
+			</mx:FormItem>
+	
+			<mx:FormItem label="Toestand">
+				<components:ComboBoxEx 
+					id="cb_toestand"
+					dataProvider="{dp_toestand}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.nooduitgang_toestand}"/>
+			</mx:FormItem>
+	
+			<mx:FormItem label="Schotbalken aanwezig">
+				<mx:CheckBox 
+					id="cb_schotbalken_binnenkant_aanwezig"
+					selected="{data.nooduitgang_schotbalken_binnenkant_aanwezig}"
+					label="Binnenkant"/>
+				<mx:CheckBox 
+					id="cb_schotbalken_buitenkant_aanwezig"
+					selected="{data.nooduitgang_schotbalken_buitenkant_aanwezig}"
+					label="Buitenkant"/>
+			</mx:FormItem>
+	
+			<mx:FormItem label="Opmerkingen">
+				<mx:TextArea 
+					id="ta_opmerkingen"
+					text="{data.nooduitgang_opmerkingen}"
+					width="320"/>
+			</mx:FormItem>
+	
+		</mx:Form>
+		
+	</mx:VBox>
 
 </mx:Canvas>

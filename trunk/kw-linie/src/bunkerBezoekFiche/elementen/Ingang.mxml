@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
 
 	<mx:ArrayCollection id="dp_toegang">
+		<mx:Object label="" />
 		<mx:Object label="Gewoon" />
 		<mx:Object label="Via put" />
 	</mx:ArrayCollection>
@@ -12,47 +13,52 @@
 			import util.BindingUtils;
 			
 			public function bind(vo: Object) : void {
-				vo.ingang_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.ingang_bekeken = BindingUtils.bekekenToString(bekeken_ingang);
 				vo.ingang_toegang = BindingUtils.comboBoxExToString(cb_toegang);
 				vo.ingang_ladder_nog_aanwezig = BindingUtils.checkboxToBoolean(cb_ladder_nog_aanwezig);
 				vo.ingang_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
 		]]>
 	</mx:Script>
-
-	<mx:Form x="0" y="0"
+	
+	<mx:VBox>
+		
+		<mx:HBox width="100%" horizontalAlign="center">
+			<components:Bekeken
+				id="bekeken_ingang"
+				value="{data.ingang_bekeken}"/>
+		</mx:HBox>
+		
+		<mx:Form
+			enabled="{bekeken_ingang.value == 'bekeken'}"
 			paddingBottom="0"
 			paddingLeft="0"
 			paddingRight="0"
 			paddingTop="0">
-
-		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox
-				id="cb_niet_bekeken"
-				selected="{data.ingang_niet_bekeken}"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="Toegang">
-			<components:ComboBoxEx 
-				id="cb_toegang"
-				dataProvider="{dp_toegang}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.ingang_toegang}" />
-			<mx:CheckBox
-				id="cb_ladder_nog_aanwezig"
-				label="Ladder nog aanwezig"
-				enabled="{cb_toegang.selectedItem.label == 'Via put'}"
-				selected="{data.ingang_ladder_nog_aanwezig}"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea
-				id="ta_opmerkingen"
-				text="{data.ingang_opmerkingen}" 
-				width="320"/>
-		</mx:FormItem>
-		
-	</mx:Form>
 	
+			<mx:FormItem label="Toegang">
+				<components:ComboBoxEx 
+					id="cb_toegang"
+					dataProvider="{dp_toegang}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.ingang_toegang}" />
+				<mx:CheckBox
+					id="cb_ladder_nog_aanwezig"
+					label="Ladder nog aanwezig"
+					enabled="{cb_toegang.selectedItem.label == 'Via put'}"
+					selected="{data.ingang_ladder_nog_aanwezig}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Opmerkingen">
+				<mx:TextArea
+					id="ta_opmerkingen"
+					text="{data.ingang_opmerkingen}" 
+					width="320"/>
+			</mx:FormItem>
+			
+		</mx:Form>
+		
+	</mx:VBox>
+		
 </mx:Canvas>

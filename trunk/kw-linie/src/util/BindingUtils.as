@@ -1,5 +1,6 @@
 package util
 {
+	import components.Bekeken;
 	import components.ComboBoxEx;
 	
 	import mx.controls.CheckBox;
@@ -8,16 +9,25 @@ package util
 	import mx.controls.NumericStepper;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
+	import mx.core.UIComponent;
 	
 
 	public class BindingUtils {
 		
+		public static function isEnabled(component: UIComponent) : Boolean {
+			if (component.enabled && component.parent != null && component.parent is UIComponent) {
+				return isEnabled(UIComponent(component.parent));
+			} else {
+				return component.enabled;
+			}
+		}
+		
 		public static function isEmpty(ti: TextInput) : Boolean {
-			return (ti.text == null) || (ti.text == "");
+			return !isEnabled(ti) || (ti.text == null) || (ti.text == "");
 		}
 		
 		public static function isEmptyTextArea(ti: TextArea) : Boolean {
-			return (ti.text == null) || (ti.text == "");
+			return !isEnabled(ti) || (ti.text == null) || (ti.text == "");
 		}
 		
 		public static function textinputToString(ti: TextInput) : Object {
@@ -57,7 +67,7 @@ package util
 		}
 		
 		public static function checkboxToBoolean(cb: CheckBox) : Object {
-			if (cb.enabled) {
+			if (isEnabled(cb)) {
 				return cb.selected;
 			} else {
 				return null;
@@ -65,7 +75,7 @@ package util
 		}
 		
 		public static function comboboxToString(cb: ComboBox) : Object {
-			if (cb.enabled && cb.selectedIndex>=0) {
+			if (isEnabled(cb) && cb.selectedIndex>=0) {
 				return cb.selectedLabel;
 			} else {
 				return null;
@@ -73,7 +83,7 @@ package util
 		}
 		
 		public static function comboBoxExToString(cb: ComboBoxEx) : Object {
-			if (cb.enabled && cb.selectedIndex>=0) {
+			if (isEnabled(cb) && cb.selectedIndex>=0) {
 				return cb.selectedValue;
 			} else {
 				return null;
@@ -81,8 +91,16 @@ package util
 		}
 		
 		public static function dateFieldToDate(df: DateField) : Object {
-			if (df.enabled) {
+			if (isEnabled(df)) {
 				return DateField.dateToString(df.selectedDate, "YYYY-MM-DD");
+			} else {
+				return null;
+			}
+		}
+		
+		public static function bekekenToString(bekeken: Bekeken) : Object {
+			if (isEnabled(bekeken)) {
+				return bekeken.value;
 			} else {
 				return null;
 			}
