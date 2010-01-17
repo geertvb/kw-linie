@@ -345,7 +345,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `camouflage_niet_bekeken` = ?,"; 
+		$sql .= "   `camouflage_bekeken` = ?,"; 
 		$sql .= "   `camouflage_aanwezig` = ?,"; 
 		$sql .= "   `camouflage_baksteen` = ?,"; 
 		$sql .= "   `camouflage_pannendak` = ?,"; 
@@ -357,8 +357,8 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiiiiisi', 
-				$vo["camouflage_niet_bekeken"], 
+			$stmt->bind_param('siiiiiisi', 
+				$vo["camouflage_bekeken"], 
 				$vo["camouflage_aanwezig"], 
 				$vo["camouflage_baksteen"], 
 				$vo["camouflage_pannendak"], 
@@ -379,7 +379,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `dakplaten_niet_bekeken` = ?,"; 
+		$sql .= "   `dakplaten_bekeken` = ?,"; 
 		$sql .= "   `dakplaten_aanwezig` = ?,"; 
 		$sql .= "   `dakplaten_bunkernummer_leesbaar` = ?,"; 
 		$sql .= "   `dakplaten_opmerkingen` = ?"; 
@@ -387,8 +387,8 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiisi', 
-				$vo["dakplaten_niet_bekeken"], 
+			$stmt->bind_param('siisi', 
+				$vo["dakplaten_bekeken"], 
 				$vo["dakplaten_aanwezig"], 
 				$vo["dakplaten_bunkernummer_leesbaar"], 
 				$vo["dakplaten_opmerkingen"], 
@@ -405,7 +405,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `afsluitluik_granaatwerper_niet_bekeken` = ?,"; 
+		$sql .= "   `afsluitluik_granaatwerper_bekeken` = ?,"; 
 		$sql .= "   `afsluitluik_granaatwerper_aanwezig` = ?,"; 
 		$sql .= "   `afsluitluik_granaatwerper_aantal_totaal` = ?,"; 
 		$sql .= "   `afsluitluik_granaatwerper_aantal_met_ketting` = ?,"; 
@@ -414,8 +414,8 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iisssi', 
-				$vo["afsluitluik_granaatwerper_niet_bekeken"], 
+			$stmt->bind_param('sisssi', 
+				$vo["afsluitluik_granaatwerper_bekeken"], 
 				$vo["afsluitluik_granaatwerper_aanwezig"], 
 				$vo["afsluitluik_granaatwerper_aantal_totaal"], 
 				$vo["afsluitluik_granaatwerper_aantal_met_ketting"], 
@@ -433,7 +433,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `afsluitluik_pistoolkoker_niet_bekeken` = ?,"; 
+		$sql .= "   `afsluitluik_pistoolkoker_bekeken` = ?,"; 
 		$sql .= "   `afsluitluik_pistoolkoker_aanwezig` = ?,"; 
 		$sql .= "   `afsluitluik_pistoolkoker_met_ketting` = ?,"; 
 		$sql .= "   `afsluitluik_pistoolkoker_opmerkingen` = ?"; 
@@ -441,8 +441,8 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiisi', 
-				$vo["afsluitluik_pistoolkoker_niet_bekeken"], 
+			$stmt->bind_param('siisi', 
+				$vo["afsluitluik_pistoolkoker_bekeken"], 
 				$vo["afsluitluik_pistoolkoker_aanwezig"], 
 				$vo["afsluitluik_pistoolkoker_met_ketting"], 
 				$vo["afsluitluik_pistoolkoker_opmerkingen"], 
@@ -459,15 +459,15 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `rooster_ingang_niet_bekeken` = ?,"; 
+		$sql .= "   `rooster_ingang_bekeken` = ?,"; 
 		$sql .= "   `rooster_ingang_aanwezig` = ?,"; 
 		$sql .= "   `rooster_ingang_opmerkingen` = ?"; 
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iisi', 
-				$vo["rooster_ingang_niet_bekeken"], 
+			$stmt->bind_param('sisi', 
+				$vo["rooster_ingang_bekeken"], 
 				$vo["rooster_ingang_aanwezig"], 
 				$vo["rooster_ingang_opmerkingen"], 
 				
@@ -483,7 +483,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `nooduitgang_niet_bekeken` = ?,"; 
+		$sql .= "   `nooduitgang_bekeken` = ?,"; 
 		$sql .= "   `nooduitgang_aanwezig` = ?,"; 
 		$sql .= "   `nooduitgang_toestand` = ?,"; 
 		$sql .= "   `nooduitgang_schotbalken_binnenkant_aanwezig` = ?,"; 
@@ -493,8 +493,8 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iisiisi', 
-				$vo["nooduitgang_niet_bekeken"], 
+			$stmt->bind_param('sisiisi', 
+				$vo["nooduitgang_bekeken"], 
 				$vo["nooduitgang_aanwezig"], 
 				$vo["nooduitgang_toestand"], 
 				$vo["nooduitgang_schotbalken_binnenkant_aanwezig"], 
@@ -513,7 +513,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `verluchtingspijpen_niet_bekeken` = ?,"; 
+		$sql .= "   `verluchtingspijpen_bekeken` = ?,"; 
 		$sql .= "   `verluchtingspijpen_aanwezig` = ?,"; 
 		$sql .= "   `verluchtingspijpen_aantal_totaal` = ?,"; 
 		$sql .= "   `verluchtingspijpen_aantal_met_roostertje` = ?,"; 
@@ -523,8 +523,8 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iissssi', 
-				$vo["verluchtingspijpen_niet_bekeken"], 
+			$stmt->bind_param('sissssi', 
+				$vo["verluchtingspijpen_bekeken"], 
 				$vo["verluchtingspijpen_aanwezig"], 
 				$vo["verluchtingspijpen_aantal_totaal"], 
 				$vo["verluchtingspijpen_aantal_met_roostertje"], 
@@ -543,10 +543,10 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `bedreigingen_niet_bekeken` = ?,"; 
+		$sql .= "   `bedreigingen_bekeken` = ?,"; 
 		$sql .= "   `bedreigingen` = ?,"; 
 		$sql .= "   `bedreigingen_andere` = ?,"; 
-		$sql .= "   `toestand_buiten_niet_bekeken` = ?,"; 
+		$sql .= "   `toestand_buiten_bekeken` = ?,"; 
 		$sql .= "   `toestand_buiten_goed` = ?,"; 
 		$sql .= "   `toestand_buiten_betonrot` = ?,"; 
 		$sql .= "   `toestand_buiten_beschadiging_gevechten` = ?,"; 
@@ -554,17 +554,19 @@ SQL;
 		$sql .= "   `toestand_buiten_beschadiging_natuurlijk` = ?,"; 
 		$sql .= "   `toestand_buiten_andere` = ?,"; 
 		$sql .= "   `toestand_buiten_andere_tekst` = ?,"; 
+		$sql .= "   `toestand_buiten_toegankelijk_bekeken` = ?,"; 
 		$sql .= "   `toestand_buiten_toegankelijk` = ?,"; 
+		$sql .= "   `toestand_buiten_ontoegankelijk_reden_bekeken` = ?,"; 
 		$sql .= "   `toestand_buiten_ontoegankelijk_reden` = ?"; 
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('issiiiiiiisssi', 
-				$vo["bedreigingen_niet_bekeken"], 
+			$stmt->bind_param('ssssiiiiiisssssi', 
+				$vo["bedreigingen_bekeken"], 
 				$vo["bedreigingen"], 
 				$vo["bedreigingen_andere"], 
-				$vo["toestand_buiten_niet_bekeken"], 
+				$vo["toestand_buiten_bekeken"], 
 				$vo["toestand_buiten_goed"], 
 				$vo["toestand_buiten_betonrot"], 
 				$vo["toestand_buiten_beschadiging_gevechten"], 
@@ -572,7 +574,9 @@ SQL;
 				$vo["toestand_buiten_beschadiging_natuurlijk"], 
 				$vo["toestand_buiten_andere"], 
 				$vo["toestand_buiten_andere_tekst"], 
+				$vo["toestand_buiten_toegankelijk_bekeken"], 
 				$vo["toestand_buiten_toegankelijk"], 
+				$vo["toestand_buiten_ontoegankelijk_reden_bekeken"], 
 				$vo["toestand_buiten_ontoegankelijk_reden"], 
 				
 				$vo["bunkerbezoek_id"]);
@@ -587,20 +591,26 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
+		$sql .= "   `toestand_binnen_gebruik_bekeken` = ?,"; 
 		$sql .= "   `toestand_binnen_gebruik` = ?,"; 
 		$sql .= "   `toestand_binnen_gebruik_andere` = ?,"; 
+		$sql .= "   `toestand_binnen_toestand_bekeken` = ?,"; 
 		$sql .= "   `toestand_binnen_toestand` = ?,"; 
 		$sql .= "   `toestand_binnen_toestand_andere` = ?,"; 
+		$sql .= "   `toestand_binnen_vochtigheid_bekeken` = ?,"; 
 		$sql .= "   `toestand_binnen_vochtigheid` = ?"; 
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sssssi', 
+			$stmt->bind_param('ssssssssi', 
+				$vo["toestand_binnen_gebruik_bekeken"], 
 				$vo["toestand_binnen_gebruik"], 
 				$vo["toestand_binnen_gebruik_andere"], 
+				$vo["toestand_binnen_toestand_bekeken"], 
 				$vo["toestand_binnen_toestand"], 
 				$vo["toestand_binnen_toestand_andere"], 
+				$vo["toestand_binnen_vochtigheid_bekeken"], 
 				$vo["toestand_binnen_vochtigheid"], 
 				
 				$vo["bunkerbezoek_id"]);
@@ -640,7 +650,7 @@ SQL;
 		$sql = "update `kwl_bunkerbezoek` ";
 		$sql .= "set ";
 
-		$sql .= "`omgeving_10m_niet_bekeken` = ?,"; 
+		$sql .= "`omgeving_10m_bekeken` = ?,"; 
 		$sql .= "`omgeving_10m_bos` = ?,"; 
 		$sql .= "`omgeving_10m_bebouwing` = ?,"; 
 		$sql .= "`omgeving_10m_weiland` = ?,"; 
@@ -648,7 +658,7 @@ SQL;
 		$sql .= "`omgeving_10m_akker` = ?,"; 
 		$sql .= "`omgeving_10m_water` = ?,"; 
 
-		$sql .= "`omgeving_100m_niet_bekeken` = ?,"; 
+		$sql .= "`omgeving_100m_bekeken` = ?,"; 
 		$sql .= "`omgeving_100m_bos` = ?,"; 
 		$sql .= "`omgeving_100m_bebouwing` = ?,"; 
 		$sql .= "`omgeving_100m_weiland` = ?,"; 
@@ -656,19 +666,27 @@ SQL;
 		$sql .= "`omgeving_100m_akker` = ?,"; 
 		$sql .= "`omgeving_100m_water` = ?,"; 
 		
+		$sql .= "`ligging_bekeken` = ?,"; 
 		$sql .= "`ligging` = ?,"; 
+		$sql .= "`expositie_bekeken` = ?,"; 
 		$sql .= "`expositie` = ?,"; 
+		$sql .= "`relief_bekeken` = ?,"; 
 		$sql .= "`relief` = ?,"; 
 		$sql .= "`afstand_berijdbare_weg_meter` = ?,"; 
-		$sql .= "`afstand_berijdbare_weg_niet_bekeken` = ?,"; 
-		$sql .= "`recreatieve_ontsluiting` = ?,"; 
-		$sql .= "`recreatieve_ontsluiting_andere` = ? "; 
+		$sql .= "`afstand_berijdbare_weg_bekeken` = ?,"; 
+
+		$sql .= "`recreatieve_ontsluiting_bekeken` = ?,"; 
+		$sql .= "`recreatieve_ontsluiting_langs_trage_weg` = ?,";
+		$sql .= "`recreatieve_ontsluiting_fietspad` = ?,";
+		$sql .= "`recreatieve_ontsluiting_informatiebord` = ?,";
+		$sql .= "`recreatieve_ontsluiting_andere` = ?,";
+		$sql .= "`recreatieve_ontsluiting_andere_omschrijving` = ? "; 
 		
 		$sql .= "where `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiiiiiiiiiiiisssiissi', 
-				$vo["omgeving_10m_niet_bekeken"], 
+			if (!$stmt->bind_param('siiiiiisiiiiiissssssissiiiisi', 
+				$vo["omgeving_10m_bekeken"], 
 				$vo["omgeving_10m_bos"], 
 				$vo["omgeving_10m_bebouwing"], 
 				$vo["omgeving_10m_weiland"], 
@@ -676,7 +694,7 @@ SQL;
 				$vo["omgeving_10m_akker"],
 				$vo["omgeving_10m_water"],
 
-				$vo["omgeving_100m_niet_bekeken"], 
+				$vo["omgeving_100m_bekeken"], 
 				$vo["omgeving_100m_bos"], 
 				$vo["omgeving_100m_bebouwing"], 
 				$vo["omgeving_100m_weiland"], 
@@ -684,18 +702,32 @@ SQL;
 				$vo["omgeving_100m_akker"],
 				$vo["omgeving_100m_water"],
 				
+				$vo["ligging_bekeken"], 
 				$vo["ligging"], 
+				$vo["expositie_bekeken"], 
 				$vo["expositie"], 
+				$vo["relief_bekeken"], 
 				$vo["relief"], 
 				$vo["afstand_berijdbare_weg_meter"], 
-				$vo["afstand_berijdbare_weg_niet_bekeken"], 
-				$vo["recreatieve_ontsluiting"],
+				$vo["afstand_berijdbare_weg_bekeken"], 
+				
+				$vo["recreatieve_ontsluiting_bekeken"],
+				$vo["recreatieve_ontsluiting_langs_trage_weg"],
+				$vo["recreatieve_ontsluiting_fietspad"],
+				$vo["recreatieve_ontsluiting_informatiebord"],
 				$vo["recreatieve_ontsluiting_andere"],
+				$vo["recreatieve_ontsluiting_andere_omschrijving"],
 				
 				$vo["bunkerbezoek_id"]
-				);
-			$stmt->execute();
+				)) {
+				throw new Exception($mysqli->error);
+			}
+			if (!$stmt->execute()) {
+				throw new Exception($mysqli->error);
+			}
 			$stmt->close();
+		} else {
+			throw new Exception($mysqli->error);
 		}
 		return $sql;
 	}
@@ -705,15 +737,15 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-		$sql .= "   `ingang_niet_bekeken` = ?,";
+		$sql .= "   `ingang_bekeken` = ?,";
   		$sql .= "   `ingang_toegang` = ?,";
   		$sql .= "   `ingang_ladder_nog_aanwezig` = ?,";
   		$sql .= "   `ingang_opmerkingen` = ?";
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('isisi', 
-				$vo["ingang_niet_bekeken"], 
+			$stmt->bind_param('ssisi', 
+				$vo["ingang_bekeken"], 
 				$vo["ingang_toegang"], 
 				$vo["ingang_ladder_nog_aanwezig"], 
 				$vo["ingang_opmerkingen"], 
@@ -730,7 +762,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-  		$sql .= "   `buitendeur_niet_bekeken` = ?,";
+  		$sql .= "   `buitendeur_bekeken` = ?,";
   		$sql .= "   `buitendeur_aanwezig` = ?,";
   		$sql .= "   `buitendeur_origineel` = ?,";
   		$sql .= "   `buitendeur_replica` = ?,";
@@ -742,8 +774,8 @@ SQL;
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiisssisi', 
-				$vo["buitendeur_niet_bekeken"], 
+			$stmt->bind_param('siiisssisi', 
+				$vo["buitendeur_bekeken"], 
 				$vo["buitendeur_aanwezig"], 
 				$vo["buitendeur_origineel"], 
 				$vo["buitendeur_replica"], 
@@ -765,7 +797,7 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_bunkerbezoek`";
 		$sql .= " set ";
-  		$sql .= "   `binnendeur_niet_bekeken` = ?,";
+  		$sql .= "   `binnendeur_bekeken` = ?,";
   		$sql .= "   `binnendeur_aanwezig` = ?,";
   		$sql .= "   `binnendeur_origineel` = ?,";
   		$sql .= "   `binnendeur_replica` = ?,";
@@ -777,8 +809,8 @@ SQL;
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiisssisi', 
-				$vo["binnendeur_niet_bekeken"], 
+			$stmt->bind_param('siiisssisi', 
+				$vo["binnendeur_bekeken"], 
 				$vo["binnendeur_aanwezig"], 
 				$vo["binnendeur_origineel"], 
 				$vo["binnendeur_replica"], 
@@ -821,7 +853,7 @@ SQL;
 			$sql .= " INSERT INTO `kwl_bunkerbezoek_schietgat` (";
 			$sql .= "   `bunkerbezoek_id`,";
 			$sql .= "   `schietgat_nummer`,";
-			$sql .= "   `niet_bekeken`,";
+			$sql .= "   `bekeken`,";
 
 			$sql .= "   `toestand`,";
 			$sql .= "   `schootsveld`,";
@@ -877,7 +909,7 @@ SQL;
 			$sql .= "   ?";
 
 			$sql .= " ) ON DUPLICATE KEY UPDATE";
-			$sql .= " `niet_bekeken` = VALUES(`niet_bekeken`),";
+			$sql .= " `bekeken` = VALUES(`bekeken`),";
 
 			$sql .= " `toestand` = VALUES(`toestand`),";
 			$sql .= " `schootsveld` = VALUES(`schootsveld`),";
@@ -905,10 +937,10 @@ SQL;
 			
 			if ($stmt = $mysqli->prepare($sql)) {
 				foreach ($schietgaten as $schietgat) {
-					$stmt->bind_param('iiisiiiissiiisiiiiiiis', 
+					$stmt->bind_param('iissiiiissiiisiiiiiiis', 
 						$bunkerbezoek_id, 
 						$schietgat["schietgat_nummer"], 
-						$schietgat["niet_bekeken"],
+						$schietgat["bekeken"],
 
 						$schietgat["toestand"],
 						$schietgat["schootsveld"],
