@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*">
 
 	<mx:Script>
 		<![CDATA[
 			import util.BindingUtils;
 			
 			public function bind(vo: Object) : void {
-				vo.maatregelen_bekeken = BindingUtils.checkboxToBoolean(cb_maatregelen_bekeken);
+				vo.maatregelen_bekeken = BindingUtils.bekekenToString(bekeken_maatregelen);
 				
 				vo.openingen_dichtgemetst = BindingUtils.checkboxToBoolean(cb_openingen_dichtgemetst);
 				vo.dakbedekking = BindingUtils.checkboxToBoolean(cb_dakbedekking);
@@ -25,12 +27,12 @@
 		<mx:Form>
 			
 			<mx:FormItem label="Bekeken">
-				<mx:CheckBox
-					id="cb_maatregelen_bekeken"
-					selected="{data.maatregelen_bekeken}" />
+				<components:Bekeken
+					id="bekeken_maatregelen"
+					value="{data.maatregelen_bekeken}" />
 			</mx:FormItem>
 
-			<mx:FormItem label="Maatregelen" enabled="{cb_maatregelen_bekeken.selected}">
+			<mx:FormItem label="Maatregelen" enabled="{bekeken_maatregelen.value == 'bekeken'}">
 				<mx:CheckBox 
 					id="cb_openingen_dichtgemetst"
 					selected="{data.openingen_dichtgemetst}"

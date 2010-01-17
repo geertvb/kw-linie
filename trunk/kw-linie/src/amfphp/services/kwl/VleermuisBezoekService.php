@@ -220,7 +220,7 @@ where
 SQL3;
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('iiiiiiiiiii', 
+			$stmt->bind_param('siiiiiiiiii', 
 				$vo["maatregelen_bekeken"], 
 				$vo["openingen_dichtgemetst"], 
 				$vo["dakbedekking"], 
