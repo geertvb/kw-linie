@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*">
 
 	<mx:Script>
 		<![CDATA[
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
-				vo.afsluitluik_pistoolkoker_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.afsluitluik_pistoolkoker_bekeken = BindingUtils.bekekenToString(bekeken_afsluitluik_pistoolkoker);
 				vo.afsluitluik_pistoolkoker_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
 				vo.afsluitluik_pistoolkoker_met_ketting = BindingUtils.checkboxToBoolean(cb_met_ketting);
 				vo.afsluitluik_pistoolkoker_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
@@ -13,37 +15,42 @@
 		]]>
 	</mx:Script>
 
-	<mx:Form x="0" y="0"
+	<mx:VBox>
+		
+		<mx:HBox width="100%" horizontalAlign="center">
+			<components:Bekeken
+				id="bekeken_afsluitluik_pistoolkoker"
+				value="{data.afsluitluik_pistoolkoker_bekeken}"/>
+		</mx:HBox>
+		
+		<mx:Form
+			enabled="{bekeken_afsluitluik_pistoolkoker.value == 'bekeken'}"
 			paddingBottom="0"
 			paddingLeft="0"
 			paddingRight="0"
 			paddingTop="0">
-			
-		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox
-				id="cb_niet_bekeken"
-				selected="{data.afsluitluik_pistoolkoker_niet_bekeken}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox
-				id="cb_aanwezig"
-				selected="{data.afsluitluik_pistoolkoker_aanwezig}" />
-		</mx:FormItem>
-
-		<mx:FormItem label="Met ketting">
-			<mx:CheckBox
-				id="cb_met_ketting"
-				selected="{data.afsluitluik_pistoolkoker_met_ketting}" />
-		</mx:FormItem>
-
-		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea 
-				id="ta_opmerkingen"
-				text="{data.afsluitluik_pistoolkoker_opmerkingen}"
-				width="320"/>
-		</mx:FormItem>
-
-	</mx:Form>
+				
+			<mx:FormItem label="Aanwezig">
+				<mx:CheckBox
+					id="cb_aanwezig"
+					selected="{data.afsluitluik_pistoolkoker_aanwezig}" />
+			</mx:FormItem>
+	
+			<mx:FormItem label="Met ketting">
+				<mx:CheckBox
+					id="cb_met_ketting"
+					selected="{data.afsluitluik_pistoolkoker_met_ketting}" />
+			</mx:FormItem>
+	
+			<mx:FormItem label="Opmerkingen">
+				<mx:TextArea 
+					id="ta_opmerkingen"
+					text="{data.afsluitluik_pistoolkoker_opmerkingen}"
+					width="320"/>
+			</mx:FormItem>
+	
+		</mx:Form>
+		
+	</mx:VBox>
 
 </mx:Canvas>

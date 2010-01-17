@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="components.*">
 
 	<mx:ArrayCollection id="dp_aantal">
+		<mx:Object label="" />
 		<mx:Object label="nvt" />
 		<mx:Object label="1" />
 		<mx:Object label="2" />
@@ -12,7 +15,7 @@
 		<![CDATA[
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
-				vo.verluchtingspijpen_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.verluchtingspijpen_bekeken = BindingUtils.bekekenToString(bekeken_verluchtingspijpen);
 				vo.verluchtingspijpen_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
 				vo.verluchtingspijpen_aantal_totaal = BindingUtils.comboBoxExToString(cb_aantal_totaal);
 				vo.verluchtingspijpen_aantal_met_roostertje = BindingUtils.comboBoxExToString(cb_aantal_met_roostertje);
@@ -22,58 +25,63 @@
 		]]>
 	</mx:Script>
 
-	<mx:Form x="0" y="0"
+	<mx:VBox>
+		
+		<mx:HBox width="100%" horizontalAlign="center">
+			<components:Bekeken
+				id="bekeken_verluchtingspijpen"
+				value="{data.verluchtingspijpen_bekeken}"/>
+		</mx:HBox>
+		
+		<mx:Form
+			enabled="{bekeken_verluchtingspijpen.value == 'bekeken'}"
 			paddingBottom="0"
 			paddingLeft="0"
 			paddingRight="0"
 			paddingTop="0">
-			
-		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox
-				id="cb_niet_bekeken"
-				selected="{data.verluchtingspijpen_niet_bekeken}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox
-				id="cb_aanwezig"
-				selected="{data.verluchtingspijpen_aanwezig}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Totaal aantal">
-			<components:ComboBoxEx 
-				id="cb_aantal_totaal"
-				dataProvider="{dp_aantal}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.verluchtingspijpen_aantal_totaal}" />
-		</mx:FormItem>
-
-		<mx:FormItem label="Aantal met roostertje">
-			<components:ComboBoxEx 
-				id="cb_aantal_met_roostertje"
-				dataProvider="{dp_aantal}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.verluchtingspijpen_aantal_met_roostertje}" />
-		</mx:FormItem>
-
-		<mx:FormItem label="Aantal met schouwtje">
-			<components:ComboBoxEx 
-				id="cb_aantal_met_shouwtje"
-				dataProvider="{dp_aantal}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.verluchtingspijpen_aantal_met_shouwtje}" />
-		</mx:FormItem>
-
-		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea 
-				id="ta_opmerkingen"
-				text="{data.verluchtingspijpen_opmerkingen}"
-				width="320"/>
-		</mx:FormItem>
-
-	</mx:Form>
+				
+			<mx:FormItem label="Aanwezig">
+				<mx:CheckBox
+					id="cb_aanwezig"
+					selected="{data.verluchtingspijpen_aanwezig}"/>
+			</mx:FormItem>
+	
+			<mx:FormItem label="Totaal aantal">
+				<components:ComboBoxEx 
+					id="cb_aantal_totaal"
+					dataProvider="{dp_aantal}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.verluchtingspijpen_aantal_totaal}" />
+			</mx:FormItem>
+	
+			<mx:FormItem label="Aantal met roostertje">
+				<components:ComboBoxEx 
+					id="cb_aantal_met_roostertje"
+					dataProvider="{dp_aantal}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.verluchtingspijpen_aantal_met_roostertje}" />
+			</mx:FormItem>
+	
+			<mx:FormItem label="Aantal met schouwtje">
+				<components:ComboBoxEx 
+					id="cb_aantal_met_shouwtje"
+					dataProvider="{dp_aantal}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.verluchtingspijpen_aantal_met_shouwtje}" />
+			</mx:FormItem>
+	
+			<mx:FormItem label="Opmerkingen">
+				<mx:TextArea 
+					id="ta_opmerkingen"
+					text="{data.verluchtingspijpen_opmerkingen}"
+					width="320"/>
+			</mx:FormItem>
+	
+		</mx:Form>
+		
+	</mx:VBox>
 
 </mx:Canvas>

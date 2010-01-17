@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box 
+	direction="horizontal"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.PropertyChangeEvent;
+			
+			private var _value: String;
+			
+			[Bindable]
+			public function set value(newValue: String) : void {
+				if (rb_bekeken.value != newValue && rb_niet_bekeken.value != newValue ) {
+					_value = rb_onbekend.value as String;
+				} else {
+					_value = newValue;
+				}
+				rbg_bekeken.selectedValue = _value;
+			}
+			
+			public function get value() : String {
+				return _value;
+			}
+			
+
+			protected function rbg_bekeken_changeHandler(event:Event) : void {
+				value = rbg_bekeken.selectedValue as String;
+			}
+
+		]]>
+	</mx:Script>
+	
+	<mx:RadioButtonGroup
+		id="rbg_bekeken"
+		change="rbg_bekeken_changeHandler(event)"
+		selectedValue="{value}"/>
+	
+	<mx:RadioButton
+		id="rb_bekeken"
+		group="{rbg_bekeken}"
+		value="bekeken"
+		label="Bekeken" />
+	
+	<mx:RadioButton
+		id="rb_niet_bekeken"
+		group="{rbg_bekeken}"
+		value="niet bekeken"
+		label="Niet bekeken" />
+	
+	<mx:RadioButton
+		visible="false"
+		includeInLayout="false"
+		id="rb_onbekend"
+		group="{rbg_bekeken}"
+		value=""
+		label="Onbekend" />
+	
+</mx:Box>

@@ -3,8 +3,8 @@
 
 	<mx:ArrayCollection id="dp_gebruik">
 		<mx:Object 
-			label="Niet bekeken" 
-			data="Niet bekeken"/>
+			label="" 
+			data=""/>
 		<mx:Object 
 			label="Niet geweten (o.w.v. bvb niet toegankelijk)" 
 			data="Niet geweten"/>
@@ -32,7 +32,7 @@
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_toestand">
-		<mx:Object label="Niet bekeken" />
+		<mx:Object label="" />
 		<mx:Object label="Niet geweten" />
 		<mx:Object label="Proper" />
 		<mx:Object label="Sluikstort" />
@@ -42,7 +42,7 @@
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_vochtigheid">
-		<mx:Object label="Niet bekeken" />
+		<mx:Object label="" />
 		<mx:Object label="Droog" />
 		<mx:Object label="Vochtig (condens aan plafond)" />
 		<mx:Object label="Zeer nat (laagje water op bodem)" />
@@ -52,10 +52,13 @@
 		<![CDATA[
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
+				vo.toestand_binnen_gebruik_bekeken = BindingUtils.bekekenToString(bekeken_toestand_binnen_gebruik);
 				vo.toestand_binnen_gebruik = BindingUtils.comboBoxExToString(cb_internGebruik);
 				vo.toestand_binnen_gebruik_andere = BindingUtils.textinputToString(ti_gebruik_andere);
+				vo.toestand_binnen_toestand_bekeken = BindingUtils.bekekenToString(bekeken_toestand_binnen_toestand);
 				vo.toestand_binnen_toestand = BindingUtils.comboBoxExToString(cb_toestandBinnen);
 				vo.toestand_binnen_toestand_andere = BindingUtils.textinputToString(ti_toestand_binnen_toestand_andere);
+				vo.toestand_binnen_vochtigheid_bekeken = BindingUtils.bekekenToString(bekeken_toestand_binnen_vochtigheid);
 				vo.toestand_binnen_vochtigheid = BindingUtils.comboBoxExToString(cb_toestand_binnen_vochtigheid);
 			}
 		]]>
@@ -64,35 +67,49 @@
 	<mx:Form x="0" y="0">
 	
 		<mx:FormItem label="Intern gebruik">
-			<components:ComboBoxEx
-				rowCount="9" 
-				labelField="label"
-				valueField="data"
-				selectedValue="{data.toestand_binnen_gebruik}"
-				dataProvider="{dp_gebruik}"
-				id="cb_internGebruik" />
-			<mx:TextInput
-				id="ti_gebruik_andere"
-				text="{data.toestand_binnen_gebruik_andere}" 
-				enabled="{cb_internGebruik.selectedValue == 'Andere'}"/>
+			<components:Bekeken
+				id="bekeken_toestand_binnen_gebruik"
+				value="{data.toestand_binnen_gebruik_bekeken}"/>
+			<mx:HBox enabled="{bekeken_toestand_binnen_gebruik.value == 'bekeken'}">
+				<components:ComboBoxEx
+					rowCount="9" 
+					labelField="label"
+					valueField="data"
+					selectedValue="{data.toestand_binnen_gebruik}"
+					dataProvider="{dp_gebruik}"
+					id="cb_internGebruik" />
+				<mx:TextInput
+					id="ti_gebruik_andere"
+					text="{data.toestand_binnen_gebruik_andere}" 
+					enabled="{cb_internGebruik.selectedValue == 'Andere'}"/>
+			</mx:HBox>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Toestand binnen" horizontalAlign="left">
-			<components:ComboBoxEx
-				rowCount="9" 
-				dataProvider="{dp_toestand}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.toestand_binnen_toestand}"
-				id="cb_toestandBinnen" />
-			<mx:TextInput 
-				id="ti_toestand_binnen_toestand_andere"
-				text="{data.toestand_binnen_toestand_andere}"
-				enabled="{cb_toestandBinnen.selectedItem.label == 'Andere'}"/>
+			<components:Bekeken
+				id="bekeken_toestand_binnen_toestand"
+				value="{data.toestand_binnen_toestand_bekeken}"/>
+			<mx:HBox enabled="{bekeken_toestand_binnen_toestand.value == 'bekeken'}">
+				<components:ComboBoxEx
+					rowCount="9" 
+					dataProvider="{dp_toestand}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.toestand_binnen_toestand}"
+					id="cb_toestandBinnen" />
+				<mx:TextInput 
+					id="ti_toestand_binnen_toestand_andere"
+					text="{data.toestand_binnen_toestand_andere}"
+					enabled="{cb_toestandBinnen.selectedItem.label == 'Andere'}"/>
+			</mx:HBox>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Vochtigheid">
+			<components:Bekeken
+				id="bekeken_toestand_binnen_vochtigheid"
+				value="{data.toestand_binnen_vochtigheid_bekeken}"/>
 			<components:ComboBoxEx 
+				enabled="{bekeken_toestand_binnen_vochtigheid.value == 'bekeken'}"
 				id="cb_toestand_binnen_vochtigheid"
 				dataProvider="{dp_vochtigheid}"
 				labelField="label"

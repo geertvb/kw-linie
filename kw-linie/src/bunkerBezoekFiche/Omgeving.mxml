@@ -2,31 +2,23 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
 
 	<mx:ArrayCollection id="dp_ligging">
-		<mx:Object label="Niet bekeken" />
+		<mx:Object label="" />
 		<mx:Object label="Geheel ondergronds" />
 		<mx:Object label="Gedeeltelijk ondergronds" />
 		<mx:Object label="Bovengronds" />
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_expositie">
-		<mx:Object label="Niet bekeken" />
+		<mx:Object label="" />
 		<mx:Object label="Volledig beschaduwd" />
 		<mx:Object label="Half beschaduwd" />
 		<mx:Object label="In volle zon" />
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_relief">
-		<mx:Object label="Niet bekeken" />
+		<mx:Object label="" />
 		<mx:Object label="Vlak" />
 		<mx:Object label="Hellend" />
-	</mx:ArrayCollection>
-
-	<mx:ArrayCollection id="dp_recreatieve_ontsluiting">
-		<mx:Object label="Niet bekeken" />
-		<mx:Object label="Ligt langs trage weg" />
-		<mx:Object label="Fietspad" />
-		<mx:Object label="Nuttig om informatiebord te plaatsen?" />
-		<mx:Object label="Andere" />
 	</mx:ArrayCollection>
 
 	<mx:Script>
@@ -57,7 +49,7 @@
 
 			public function bind(vo: Object) : void {
 
-				vo.omgeving_10m_niet_bekeken = BindingUtils.checkboxToBoolean(cb_nb_10m);
+				vo.omgeving_10m_bekeken = BindingUtils.bekekenToString(bekeken_10m);
 				vo.omgeving_10m_bos = BindingUtils.textinputToInteger(ti_omgeving_10m_bos);
 				vo.omgeving_10m_bebouwing = BindingUtils.textinputToInteger(ti_omgeving_10m_bebouwing);
 				vo.omgeving_10m_weiland = BindingUtils.textinputToInteger(ti_omgeving_10m_weiland);
@@ -65,7 +57,7 @@
 				vo.omgeving_10m_akker = BindingUtils.textinputToInteger(ti_omgeving_10m_akker);
 				vo.omgeving_10m_water = BindingUtils.textinputToInteger(ti_omgeving_10m_water);
 
-				vo.omgeving_100m_niet_bekeken = BindingUtils.checkboxToBoolean(cb_nb_100m);
+				vo.omgeving_100m_bekeken = BindingUtils.bekekenToString(bekeken_100m);
 				vo.omgeving_100m_bos = BindingUtils.textinputToInteger(ti_omgeving_100m_bos);
 				vo.omgeving_100m_bebouwing = BindingUtils.textinputToInteger(ti_omgeving_100m_bebouwing);
 				vo.omgeving_100m_weiland = BindingUtils.textinputToInteger(ti_omgeving_100m_weiland);
@@ -73,248 +65,305 @@
 				vo.omgeving_100m_akker = BindingUtils.textinputToInteger(ti_omgeving_100m_akker);
 				vo.omgeving_100m_water = BindingUtils.textinputToInteger(ti_omgeving_100m_water);
 				
+				vo.ligging_bekeken = BindingUtils.bekekenToString(bekeken_ligging);
 				vo.ligging = BindingUtils.comboboxToString(cb_ligging);
+				vo.expositie_bekeken = BindingUtils.bekekenToString(bekeken_expositie);
 				vo.expositie = BindingUtils.comboboxToString(cb_expositie);
+				vo.relief_bekeken = BindingUtils.bekekenToString(bekeken_relief);
 				vo.relief = BindingUtils.comboboxToString(cb_relief);
 				vo.afstand_berijdbare_weg_meter = BindingUtils.textinputToInteger(ti_afstand_berijdbare_weg_meter);
-				vo.afstand_berijdbare_weg_niet_bekeken = BindingUtils.checkboxToBoolean(cb_afstand_berijdbare_weg_niet_bekeken);
-				vo.recreatieve_ontsluiting = BindingUtils.comboboxToString(cb_recreatieveOntsluiting);
-				vo.recreatieve_ontsluiting_andere = BindingUtils.textinputToString(ti_recreatieve_ontsluiting_andere);
+				vo.afstand_berijdbare_weg_bekeken = BindingUtils.bekekenToString(bekeken_afstand_berijdbare_weg);
+
+				vo.recreatieve_ontsluiting_bekeken = BindingUtils.bekekenToString(bekeken_recreatieve_ontsluiting);
+				vo.recreatieve_ontsluiting_langs_trage_weg = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_langs_trage_weg);
+				vo.recreatieve_ontsluiting_fietspad = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_fietspad);
+				vo.recreatieve_ontsluiting_informatiebord = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_informatiebord);
+				vo.recreatieve_ontsluiting_andere = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_andere);
+				vo.recreatieve_ontsluiting_andere_omschrijving = BindingUtils.textinputToString(ti_recreatieve_ontsluiting_andere_omschrijving);
 			}
 
 		]]>
 	</mx:Script>
 
 
-	<mx:Form x="0" y="0">
-		<mx:FormItem label="Algemene toestand">
-			<mx:Grid x="10" y="10">
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%" horizontalAlign="center">
-						<mx:Label text="10m" fontWeight="bold"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%" horizontalAlign="center">
-						<mx:Label text="100m" fontWeight="bold"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Niet bekeken"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%" horizontalAlign="center">
-						<mx:CheckBox id="cb_nb_10m"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%" horizontalAlign="center">
-						<mx:CheckBox id="cb_nb_100m"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Bos"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_10m_bos"
-							text="{data.omgeving_10m_bos}"
-							change="refresh_omgeving_10m_totaal()"
-							valueCommit="refresh_omgeving_10m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_10m.selected}"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_100m_bos"
-							text="{data.omgeving_100m_bos}"
-							change="refresh_omgeving_100m_totaal()"
-							valueCommit="refresh_omgeving_100m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_100m.selected}"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Bebouwing"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_10m_bebouwing"
-							text="{data.omgeving_10m_bebouwing}"
-							change="refresh_omgeving_10m_totaal()"
-							valueCommit="refresh_omgeving_10m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_10m.selected}"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_100m_bebouwing"
-							text="{data.omgeving_100m_bebouwing}"
-							change="refresh_omgeving_100m_totaal()"
-							valueCommit="refresh_omgeving_100m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_100m.selected}"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Weiland"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_10m_weiland"
-							text="{data.omgeving_10m_weiland}"
-							change="refresh_omgeving_10m_totaal()"
-							valueCommit="refresh_omgeving_10m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_10m.selected}"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_100m_weiland"
-							text="{data.omgeving_100m_weiland}"
-							change="refresh_omgeving_100m_totaal()"
-							valueCommit="refresh_omgeving_100m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_100m.selected}"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Park"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_10m_park"
-							text="{data.omgeving_10m_park}"
-							change="refresh_omgeving_10m_totaal()"
-							valueCommit="refresh_omgeving_10m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_10m.selected}"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_100m_park"
-							text="{data.omgeving_100m_park}"
-							change="refresh_omgeving_100m_totaal()"
-							valueCommit="refresh_omgeving_100m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_100m.selected}"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Akker"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_10m_akker"
-							text="{data.omgeving_10m_akker}"
-							change="refresh_omgeving_10m_totaal()"
-							valueCommit="refresh_omgeving_10m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_10m.selected}"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_100m_akker"
-							text="{data.omgeving_100m_akker}"
-							change="refresh_omgeving_100m_totaal()"
-							valueCommit="refresh_omgeving_100m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_100m.selected}"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Water"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_10m_water"
-							text="{data.omgeving_10m_water}"
-							change="refresh_omgeving_10m_totaal()"
-							valueCommit="refresh_omgeving_10m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_10m.selected}"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:TextInput 
-							id="ti_omgeving_100m_water"
-							text="{data.omgeving_100m_water}"
-							change="refresh_omgeving_100m_totaal()"
-							valueCommit="refresh_omgeving_100m_totaal()"
-							width="64" 
-							enabled="{!cb_nb_100m.selected}"/>
-					</mx:GridItem>
-				</mx:GridRow>
-				<mx:GridRow width="100%" height="100%">
-					<mx:GridItem width="100%" height="100%">
-						<mx:Label text="Totaal"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:Text 
-							id="ti_omgeving_10m_totaal"
-							width="64" 
-							enabled="{!cb_nb_10m.selected}"/>
-					</mx:GridItem>
-					<mx:GridItem width="100%" height="100%">
-						<mx:Text 
-							id="ti_omgeving_100m_totaal"
-							width="64" 
-							enabled="{!cb_nb_100m.selected}"/>
-					</mx:GridItem>
-				</mx:GridRow>
-			</mx:Grid>
-		</mx:FormItem>
+	<mx:HBox>
+	
+	<mx:Grid 
+		paddingLeft="16"
+		paddingTop="16">
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+				<mx:Label text="10m" fontWeight="bold"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+				<mx:Label text="100m" fontWeight="bold"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Bekeken"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+				<components:Bekeken
+					direction="vertical"
+					id="bekeken_10m"
+					value="{data.omgeving_10m_bekeken}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%" horizontalAlign="center">
+				<components:Bekeken
+					direction="vertical"
+					id="bekeken_100m"
+					value="{data.omgeving_100m_bekeken}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Bos"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_10m_bos"
+					text="{data.omgeving_10m_bos}"
+					change="refresh_omgeving_10m_totaal()"
+					valueCommit="refresh_omgeving_10m_totaal()"
+					width="64" 
+					enabled="{bekeken_10m.value == 'bekeken'}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_100m_bos"
+					text="{data.omgeving_100m_bos}"
+					change="refresh_omgeving_100m_totaal()"
+					valueCommit="refresh_omgeving_100m_totaal()"
+					width="64" 
+					enabled="{bekeken_100m.value == 'bekeken'}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Bebouwing"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_10m_bebouwing"
+					text="{data.omgeving_10m_bebouwing}"
+					change="refresh_omgeving_10m_totaal()"
+					valueCommit="refresh_omgeving_10m_totaal()"
+					width="64" 
+					enabled="{bekeken_10m.value == 'bekeken'}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_100m_bebouwing"
+					text="{data.omgeving_100m_bebouwing}"
+					change="refresh_omgeving_100m_totaal()"
+					valueCommit="refresh_omgeving_100m_totaal()"
+					width="64" 
+					enabled="{bekeken_100m.value == 'bekeken'}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Weiland"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_10m_weiland"
+					text="{data.omgeving_10m_weiland}"
+					change="refresh_omgeving_10m_totaal()"
+					valueCommit="refresh_omgeving_10m_totaal()"
+					width="64" 
+					enabled="{bekeken_10m.value == 'bekeken'}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_100m_weiland"
+					text="{data.omgeving_100m_weiland}"
+					change="refresh_omgeving_100m_totaal()"
+					valueCommit="refresh_omgeving_100m_totaal()"
+					width="64" 
+					enabled="{bekeken_100m.value == 'bekeken'}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Park"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_10m_park"
+					text="{data.omgeving_10m_park}"
+					change="refresh_omgeving_10m_totaal()"
+					valueCommit="refresh_omgeving_10m_totaal()"
+					width="64" 
+					enabled="{bekeken_10m.value == 'bekeken'}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_100m_park"
+					text="{data.omgeving_100m_park}"
+					change="refresh_omgeving_100m_totaal()"
+					valueCommit="refresh_omgeving_100m_totaal()"
+					width="64" 
+					enabled="{bekeken_100m.value == 'bekeken'}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Akker"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_10m_akker"
+					text="{data.omgeving_10m_akker}"
+					change="refresh_omgeving_10m_totaal()"
+					valueCommit="refresh_omgeving_10m_totaal()"
+					width="64" 
+					enabled="{bekeken_10m.value == 'bekeken'}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_100m_akker"
+					text="{data.omgeving_100m_akker}"
+					change="refresh_omgeving_100m_totaal()"
+					valueCommit="refresh_omgeving_100m_totaal()"
+					width="64" 
+					enabled="{bekeken_100m.value == 'bekeken'}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Water"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_10m_water"
+					text="{data.omgeving_10m_water}"
+					change="refresh_omgeving_10m_totaal()"
+					valueCommit="refresh_omgeving_10m_totaal()"
+					width="64" 
+					enabled="{bekeken_10m.value == 'bekeken'}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:TextInput 
+					id="ti_omgeving_100m_water"
+					text="{data.omgeving_100m_water}"
+					change="refresh_omgeving_100m_totaal()"
+					valueCommit="refresh_omgeving_100m_totaal()"
+					width="64" 
+					enabled="{bekeken_100m.value == 'bekeken'}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow width="100%" height="100%">
+			<mx:GridItem width="100%" height="100%">
+				<mx:Label text="Totaal"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:Text 
+					id="ti_omgeving_10m_totaal"
+					width="64" 
+					enabled="{bekeken_10m.value == 'bekeken'}"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" height="100%">
+				<mx:Text 
+					id="ti_omgeving_100m_totaal"
+					width="64" 
+					enabled="{bekeken_100m.value == 'bekeken'}"/>
+			</mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+
+	<mx:Form>
+
 		<mx:FormItem label="Ligging">
+			<components:Bekeken
+				id="bekeken_ligging"
+				value="{data.ligging_bekeken}"/>
 			<components:ComboBoxEx 
 				id="cb_ligging" 
+				enabled="{bekeken_ligging.value == 'bekeken'}"
 				labelField="label"
 				valueField="label"
 				selectedValue="{data.ligging}"
 				dataProvider="{dp_ligging}" />
 		</mx:FormItem>
+
 		<mx:FormItem label="Expositie">
+			<components:Bekeken
+				id="bekeken_expositie"
+				value="{data.expositie_bekeken}"/>
 			<components:ComboBoxEx
 				id="cb_expositie"
+				enabled="{bekeken_expositie.value == 'bekeken'}"
 				labelField="label"
 				valueField="label"
 				selectedValue="{data.expositie}"
 				dataProvider="{dp_expositie}" />
 		</mx:FormItem>
+
 		<mx:FormItem label="Relief">
+			<components:Bekeken
+				id="bekeken_relief"
+				value="{data.relief_bekeken}"/>
 			<components:ComboBoxEx
 				id="cb_relief"
+				enabled="{bekeken_relief.value == 'bekeken'}"
 				labelField="label"
 				valueField="label"
 				selectedValue="{data.relief}"
 				dataProvider="{dp_relief}" />
 		</mx:FormItem>
+
 		<mx:FormItem label="Afstand berijdbare weg">
+			<components:Bekeken
+				id="bekeken_afstand_berijdbare_weg"
+				value="{data.afstand_berijdbare_weg_bekeken}"/>
 			<mx:HBox>
 				<mx:TextInput 
 					id="ti_afstand_berijdbare_weg_meter"
 					text="{data.afstand_berijdbare_weg_meter}"
 					width="64" 
-					enabled="{!cb_afstand_berijdbare_weg_niet_bekeken.selected}"/>
+					enabled="{bekeken_afstand_berijdbare_weg.value == 'bekeken'}"/>
 				<mx:Label text="meter" />
 			</mx:HBox>
-			<mx:CheckBox 
-				id="cb_afstand_berijdbare_weg_niet_bekeken" 
-				label="Niet bekeken"/>
 		</mx:FormItem>
+		
 		<mx:FormItem label="Recreatieve ontsluiting">
-			<components:ComboBoxEx
-				id="cb_recreatieveOntsluiting"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.recreatieve_ontsluiting}"
-				dataProvider="{dp_recreatieve_ontsluiting}" />
-			<mx:TextInput
-				id="ti_recreatieve_ontsluiting_andere" 
-				enabled="{cb_recreatieveOntsluiting.selectedItem.label == 'Andere'}"/>
+			<components:Bekeken
+				id="bekeken_recreatieve_ontsluiting"
+				value="{data.recreatieve_ontsluiting_bekeken}"/>
+			<mx:VBox enabled="{bekeken_recreatieve_ontsluiting.value == 'bekeken'}">
+				<mx:CheckBox
+					id="cb_recreatieve_ontsluiting_langs_trage_weg"
+					label="Ligt langs trage weg"
+					selected="{data.recreatieve_ontsluiting_langs_trage_weg}" />
+				<mx:CheckBox
+					id="cb_recreatieve_ontsluiting_fietspad"
+					label="Fietspad"
+					selected="{data.recreatieve_ontsluiting_fietspad}" />
+				<mx:CheckBox
+					id="cb_recreatieve_ontsluiting_informatiebord"
+					label="Nuttig om informatiebord te plaatsen?"
+					selected="{data.recreatieve_ontsluiting_informatiebord}" />
+				<mx:HBox>
+					<mx:CheckBox
+						id="cb_recreatieve_ontsluiting_andere"
+						label="Andere"
+						selected="{data.recreatieve_ontsluiting_andere}" />
+					<mx:TextInput
+						id="ti_recreatieve_ontsluiting_andere_omschrijving" 
+						text="{data.recreatieve_ontsluiting_andere_omschrijving}"
+						width="200"
+						enabled="{cb_recreatieve_ontsluiting_andere.selected}"/>				
+				</mx:HBox>
+			</mx:VBox>
 		</mx:FormItem>
+		
 	</mx:Form>
+	</mx:HBox>
+
+
 </mx:Canvas>

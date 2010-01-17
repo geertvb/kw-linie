@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="components.*">
 
 	<mx:ArrayCollection id="dp_aantal">
+		<mx:Object label="" />
 		<mx:Object label="nvt" />
 		<mx:Object label="1" />
 		<mx:Object label="2" />
@@ -15,7 +16,7 @@
 		<![CDATA[
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
-				vo.afsluitluik_granaatwerper_niet_bekeken = BindingUtils.checkboxToBoolean(cb_niet_bekeken);
+				vo.afsluitluik_granaatwerper_bekeken = BindingUtils.bekekenToString(bekeken_afsluitluik_granaatwerper);
 				vo.afsluitluik_granaatwerper_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
 				vo.afsluitluik_granaatwerper_aantal_totaal = BindingUtils.comboBoxExToString(cb_aantal_totaal);
 				vo.afsluitluik_granaatwerper_aantal_met_ketting = BindingUtils.comboBoxExToString(cb_aantal_met_ketting);
@@ -24,49 +25,56 @@
 		]]>
 	</mx:Script>
 
-	<mx:Form x="0" y="0"
+	<mx:VBox>
+		
+		<mx:HBox width="100%" horizontalAlign="center">
+			<components:Bekeken
+				id="bekeken_afsluitluik_granaatwerper"
+				value="{data.afsluitluik_granaatwerper_bekeken}"/>
+		</mx:HBox>
+		
+		<mx:Form
+			enabled="{bekeken_afsluitluik_granaatwerper.value == 'bekeken'}"
 			paddingBottom="0"
 			paddingLeft="0"
 			paddingRight="0"
 			paddingTop="0">
-			
-		<mx:FormItem label="Niet bekeken">
-			<mx:CheckBox
-				id="cb_niet_bekeken"
-				selected="{data.afsluitluik_granaatwerper_niet_bekeken}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Aanwezig">
-			<mx:CheckBox
-				id="cb_aanwezig"
-				selected="{data.afsluitluik_granaatwerper_aanwezig}" />
-		</mx:FormItem>
-
-		<mx:FormItem label="Totaal aantal">
-			<components:ComboBoxEx 
-				id="cb_aantal_totaal"
-				dataProvider="{dp_aantal}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.afsluitluik_granaatwerper_aantal_totaal}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Aantal met ketting">
-			<components:ComboBoxEx 
-				id="cb_aantal_met_ketting"
-				dataProvider="{dp_aantal}"
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.afsluitluik_granaatwerper_aantal_met_ketting}"/>
-		</mx:FormItem>
-
-		<mx:FormItem label="Opmerkingen">
-			<mx:TextArea 
-				id="ta_opmerkingen"
-				text="{data.afsluitluik_granaatwerper_opmerkingen}"
-				width="320"/>
-		</mx:FormItem>
-
-	</mx:Form>
+				
+			<mx:FormItem label="Aanwezig">
+				<mx:CheckBox
+					id="cb_aanwezig"
+					selected="{data.afsluitluik_granaatwerper_aanwezig}" />
+			</mx:FormItem>
+	
+			<mx:FormItem label="Totaal aantal">
+				<components:ComboBoxEx 
+					rowCount="8"
+					id="cb_aantal_totaal"
+					dataProvider="{dp_aantal}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.afsluitluik_granaatwerper_aantal_totaal}"/>
+			</mx:FormItem>
+	
+			<mx:FormItem label="Aantal met ketting">
+				<components:ComboBoxEx 
+					rowCount="8"
+					id="cb_aantal_met_ketting"
+					dataProvider="{dp_aantal}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.afsluitluik_granaatwerper_aantal_met_ketting}"/>
+			</mx:FormItem>
+	
+			<mx:FormItem label="Opmerkingen">
+				<mx:TextArea 
+					id="ta_opmerkingen"
+					text="{data.afsluitluik_granaatwerper_opmerkingen}"
+					width="320"/>
+			</mx:FormItem>
+	
+		</mx:Form>
+		
+	</mx:VBox>
 
 </mx:Canvas>
