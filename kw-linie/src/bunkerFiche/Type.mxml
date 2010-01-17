@@ -7,23 +7,7 @@
 		<![CDATA[
 			import util.StringUtils;
 			import util.BindingUtils;
-			import referenceData.BunkerSchietgatenHolder;
-			import referenceData.BunkerExtHolder;
-			import referenceData.BunkerCodeHolder;
-			import referenceData.BunkerTypeHolder;
-			
-			[Bindable]
-			private var types: Object = BunkerTypeHolder.getInstance();
 
-			[Bindable]
-			private var codes: Object = BunkerCodeHolder.getInstance();
-
-			[Bindable]
-			private var exts: Object = BunkerExtHolder.getInstance();
-
-			[Bindable]
-			private var schietgaten: Object = BunkerSchietgatenHolder.getInstance();
-			
 			public function bunkerNummer(code: String, nr: int, ext: String) : String {
 				var padded: String = StringUtils.leftPadding(nr.toString(), 2);
 				return StringUtils.join([code, padded, ext]);
@@ -44,13 +28,76 @@
 	</mx:Script>
 	
 	<mx:ArrayCollection id="dp_aanwezig">
+		<mx:Object label="" value="" />
 		<mx:Object label="Aanwezig" value="aanwezig" />
 		<mx:Object label="Afwezig" value="afwezig" />
 		<mx:Object label="Afgebroken" value="afgebroken" />
 		<mx:Object label="Nooit gebouwd" value="nooit gebouwd" />
-		<mx:Object label="Onbekend" value="" />
 	</mx:ArrayCollection>
 	
+	<mx:ArrayCollection id="dp_schietgaten">
+		<mx:Object label="" />
+		<mx:Object label="1" />
+		<mx:Object label="2" />
+		<mx:Object label="3" />
+		<mx:Object label="nvt" />
+	</mx:ArrayCollection>
+
+	<mx:ArrayCollection id="dp_types">
+		<mx:Object label="" />
+		<mx:Object label="verdediging 1e lijn" />
+		<mx:Object label="verdediging 2e lijn" />
+		<mx:Object label="verdediging antitankcentrum" />
+		<mx:Object label="bruggenhoofd mechelen" />
+		<mx:Object label="commando 1e lijn" />
+		<mx:Object label="commando 2e lijn" />
+		<mx:Object label="connectiekamer" />
+	</mx:ArrayCollection>
+	
+	<mx:ArrayCollection id="dp_codes">
+		<mx:Object label="" />
+		<mx:Object label="A" />
+		<mx:Object label="Bb" />
+		<mx:Object label="BL" />
+		<mx:Object label="C" />
+		<mx:Object label="Do" />
+		<mx:Object label="F" />
+		<mx:Object label="GH" />
+		<mx:Object label="H" />
+		<mx:Object label="Ha" />
+		<mx:Object label="He" />
+		<mx:Object label="Ib" />
+		<mx:Object label="KO" />
+		<mx:Object label="KR" />
+		<mx:Object label="L" />
+		<mx:Object label="LW" />
+		<mx:Object label="ML" />
+		<mx:Object label="MS" />
+		<mx:Object label="P" />
+		<mx:Object label="Pe" />
+		<mx:Object label="Ps" />
+		<mx:Object label="Ro" />
+		<mx:Object label="Ry" />
+		<mx:Object label="Sb" />
+		<mx:Object label="Te" />
+		<mx:Object label="Th" />
+		<mx:Object label="TPM" />
+		<mx:Object label="VA" />
+		<mx:Object label="VB" />
+		<mx:Object label="VC" />
+		<mx:Object label="VD" />
+		<mx:Object label="We" />
+	</mx:ArrayCollection>
+	
+	<mx:ArrayCollection id="dp_extensions">
+		<mx:Object label="" />
+		<mx:Object label="1" />
+		<mx:Object label="2" />
+		<mx:Object label="/1" />
+		<mx:Object label="b" />
+		<mx:Object label="bis" />
+	</mx:ArrayCollection>
+
 	<mx:Form x="0" y="0">
 		<mx:FormItem label="Uniek Nummer (ID)">
 			<mx:TextInput  
@@ -62,18 +109,20 @@
 		<mx:FormItem label="Type">
 			<components:ComboBoxEx 
 				id="cb_type"
-				dataProvider="{types.data}" 
-				labelField="type"
-				valueField="type"
+				dataProvider="{dp_types}" 
+				labelField="label"
+				valueField="label"
+				rowCount="8"
 				selectedValue="{data.type}"
 				width="200"/>
 		</mx:FormItem>
 		<mx:FormItem label="Code">
 			<components:ComboBoxEx 
 				id="cb_code"
-				dataProvider="{codes.data}" 
-				labelField="code"
-				valueField="code"
+				dataProvider="{dp_codes}" 
+				labelField="label"
+				valueField="label"
+				rowCount="10"
 				selectedValue="{data.code}"
 				width="200"/>
 		</mx:FormItem>
@@ -87,18 +136,19 @@
 		<mx:FormItem label="Nummer extensie">
 			<components:ComboBoxEx 
 				id="cb_ext"
-				dataProvider="{exts.data}" 
-				labelField="ext"
-				valueField="ext"
+				dataProvider="{dp_extensions}" 
+				labelField="label"
+				valueField="label"
+				rowCount="6"
 				selectedValue="{data.ext}"
 				width="200"/>
 		</mx:FormItem>
 		<mx:FormItem label="Schietgaten">
 			<components:ComboBoxEx 
 				id="cb_schietgaten"
-				dataProvider="{schietgaten.data}" 
-				labelField="schietgaten"
-				valueField="schietgaten"
+				dataProvider="{dp_schietgaten}" 
+				labelField="label"
+				valueField="label"
 				selectedValue="{data.schietgaten}"
 				width="200"/>
 		</mx:FormItem>
