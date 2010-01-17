@@ -4,6 +4,7 @@
 	xmlns:components="components.*">
 
 	<mx:ArrayCollection id="dp_toestand">
+		<mx:Object label="" />
 		<mx:Object label="Beschadigd" />
 		<mx:Object label="Volledig intact" />
 		<mx:Object label="Ondergronds deel zichtbaar" />
@@ -11,13 +12,8 @@
 	</mx:ArrayCollection>
 
 	<mx:ArrayCollection id="dp_bedreigingen">
+		<mx:Object label="" />
 		<mx:Object label="Afbraak" />
-		<mx:Object label="Andere" />
-	</mx:ArrayCollection>
-
-	<mx:ArrayCollection id="dp_recreatieve_ontsluiting">
-		<mx:Object label="Langs trage weg" />
-		<mx:Object label="Langs fietspad" />
 		<mx:Object label="Andere" />
 	</mx:ArrayCollection>
 
@@ -25,17 +21,19 @@
 		<![CDATA[
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
-				vo.toestand_niet_bekeken = BindingUtils.checkboxToBoolean(cb_toestand_niet_bekeken);
+				vo.toestand_bekeken = BindingUtils.bekekenToString(bekeken_toestand);
 				vo.toestand = BindingUtils.comboBoxExToString(cb_toestand);
 				vo.toestand_andere = BindingUtils.textinputToString(ti_toestand_andere);
 				
-				vo.bedreigingen_niet_bekeken = BindingUtils.checkboxToBoolean(cb_bedreigingen_niet_bekeken);
+				vo.bedreigingen_bekeken = BindingUtils.bekekenToString(bekeken_bedreigingen);
 				vo.bedreigingen = BindingUtils.comboBoxExToString(cb_bedreigingen);
 				vo.bedreigingen_andere = BindingUtils.textinputToString(ti_bedreigingen_andere);
 				
-				vo.recreatieve_ontsluiting_niet_bekeken = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_niet_bekeken);
-				vo.recreatieve_ontsluiting = BindingUtils.comboBoxExToString(cb_recreatieve_ontsluiting);
-				vo.recreatieve_ontsluiting_andere = BindingUtils.textinputToString(ti_recreatieve_ontsluiting_andere);
+				vo.recreatieve_ontsluiting_bekeken = BindingUtils.bekekenToString(bekeken_recreatieve_ontsluiting);
+				vo.recreatieve_ontsluiting_langs_trage_weg = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_langs_trage_weg);
+				vo.recreatieve_ontsluiting_fietspad = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_fietspad);
+				vo.recreatieve_ontsluiting_andere = BindingUtils.checkboxToBoolean(cb_recreatieve_ontsluiting_andere);
+				vo.recreatieve_ontsluiting_andere_omschrijving = BindingUtils.textinputToString(ti_recreatieve_ontsluiting_andere_omschrijving);
 				
 				vo.opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
@@ -45,60 +43,71 @@
 	<mx:Form x="0" y="0" paddingTop="0" paddingBottom="0">
 	
 		<mx:FormItem label="Toestand">
-			<mx:CheckBox
-				label="Niet bekeken"
-				id="cb_toestand_niet_bekeken"
-				selected="{data.toestand_niet_bekeken}" />
-			<components:ComboBoxEx
-				rowCount="9" 
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.toestand}"
-				dataProvider="{dp_toestand}"
-				enabled="{!cb_toestand_niet_bekeken.selected}"
-				id="cb_toestand" />
-			<mx:TextInput
-				id="ti_toestand_andere"
-				text="{data.toestand_andere}" 
-				enabled="{!cb_toestand_niet_bekeken.selected &amp;&amp; cb_toestand.selectedValue == 'Andere'}" />
+			<components:Bekeken
+				id="bekeken_toestand"
+				label="Bekeken"
+				value="{data.toestand_bekeken}" />
+			<mx:HBox enabled="{bekeken_toestand.value == 'bekeken'}">
+				<components:ComboBoxEx
+					rowCount="9" 
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.toestand}"
+					dataProvider="{dp_toestand}"
+					id="cb_toestand" />
+				<mx:TextInput
+					id="ti_toestand_andere"
+					text="{data.toestand_andere}" 
+					enabled="{cb_toestand.selectedValue == 'Andere'}" />
+			</mx:HBox>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Bedreigingen">
-			<mx:CheckBox
-				label="Niet bekeken"
-				id="cb_bedreigingen_niet_bekeken"
-				selected="{data.bedreigingen_niet_bekeken}" />
-			<components:ComboBoxEx
-				rowCount="9" 
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.bedreigingen}"
-				dataProvider="{dp_bedreigingen}"
-				enabled="{!cb_bedreigingen_niet_bekeken.selected}"
-				id="cb_bedreigingen" />
-			<mx:TextInput
-				id="ti_bedreigingen_andere"
-				text="{data.bedreigingen_andere}" 
-				enabled="{!cb_bedreigingen_niet_bekeken.selected &amp;&amp; cb_bedreigingen.selectedValue == 'Andere'}" />
+			<components:Bekeken
+				id="bekeken_bedreigingen"
+				label="Bekeken"
+				value="{data.bedreigingen_bekeken}" />
+			<mx:HBox enabled="{bekeken_bedreigingen.value == 'bekeken'}">
+				<components:ComboBoxEx
+					rowCount="9" 
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.bedreigingen}"
+					dataProvider="{dp_bedreigingen}"
+					id="cb_bedreigingen" />
+				<mx:TextInput
+					id="ti_bedreigingen_andere"
+					text="{data.bedreigingen_andere}" 
+					enabled="{cb_bedreigingen.selectedValue == 'Andere'}" />
+			</mx:HBox>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Recreatieve ontsluiting">
-			<mx:CheckBox
-				label="Niet bekeken"
-				id="cb_recreatieve_ontsluiting_niet_bekeken"
-				selected="{data.recreatieve_ontsluiting_niet_bekeken}" />
-			<components:ComboBoxEx
-				rowCount="9" 
-				labelField="label"
-				valueField="label"
-				selectedValue="{data.recreatieve_ontsluiting}"
-				dataProvider="{dp_recreatieve_ontsluiting}"
-				enabled="{!cb_recreatieve_ontsluiting_niet_bekeken.selected}"
-				id="cb_recreatieve_ontsluiting" />
-			<mx:TextInput
-				id="ti_recreatieve_ontsluiting_andere"
-				text="{data.recreatieve_ontsluiting_andere}" 
-				enabled="{!cb_recreatieve_ontsluiting_niet_bekeken.selected &amp;&amp; cb_recreatieve_ontsluiting.selectedValue == 'Andere'}" />
+			<components:Bekeken
+				id="bekeken_recreatieve_ontsluiting"
+				label="Bekeken"
+				value="{data.recreatieve_ontsluiting_bekeken}" />
+			<mx:VBox enabled="{bekeken_recreatieve_ontsluiting.value == 'bekeken'}">
+				<mx:CheckBox
+					id="cb_recreatieve_ontsluiting_langs_trage_weg"
+					label="Ligt langs trage weg"
+					selected="{data.recreatieve_ontsluiting_langs_trage_weg}" />
+				<mx:CheckBox
+					id="cb_recreatieve_ontsluiting_fietspad"
+					label="Fietspad"
+					selected="{data.recreatieve_ontsluiting_fietspad}" />
+				<mx:HBox>
+					<mx:CheckBox
+						id="cb_recreatieve_ontsluiting_andere"
+						label="Andere"
+						selected="{data.recreatieve_ontsluiting_andere}" />
+					<mx:TextInput
+						id="ti_recreatieve_ontsluiting_andere_omschrijving" 
+						text="{data.recreatieve_ontsluiting_andere_omschrijving}"
+						width="200"
+						enabled="{cb_recreatieve_ontsluiting_andere.selected}"/>				
+				</mx:HBox>
+			</mx:VBox>
 		</mx:FormItem>
 		
 		<mx:FormItem label="Opmerkingen">
