@@ -248,30 +248,34 @@ SQL;
 		$sql .= " update";
 		$sql .= "   `kwl_anderobjectbezoek`";
 		$sql .= " set ";
-		$sql .= "   `toestand_niet_bekeken` = ?,"; 
+		$sql .= "   `toestand_bekeken` = ?,"; 
 		$sql .= "   `toestand` = ?,"; 
 		$sql .= "   `toestand_andere` = ?,"; 
-		$sql .= "   `bedreigingen_niet_bekeken` = ?,"; 
+		$sql .= "   `bedreigingen_bekeken` = ?,"; 
 		$sql .= "   `bedreigingen` = ?,"; 
 		$sql .= "   `bedreigingen_andere` = ?,"; 
-		$sql .= "   `recreatieve_ontsluiting_niet_bekeken` = ?,"; 
-		$sql .= "   `recreatieve_ontsluiting` = ?,"; 
-		$sql .= "   `recreatieve_ontsluiting_andere` = ?,"; 
+		$sql .= "   `recreatieve_ontsluiting_bekeken` = ?,"; 
+		$sql .= "   `recreatieve_ontsluiting_langs_trage_weg` = ?,";
+		$sql .= "   `recreatieve_ontsluiting_fietspad` = ?,";
+		$sql .= "   `recreatieve_ontsluiting_andere` = ?,";
+		$sql .= "   `recreatieve_ontsluiting_andere_omschrijving` = ?,"; 
 		$sql .= "   `opmerkingen` = ?"; 
 		$sql .= " where";
 		$sql .= "   `anderobjectbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('issississsi', 
-				$vo["toestand_niet_bekeken"], 
+			$stmt->bind_param('sssssssiiissi', 
+				$vo["toestand_bekeken"], 
 				$vo["toestand"], 
 				$vo["toestand_andere"], 
-				$vo["bedreigingen_niet_bekeken"], 
+				$vo["bedreigingen_bekeken"], 
 				$vo["bedreigingen"], 
 				$vo["bedreigingen_andere"], 
-				$vo["recreatieve_ontsluiting_niet_bekeken"], 
-				$vo["recreatieve_ontsluiting"], 
-				$vo["recreatieve_ontsluiting_andere"], 
+				$vo["recreatieve_ontsluiting_bekeken"], 
+				$vo["recreatieve_ontsluiting_langs_trage_weg"],
+				$vo["recreatieve_ontsluiting_fietspad"],
+				$vo["recreatieve_ontsluiting_andere"],
+				$vo["recreatieve_ontsluiting_andere_omschrijving"],
 				$vo["opmerkingen"], 
 				
 				$vo["anderobjectbezoek_id"]);
