@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box 
+	direction="horizontal"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.PropertyChangeEvent;
+			
+			private var _value: String;
+			
+			[Bindable]
+			public function set value(newValue: String) : void {
+				if (rb_aanwezig.value != newValue && rb_niet_aanwezig.value != newValue ) {
+					_value = rb_onbekend.value as String;
+				} else {
+					_value = newValue;
+				}
+				rbg_aanwezig.selectedValue = _value;
+			}
+			
+			public function get value() : String {
+				return _value;
+			}
+			
+			
+			protected function rbg_aanwezig_changeHandler(event:Event) : void {
+				value = rbg_aanwezig.selectedValue as String;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:RadioButtonGroup
+		id="rbg_aanwezig"
+		change="rbg_aanwezig_changeHandler(event)"
+		selectedValue="{value}"/>
+	
+	<mx:RadioButton
+		id="rb_aanwezig"
+		group="{rbg_aanwezig}"
+		value="aanwezig"
+		label="Aanwezig" />
+	
+	<mx:RadioButton
+		id="rb_niet_aanwezig"
+		group="{rbg_aanwezig}"
+		value="niet aanwezig"
+		label="Niet aanwezig" />
+	
+	<mx:RadioButton
+		visible="false"
+		includeInLayout="false"
+		id="rb_onbekend"
+		group="{rbg_aanwezig}"
+		value=""
+		label="Onbekend" />
+	
+</mx:Box>

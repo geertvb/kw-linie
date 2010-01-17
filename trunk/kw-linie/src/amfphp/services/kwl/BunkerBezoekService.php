@@ -357,7 +357,7 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('siiiiiisi', 
+			$stmt->bind_param('ssiiiiisi', 
 				$vo["camouflage_bekeken"], 
 				$vo["camouflage_aanwezig"], 
 				$vo["camouflage_baksteen"], 
@@ -387,7 +387,7 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('siisi', 
+			$stmt->bind_param('ssisi', 
 				$vo["dakplaten_bekeken"], 
 				$vo["dakplaten_aanwezig"], 
 				$vo["dakplaten_bunkernummer_leesbaar"], 
@@ -414,7 +414,7 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sisssi', 
+			$stmt->bind_param('sssssi', 
 				$vo["afsluitluik_granaatwerper_bekeken"], 
 				$vo["afsluitluik_granaatwerper_aanwezig"], 
 				$vo["afsluitluik_granaatwerper_aantal_totaal"], 
@@ -441,7 +441,7 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('siisi', 
+			$stmt->bind_param('ssisi', 
 				$vo["afsluitluik_pistoolkoker_bekeken"], 
 				$vo["afsluitluik_pistoolkoker_aanwezig"], 
 				$vo["afsluitluik_pistoolkoker_met_ketting"], 
@@ -466,7 +466,7 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sisi', 
+			$stmt->bind_param('sssi', 
 				$vo["rooster_ingang_bekeken"], 
 				$vo["rooster_ingang_aanwezig"], 
 				$vo["rooster_ingang_opmerkingen"], 
@@ -493,7 +493,7 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sisiisi', 
+			$stmt->bind_param('ssssssi', 
 				$vo["nooduitgang_bekeken"], 
 				$vo["nooduitgang_aanwezig"], 
 				$vo["nooduitgang_toestand"], 
@@ -523,7 +523,7 @@ SQL;
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('sissssi', 
+			$stmt->bind_param('ssssssi', 
 				$vo["verluchtingspijpen_bekeken"], 
 				$vo["verluchtingspijpen_aanwezig"], 
 				$vo["verluchtingspijpen_aantal_totaal"], 
@@ -774,7 +774,7 @@ SQL;
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('siiisssisi', 
+			$stmt->bind_param('ssiisssssi', 
 				$vo["buitendeur_bekeken"], 
 				$vo["buitendeur_aanwezig"], 
 				$vo["buitendeur_origineel"], 
@@ -809,7 +809,7 @@ SQL;
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('siiisssisi', 
+			$stmt->bind_param('ssiisssssi', 
 				$vo["binnendeur_bekeken"], 
 				$vo["binnendeur_aanwezig"], 
 				$vo["binnendeur_origineel"], 
@@ -937,7 +937,7 @@ SQL;
 			
 			if ($stmt = $mysqli->prepare($sql)) {
 				foreach ($schietgaten as $schietgat) {
-					$stmt->bind_param('iissiiiissiiisiiiiiiis', 
+					$stmt->bind_param('iississsssssssssisssis', 
 						$bunkerbezoek_id, 
 						$schietgat["schietgat_nummer"], 
 						$schietgat["bekeken"],

@@ -1,5 +1,6 @@
 package util
 {
+	import components.Aanwezig;
 	import components.Bekeken;
 	import components.ComboBoxEx;
 	
@@ -105,7 +106,15 @@ package util
 				return null;
 			}
 		}
-	
+		
+		public static function aanwezigToString(aanwezig: Aanwezig) : Object {
+			if (isEnabled(aanwezig)) {
+				return aanwezig.value;
+			} else {
+				return null;
+			}
+		}
+		
 	}
 
 }

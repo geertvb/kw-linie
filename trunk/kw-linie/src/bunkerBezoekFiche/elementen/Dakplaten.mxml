@@ -9,7 +9,7 @@
 			
 			public function bind(vo: Object) : void {
 				vo.dakplaten_bekeken = BindingUtils.bekekenToString(bekeken_dakplaten);
-				vo.dakplaten_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.dakplaten_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 				vo.dakplaten_bunkernummer_leesbaar = BindingUtils.checkboxToBoolean(cb_bunkernummer_leesbaar);
 				vo.dakplaten_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
@@ -32,9 +32,9 @@
 			paddingTop="0">
 				
 			<mx:FormItem label="Aanwezig">
-				<mx:CheckBox
+				<components:Aanwezig
 					id="cb_aanwezig"
-					selected="{data.dakplaten_aanwezig}" />
+					value="{data.dakplaten_aanwezig}" />
 			</mx:FormItem>
 	
 			<mx:FormItem label="Bunkernummer leesbaar">

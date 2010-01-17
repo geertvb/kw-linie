@@ -8,7 +8,7 @@
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
 				vo.afsluitluik_pistoolkoker_bekeken = BindingUtils.bekekenToString(bekeken_afsluitluik_pistoolkoker);
-				vo.afsluitluik_pistoolkoker_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.afsluitluik_pistoolkoker_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 				vo.afsluitluik_pistoolkoker_met_ketting = BindingUtils.checkboxToBoolean(cb_met_ketting);
 				vo.afsluitluik_pistoolkoker_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
@@ -31,9 +31,9 @@
 			paddingTop="0">
 				
 			<mx:FormItem label="Aanwezig">
-				<mx:CheckBox
+				<components:Aanwezig
 					id="cb_aanwezig"
-					selected="{data.afsluitluik_pistoolkoker_aanwezig}" />
+					value="{data.afsluitluik_pistoolkoker_aanwezig}" />
 			</mx:FormItem>
 	
 			<mx:FormItem label="Met ketting">
