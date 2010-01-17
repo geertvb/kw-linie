@@ -16,7 +16,7 @@
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
 				vo.verluchtingspijpen_bekeken = BindingUtils.bekekenToString(bekeken_verluchtingspijpen);
-				vo.verluchtingspijpen_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.verluchtingspijpen_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 				vo.verluchtingspijpen_aantal_totaal = BindingUtils.comboBoxExToString(cb_aantal_totaal);
 				vo.verluchtingspijpen_aantal_met_roostertje = BindingUtils.comboBoxExToString(cb_aantal_met_roostertje);
 				vo.verluchtingspijpen_aantal_met_shouwtje = BindingUtils.comboBoxExToString(cb_aantal_met_shouwtje);
@@ -41,9 +41,9 @@
 			paddingTop="0">
 				
 			<mx:FormItem label="Aanwezig">
-				<mx:CheckBox
+				<components:Aanwezig
 					id="cb_aanwezig"
-					selected="{data.verluchtingspijpen_aanwezig}"/>
+					value="{data.verluchtingspijpen_aanwezig}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Totaal aantal">

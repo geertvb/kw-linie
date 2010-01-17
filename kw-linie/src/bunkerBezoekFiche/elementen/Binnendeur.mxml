@@ -18,13 +18,13 @@
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
 				vo.binnendeur_bekeken = BindingUtils.bekekenToString(bekeken_binnendeur);
-				vo.binnendeur_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.binnendeur_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 				vo.binnendeur_origineel = BindingUtils.checkboxToBoolean(cb_origineel);
 				vo.binnendeur_replica = BindingUtils.checkboxToBoolean(cb_replica);
 				vo.binnendeur_ander_type = BindingUtils.comboBoxExToString(cb_ander_type);
 				vo.binnendeur_ander_type_andere = BindingUtils.textinputToString(ti_ander_type_andere);
 				vo.binnendeur_toestand = BindingUtils.comboBoxExToString(cb_toestand);
-				vo.binnendeur_scharnieren_aanwezig = BindingUtils.checkboxToBoolean(cb_scharnieren_aanwezig);
+				vo.binnendeur_scharnieren_aanwezig = BindingUtils.aanwezigToString(cb_scharnieren_aanwezig);
 				vo.binnendeur_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
 		]]>
@@ -46,9 +46,9 @@
 			paddingTop="0">
 			
 			<mx:FormItem label="Aanwezig">
-				<mx:CheckBox
+				<components:Aanwezig
 					id="cb_aanwezig"
-					selected="{data.binnendeur_aanwezig}"/>
+					value="{data.binnendeur_aanwezig}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Origineel">
@@ -86,10 +86,9 @@
 			</mx:FormItem>
 	
 			<mx:FormItem label="Scharnieren">
-				<mx:CheckBox 
+				<components:Aanwezig
 					id="cb_scharnieren_aanwezig"
-					selected="{data.binnendeur_scharnieren_aanwezig}"
-					label="Aanwezig"/>
+					value="{data.binnendeur_scharnieren_aanwezig}" />
 			</mx:FormItem>
 	
 			<mx:FormItem label="Opmerkingen">

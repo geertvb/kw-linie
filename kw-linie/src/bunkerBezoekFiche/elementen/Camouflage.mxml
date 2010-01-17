@@ -9,7 +9,7 @@
 			
 			public function bind(vo: Object) : void {
 				vo.camouflage_bekeken = BindingUtils.bekekenToString(bekeken_camouflage);
-				vo.camouflage_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.camouflage_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 				vo.camouflage_baksteen = BindingUtils.checkboxToBoolean(cb_baksteen);
 				vo.camouflage_pannendak = BindingUtils.checkboxToBoolean(cb_pannendak);
 				vo.camouflage_eitjesbepleistering = BindingUtils.checkboxToBoolean(cb_eitjesbepleistering);
@@ -36,9 +36,9 @@
 			paddingTop="0">
 				
 			<mx:FormItem label="Aanwezig">
-				<mx:CheckBox
+				<components:Aanwezig
 					id="cb_aanwezig"
-					selected="{data.camouflage_aanwezig}"/>
+					value="{data.camouflage_aanwezig}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Type">

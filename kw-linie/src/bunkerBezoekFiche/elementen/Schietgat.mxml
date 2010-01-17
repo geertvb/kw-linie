@@ -36,22 +36,22 @@
 				vo.bekeken = BindingUtils.bekekenToString(bekeken);
 				vo.toestand = BindingUtils.comboBoxExToString(cb_toestand);
 				vo.schootsveld = BindingUtils.textinputToInteger(ti_schootsveld);
-				vo.afsluitluik_buitenzijde_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_buitenzijde_aanwezig);
-				vo.afsluitluik_bedieningsketting_aanwezig = BindingUtils.checkboxToBoolean(cb_afsluitluik_bedieningsketting_aanwezig);
+				vo.afsluitluik_buitenzijde_aanwezig = BindingUtils.aanwezigToString(cb_afsluitluik_buitenzijde_aanwezig);
+				vo.afsluitluik_bedieningsketting_aanwezig = BindingUtils.aanwezigToString(cb_afsluitluik_bedieningsketting_aanwezig);
 				vo.afsluitluik_binnenzijde_aanwezig = false; //BindingUtils.checkboxToBoolean(cb_afsluitluik_binnenzijde_aanwezig);
-				vo.affuit_aanwezig = BindingUtils.checkboxToBoolean(cb_affuit_aanwezig);
+				vo.affuit_aanwezig = BindingUtils.aanwezigToString(cb_affuit_aanwezig);
 				vo.affuit_type = BindingUtils.comboBoxExToString(cb_affuit_type);
 				vo.affuit_toestand = BindingUtils.comboBoxExToString(cb_affuit_toestand);
-				vo.affuit_verankeringspunten_aanwezig = BindingUtils.checkboxToBoolean(cb_affuit_verankeringspunten_aanwezig);
-				vo.affuit_nummer_inscripties_aanwezig = BindingUtils.checkboxToBoolean(cb_affuit_nummer_inscripties_aanwezig);
-				vo.witte_lijn_aanwezig = BindingUtils.checkboxToBoolean(cb_witte_lijn_aanwezig);
+				vo.affuit_verankeringspunten_aanwezig = BindingUtils.aanwezigToString(cb_affuit_verankeringspunten_aanwezig);
+				vo.affuit_nummer_inscripties_aanwezig = BindingUtils.aanwezigToString(cb_affuit_nummer_inscripties_aanwezig);
+				vo.witte_lijn_aanwezig = BindingUtils.aanwezigToString(cb_witte_lijn_aanwezig);
 				vo.observatiesleuf_toestand = BindingUtils.comboBoxExToString(cb_observatiesleuf_toestand);
-				vo.observatiesleuf_luikje_aanwezig = BindingUtils.checkboxToBoolean(cb_observatiesleuf_luikje_aanwezig);
-				vo.haken_petroleumlampen_aanwezig = BindingUtils.checkboxToBoolean(cb_haken_petroleumlampen_aanwezig);
+				vo.observatiesleuf_luikje_aanwezig = BindingUtils.aanwezigToString(cb_observatiesleuf_luikje_aanwezig);
+				vo.haken_petroleumlampen_aanwezig = BindingUtils.aanwezigToString(cb_haken_petroleumlampen_aanwezig);
 				vo.haken_petroleumlampen_aantal = BindingUtils.textinputToInteger(ti_haken_petroleumlampen_aantal);
-				vo.houten_schapje_aanwezig = BindingUtils.checkboxToBoolean(cb_houten_schapje_aanwezig);
-				vo.zitbankje_aanwezig = BindingUtils.checkboxToBoolean(cb_zitbankje_aanwezig);
-				vo.metalen_schap_met_haken_aanwezig = BindingUtils.checkboxToBoolean(cb_metalen_schap_met_haken_aanwezig);
+				vo.houten_schapje_aanwezig = BindingUtils.aanwezigToString(cb_houten_schapje_aanwezig);
+				vo.zitbankje_aanwezig = BindingUtils.aanwezigToString(cb_zitbankje_aanwezig);
+				vo.metalen_schap_met_haken_aanwezig = BindingUtils.aanwezigToString(cb_metalen_schap_met_haken_aanwezig);
 				vo.metalen_schap_met_haken_aantal = BindingUtils.textinputToInteger(ti_metalen_schap_met_haken_aantal);
 				vo.opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
@@ -96,14 +96,15 @@
 					</mx:FormItem>
 			
 					<mx:FormItem label="Afsluitluik">
-						<mx:CheckBox 
+						<components:Aanwezig
 							id="cb_afsluitluik_buitenzijde_aanwezig"
-							selected="{data.afsluitluik_buitenzijde_aanwezig}"
-							label="Buitenzijde aanwezig"/>
-						<mx:CheckBox 
+							value="{data.afsluitluik_buitenzijde_aanwezig}" />
+					</mx:FormItem>
+					
+					<mx:FormItem label="Bedieningsketting">
+						<components:Aanwezig
 							id="cb_afsluitluik_bedieningsketting_aanwezig"
-							selected="{data.afsluitluik_bedieningsketting_aanwezig}"
-							label="Bedieningsketting"/>
+							value="{data.afsluitluik_bedieningsketting_aanwezig}" />
 						<!--
 						<mx:CheckBox 
 							id="cb_afsluitluik_binnenzijde_aanwezig"
@@ -113,10 +114,9 @@
 					</mx:FormItem>
 			
 					<mx:FormItem label="Affuit">
-						<mx:CheckBox
-							label="Aanwezig"
+						<components:Aanwezig
 							id="cb_affuit_aanwezig"
-							selected="{data.affuit_aanwezig}"/>
+							value="{data.affuit_aanwezig}"/>
 						<mx:Form paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0">
 							<mx:FormItem label="Type">
 								<components:ComboBoxEx
@@ -135,14 +135,16 @@
 									selectedValue="{data.affuit_toestand}"/>
 							</mx:FormItem>
 						</mx:Form>
-						<mx:CheckBox 
+					</mx:FormItem>
+					<mx:FormItem label="Verankeringspunten">
+						<components:Aanwezig
 							id="cb_affuit_verankeringspunten_aanwezig"
-							selected="{data.affuit_verankeringspunten_aanwezig}"
-							label="Verankeringspunten aanwezig in vloer"/>
-						<mx:CheckBox 
+							value="{data.affuit_verankeringspunten_aanwezig}" />
+					</mx:FormItem>
+					<mx:FormItem label="Nummer inscripties">
+						<components:Aanwezig
 							id="cb_affuit_nummer_inscripties_aanwezig"
-							selected="{data.affuit_nummer_inscripties_aanwezig}"
-							label="Nummer inscripties aanwezig"/>
+							value="{data.affuit_nummer_inscripties_aanwezig}" />
 					</mx:FormItem>
 			
 				</mx:Form>
@@ -153,10 +155,9 @@
 					paddingRight="0"
 					paddingTop="0">
 					<mx:FormItem label="Witte lijn">
-						<mx:CheckBox 
+						<components:Aanwezig
 							id="cb_witte_lijn_aanwezig"
-							selected="{data.witte_lijn_aanwezig}"
-							label="Aanwezig"/>
+							value="{data.witte_lijn_aanwezig}" />
 					</mx:FormItem>
 					<mx:FormItem label="Observatiesleuf">
 						<components:ComboBoxEx
@@ -165,45 +166,43 @@
 							labelField="label"
 							valueField="label"
 							selectedValue="{data.observatiesleuf_toestand}"/>
-						<mx:CheckBox 
-							id="cb_observatiesleuf_luikje_aanwezig"
-							selected="{data.observatiesleuf_luikje_aanwezig}"
-							label="Luikje aanwezig"/>
 					</mx:FormItem>
-					<mx:FormItem label="Haken petroleumlampen">
-						<mx:CheckBox
+					<mx:FormItem label="Luikje">
+						<components:Aanwezig
+							id="cb_observatiesleuf_luikje_aanwezig"
+							value="{data.observatiesleuf_luikje_aanwezig}" />
+					</mx:FormItem>
+					<mx:FormItem label="Petroleumlamp">
+						<components:Aanwezig
 							id="cb_haken_petroleumlampen_aanwezig"
-							selected="{data.haken_petroleumlampen_aanwezig}" 
-							label="Aanwezig"/>
-						<mx:TextInput 
-							id="ti_haken_petroleumlampen_aantal"
-							text="{data.haken_petroleumlampen_aantal}"
-							width="64"/>
+							value="{data.haken_petroleumlampen_aanwezig}" />
+						<mx:FormItem label="Aantal haken">
+							<mx:TextInput 
+								id="ti_haken_petroleumlampen_aantal"
+								text="{data.haken_petroleumlampen_aantal}"
+								width="64"/>
+						</mx:FormItem>
 					</mx:FormItem>
 					<mx:FormItem label="Houten schapje">
-						<mx:CheckBox
+						<components:Aanwezig
 							id="cb_houten_schapje_aanwezig"
-							selected="{data.houten_schapje_aanwezig}" 
-							label="Aanwezig"/>
+							value="{data.houten_schapje_aanwezig}" />
 					</mx:FormItem>
 					<mx:FormItem label="Zitbankje">
-						<mx:CheckBox 
+						<components:Aanwezig
 							id="cb_zitbankje_aanwezig"
-							selected="{data.zitbankje_aanwezig}"
-							label="Aanwezig"/>
+							value="{data.zitbankje_aanwezig}" />
 					</mx:FormItem>
 					<mx:FormItem label="Metalen schap">
-						<mx:CheckBox
+						<components:Aanwezig
 							id="cb_metalen_schap_met_haken_aanwezig"
-							selected="{data.metalen_schap_met_haken_aanwezig}" 
-							label="Aanwezig"/>
-						<mx:HBox width="100%">
+							value="{data.metalen_schap_met_haken_aanwezig}" />
+						<mx:FormItem label="Aantal haken">
 							<mx:TextInput 
 								id="ti_metalen_schap_met_haken_aantal"
 								text="{data.metalen_schap_met_haken_aantal}"
 								width="64"/>
-							<mx:Label text="Aantal haken"/>
-						</mx:HBox>
+						</mx:FormItem>
 					</mx:FormItem>
 				</mx:Form>
 	

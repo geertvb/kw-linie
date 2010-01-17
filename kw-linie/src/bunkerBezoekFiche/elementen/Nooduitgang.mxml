@@ -16,10 +16,10 @@
 			
 			public function bind(vo: Object) : void {
 				vo.nooduitgang_bekeken = BindingUtils.bekekenToString(bekeken_nooduitgang);
-				vo.nooduitgang_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.nooduitgang_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 				vo.nooduitgang_toestand = BindingUtils.comboBoxExToString(cb_toestand);
-				vo.nooduitgang_schotbalken_binnenkant_aanwezig = BindingUtils.checkboxToBoolean(cb_schotbalken_binnenkant_aanwezig);
-				vo.nooduitgang_schotbalken_buitenkant_aanwezig = BindingUtils.checkboxToBoolean(cb_schotbalken_buitenkant_aanwezig);
+				vo.nooduitgang_schotbalken_binnenkant_aanwezig = BindingUtils.aanwezigToString(cb_schotbalken_binnenkant_aanwezig);
+				vo.nooduitgang_schotbalken_buitenkant_aanwezig = BindingUtils.aanwezigToString(cb_schotbalken_buitenkant_aanwezig);
 				vo.nooduitgang_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
 		]]>
@@ -41,9 +41,9 @@
 			paddingTop="0">
 				
 			<mx:FormItem label="Aanwezig">
-				<mx:CheckBox
+				<components:Aanwezig
 					id="cb_aanwezig"
-					selected="{data.nooduitgang_aanwezig}"/>
+					value="{data.nooduitgang_aanwezig}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Toestand">
@@ -55,15 +55,15 @@
 					selectedValue="{data.nooduitgang_toestand}"/>
 			</mx:FormItem>
 	
-			<mx:FormItem label="Schotbalken aanwezig">
-				<mx:CheckBox 
+			<mx:FormItem label="Schotbalken binnenkant">
+				<components:Aanwezig
 					id="cb_schotbalken_binnenkant_aanwezig"
-					selected="{data.nooduitgang_schotbalken_binnenkant_aanwezig}"
-					label="Binnenkant"/>
-				<mx:CheckBox 
+					value="{data.nooduitgang_schotbalken_binnenkant_aanwezig}" />
+			</mx:FormItem>
+			<mx:FormItem label="Schotbalken buitenkant">
+				<components:Aanwezig
 					id="cb_schotbalken_buitenkant_aanwezig"
-					selected="{data.nooduitgang_schotbalken_buitenkant_aanwezig}"
-					label="Buitenkant"/>
+					value="{data.nooduitgang_schotbalken_buitenkant_aanwezig}" />
 			</mx:FormItem>
 	
 			<mx:FormItem label="Opmerkingen">

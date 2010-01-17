@@ -1,13 +1,163 @@
-ALTER TABLE `kwl_bunkerbezoek_schietgat` 
-CHANGE `niet_bekeken` `bekeken` VARCHAR( 16 ) NULL DEFAULT NULL ;
 
-update `kwl_bunkerbezoek_schietgat` 
-set `bekeken` = 'bekeken'
-where `bekeken` = '1';
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `verluchtingspijpen_aanwezig` `verluchtingspijpen_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
 
-update `kwl_bunkerbezoek_schietgat` 
-set `bekeken` = 'niet bekeken'
-where `bekeken` = '0';
+update `kwl_bunkerbezoek` 
+set `verluchtingspijpen_aanwezig` = 'aanwezig'
+where `verluchtingspijpen_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `verluchtingspijpen_aanwezig` = 'niet aanwezig'
+where `verluchtingspijpen_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `afsluitluik_pistoolkoker_aanwezig` `afsluitluik_pistoolkoker_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `afsluitluik_pistoolkoker_aanwezig` = 'aanwezig'
+where `afsluitluik_pistoolkoker_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `afsluitluik_pistoolkoker_aanwezig` = 'niet aanwezig'
+where `afsluitluik_pistoolkoker_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `nooduitgang_aanwezig` `nooduitgang_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `nooduitgang_aanwezig` = 'aanwezig'
+where `nooduitgang_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `nooduitgang_aanwezig` = 'niet aanwezig'
+where `nooduitgang_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `nooduitgang_schotbalken_binnenkant_aanwezig` `nooduitgang_schotbalken_binnenkant_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `nooduitgang_schotbalken_binnenkant_aanwezig` = 'aanwezig'
+where `nooduitgang_schotbalken_binnenkant_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `nooduitgang_schotbalken_binnenkant_aanwezig` = 'niet aanwezig'
+where `nooduitgang_schotbalken_binnenkant_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `nooduitgang_schotbalken_buitenkant_aanwezig` `nooduitgang_schotbalken_buitenkant_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `nooduitgang_schotbalken_buitenkant_aanwezig` = 'aanwezig'
+where `nooduitgang_schotbalken_buitenkant_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `nooduitgang_schotbalken_buitenkant_aanwezig` = 'niet aanwezig'
+where `nooduitgang_schotbalken_buitenkant_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `rooster_ingang_aanwezig` `rooster_ingang_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `rooster_ingang_aanwezig` = 'aanwezig'
+where `rooster_ingang_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `rooster_ingang_aanwezig` = 'niet aanwezig'
+where `rooster_ingang_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `afsluitluik_granaatwerper_aanwezig` `afsluitluik_granaatwerper_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `afsluitluik_granaatwerper_aanwezig` = 'aanwezig'
+where `afsluitluik_granaatwerper_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `afsluitluik_granaatwerper_aanwezig` = 'niet aanwezig'
+where `afsluitluik_granaatwerper_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `dakplaten_aanwezig` `dakplaten_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `dakplaten_aanwezig` = 'aanwezig'
+where `dakplaten_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `dakplaten_aanwezig` = 'niet aanwezig'
+where `dakplaten_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `camouflage_aanwezig` `camouflage_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `camouflage_aanwezig` = 'aanwezig'
+where `camouflage_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `camouflage_aanwezig` = 'niet aanwezig'
+where `camouflage_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `buitendeur_scharnieren_aanwezig` `buitendeur_scharnieren_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `buitendeur_scharnieren_aanwezig` = 'aanwezig'
+where `buitendeur_scharnieren_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `buitendeur_scharnieren_aanwezig` = 'niet aanwezig'
+where `buitendeur_scharnieren_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `buitendeur_aanwezig` `buitendeur_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `buitendeur_aanwezig` = 'aanwezig'
+where `buitendeur_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `buitendeur_aanwezig` = 'niet aanwezig'
+where `buitendeur_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `binnendeur_scharnieren_aanwezig` `binnendeur_scharnieren_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `binnendeur_scharnieren_aanwezig` = 'aanwezig'
+where `binnendeur_scharnieren_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `binnendeur_scharnieren_aanwezig` = 'niet aanwezig'
+where `binnendeur_scharnieren_aanwezig` = '0';
+
+
+ALTER TABLE `kwl_bunkerbezoek` 
+CHANGE `binnendeur_aanwezig` `binnendeur_aanwezig` VARCHAR( 16 ) NULL DEFAULT NULL ;
+
+update `kwl_bunkerbezoek` 
+set `binnendeur_aanwezig` = 'aanwezig'
+where `binnendeur_aanwezig` = '1';
+
+update `kwl_bunkerbezoek` 
+set `binnendeur_aanwezig` = 'niet aanwezig'
+where `binnendeur_aanwezig` = '0';
+
+
+
+
+
 
 
 

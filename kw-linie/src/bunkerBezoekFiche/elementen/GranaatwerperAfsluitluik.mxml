@@ -17,7 +17,7 @@
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
 				vo.afsluitluik_granaatwerper_bekeken = BindingUtils.bekekenToString(bekeken_afsluitluik_granaatwerper);
-				vo.afsluitluik_granaatwerper_aanwezig = BindingUtils.checkboxToBoolean(cb_aanwezig);
+				vo.afsluitluik_granaatwerper_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
 				vo.afsluitluik_granaatwerper_aantal_totaal = BindingUtils.comboBoxExToString(cb_aantal_totaal);
 				vo.afsluitluik_granaatwerper_aantal_met_ketting = BindingUtils.comboBoxExToString(cb_aantal_met_ketting);
 				vo.afsluitluik_granaatwerper_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
@@ -41,9 +41,9 @@
 			paddingTop="0">
 				
 			<mx:FormItem label="Aanwezig">
-				<mx:CheckBox
+				<components:Aanwezig
 					id="cb_aanwezig"
-					selected="{data.afsluitluik_granaatwerper_aanwezig}" />
+					value="{data.afsluitluik_granaatwerper_aanwezig}" />
 			</mx:FormItem>
 	
 			<mx:FormItem label="Totaal aantal">
