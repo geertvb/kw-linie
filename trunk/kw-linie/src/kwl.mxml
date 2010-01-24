@@ -359,6 +359,7 @@
 						dataProvider="{bunkerCollection}"
 						x="0" y="0" 
 						rowCount="5"
+						rowHeight="120"
 						width="100%">
 						<mx:columns>
 							<mx:DataGridColumn headerText="Foto" width="160" sortable="false">
