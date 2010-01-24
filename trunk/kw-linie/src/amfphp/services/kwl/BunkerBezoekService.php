@@ -72,6 +72,7 @@ class BunkerBezoekService {
 			$result->bezoekers = $this->findBezoekers($mysqli, $id);
 			$result->fotos = $this->findFotos($mysqli, $id);
 			$result->schietgaten = $this->findSchietgaten($mysqli, $id);
+			$result->binnendeuren = $this->findBinnendeuren($mysqli, $id);
 						
 			$mysqli->close();
 		}
@@ -177,6 +178,30 @@ class BunkerBezoekService {
 		$sql .= "   `bunkerbezoek_id` = ?";
 		$sql .= " ORDER BY";
 		$sql .= "   `schietgat_nummer` ASC";
+
+		if ($stmt = $mysqli->prepare($sql)) {
+			$stmt->bind_param('i', $id);
+			if ($stmt->execute()) {
+				$result = getresult($stmt);
+			} else {
+				throw new Exception($mysqli->error);
+			}
+			$stmt->close();
+		}
+		
+		return $result;		
+	}	
+	
+	private function findBinnendeuren($mysqli, $id) {
+		$sql = "";
+		$sql .= " SELECT";
+		$sql .= "   *";
+		$sql .= " FROM";
+		$sql .= "   `kwl_bunkerbezoek_binnendeur`";
+		$sql .= " WHERE";
+		$sql .= "   `bunkerbezoek_id` = ?";
+		$sql .= " ORDER BY";
+		$sql .= "   `binnendeur_nummer` ASC";
 
 		if ($stmt = $mysqli->prepare($sql)) {
 			$stmt->bind_param('i', $id);
@@ -301,7 +326,6 @@ class BunkerBezoekService {
 			$this->saveBinnenToestand($vo, $mysqli);
 			$this->saveIngang($vo, $mysqli);
 			$this->saveBuitendeur($vo, $mysqli);
-			$this->saveBinnendeur($vo, $mysqli);
 			$this->saveCamouflage($vo, $mysqli);
 			$this->saveDakplaten($vo, $mysqli);
 			$this->saveAfsluitluikGranaatwerper($vo, $mysqli);
@@ -310,6 +334,7 @@ class BunkerBezoekService {
 			$this->saveNooduitgang($vo, $mysqli);
 			$this->saveVerluchtingspijpen($vo, $mysqli);
 			$this->updateSchietgaten($vo, $mysqli);
+			$this->updateBinnendeuren($vo, $mysqli);
 			
 			$sql = <<<SQL
 SELECT
@@ -800,6 +825,7 @@ SQL;
 		return $sql;
 	}
 		
+	/*
 	private function saveBinnendeur($vo, $mysqli) {
 		$sql = "";
 		$sql .= " update";
@@ -834,6 +860,97 @@ SQL;
 		}
 		return $sql;
 	}
+	*/
+
+	private function updateBinnendeuren($vo, $mysqli) {
+		$bunkerbezoek_id = $vo["bunkerbezoek_id"];
+		$binnendeuren = $vo["binnendeuren"];
+		if ($binnendeuren == null || count($binnendeuren) == 0) {
+			$sql = "";
+	    	$sql .= " DELETE FROM `kwl_bunkerbezoek_binnendeur`";
+	    	$sql .= " WHERE";
+	    	$sql .= "   `bunkerbezoek_id` = " . $bunkerbezoek_id;
+			$mysqli->query($sql);
+			//throw new Exception('Empty');
+		} else {
+			$remove_nrs = array();
+			foreach ($binnendeuren as $binnendeur) {
+				$remove_nrs[] = $binnendeur["binnendeur_nummer"];
+			}
+			$sql = "";
+	    	$sql .= " DELETE FROM `kwl_bunkerbezoek_binnendeur`";
+	    	$sql .= " WHERE";
+	    	$sql .= "   `bunkerbezoek_id` = " . $bunkerbezoek_id . " AND ";
+	    	$sql .= "   `binnendeur_nummer` not in (" . implode(", ", $remove_nrs) . ")";
+			$mysqli->query($sql);
+			
+			$sql = "";
+			$sql .= " INSERT INTO `kwl_bunkerbezoek_binnendeur` (";
+			$sql .= "   `bunkerbezoek_id`,";
+			$sql .= "   `binnendeur_nummer`,";
+			
+			$sql .= "   `bekeken`,";
+			$sql .= "   `aanwezig`,";
+			$sql .= "   `origineel`,";
+			$sql .= "   `replica`,";
+			$sql .= "   `ander_type`,";
+			$sql .= "   `ander_type_andere`,";
+			$sql .= "   `toestand`,";
+			$sql .= "   `scharnieren_aanwezig`,";
+			$sql .= "   `opmerkingen`";
+
+			$sql .= " ) VALUES (";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?,";
+			$sql .= "   ?";
+
+			$sql .= " ) ON DUPLICATE KEY UPDATE";
+			$sql .= " `bekeken` = VALUES(`bekeken`),";
+			$sql .= " `aanwezig` = VALUES(`aanwezig`),";
+			$sql .= " `origineel` = VALUES(`origineel`),";
+			$sql .= " `replica` = VALUES(`replica`),";
+			$sql .= " `ander_type` = VALUES(`ander_type`),";
+			$sql .= " `ander_type_andere` = VALUES(`ander_type_andere`),";
+			$sql .= " `toestand` = VALUES(`toestand`),";
+			$sql .= " `scharnieren_aanwezig` = VALUES(`scharnieren_aanwezig`),";
+			$sql .= " `opmerkingen` = VALUES(`opmerkingen`)";
+			
+			if ($stmt = $mysqli->prepare($sql)) {
+				foreach ($binnendeuren as $binnendeur) {
+					$stmt->bind_param('iissiisssss', 
+						$bunkerbezoek_id, 
+						$binnendeur["binnendeur_nummer"], 
+						
+						$binnendeur["bekeken"],
+						$binnendeur["aanwezig"],
+						$binnendeur["origineel"],
+						$binnendeur["replica"],
+						$binnendeur["ander_type"],
+						$binnendeur["ander_type_andere"],
+						$binnendeur["toestand"],
+						$binnendeur["scharnieren_aanwezig"],
+						$binnendeur["opmerkingen"]
+					);
+					if (!$stmt->execute()) {
+						throw new Exception($mysqli->error);
+					}
+				}
+				$stmt->close();
+			} else {
+				throw new Exception($mysqli->error);
+			}
+			
+		}
+	}
 	
 	private function updateSchietgaten($vo, $mysqli) {
 		$bunkerbezoek_id = $vo["bunkerbezoek_id"];
@@ -844,9 +961,9 @@ SQL;
 	    	$sql .= " WHERE";
 	    	$sql .= "   `bunkerbezoek_id` = " . $bunkerbezoek_id;
 			$mysqli->query($sql);
-			throw new Exception('Empty');
+			//throw new Exception('Empty');
 		} else {
-			$remove_ids = array();
+			$remove_nrs = array();
 			foreach ($schietgaten as $schietgat) {
 				$remove_nrs[] = $schietgat["schietgat_nummer"];
 			}
