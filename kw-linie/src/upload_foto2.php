@@ -41,18 +41,18 @@ SQL;
 $stmt = $mysqli->prepare($sql);
 
 $stmt->bind_param('sssiiibsiiib', 
-	$omschrijving, 
-	$filename, 
-	$mimetype, 
-	$size, 
-	$width, 
-	$height, 
-	$content, 
-	$thumb_mimetype, 
-	$thumb_size, 
-	$thumb_width, 
-	$thumb_height, 
-	$thumb_content);
+	&$omschrijving, 
+	&$filename, 
+	&$mimetype, 
+	&$size, 
+	&$width, 
+	&$height, 
+	&$content, 
+	&$thumb_mimetype, 
+	&$thumb_size, 
+	&$thumb_width, 
+	&$thumb_height, 
+	&$thumb_content);
 
 $fp = fopen($image_file, "r");
 while (!feof($fp)) {
