@@ -488,17 +488,21 @@ SQL;
 		$sql .= "   `nooduitgang_toestand` = ?,"; 
 		$sql .= "   `nooduitgang_schotbalken_binnenkant_aanwezig` = ?,"; 
 		$sql .= "   `nooduitgang_schotbalken_buitenkant_aanwezig` = ?,"; 
+		$sql .= "   `telefoonaansluiting_aanwezig` = ?,"; 
+		$sql .= "   `telefoonaansluiting_inscriptie` = ?,"; 
 		$sql .= "   `nooduitgang_opmerkingen` = ?"; 
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('ssssssi', 
+			$stmt->bind_param('ssssssssi', 
 				$vo["nooduitgang_bekeken"], 
 				$vo["nooduitgang_aanwezig"], 
 				$vo["nooduitgang_toestand"], 
 				$vo["nooduitgang_schotbalken_binnenkant_aanwezig"], 
 				$vo["nooduitgang_schotbalken_buitenkant_aanwezig"], 
+				$vo["telefoonaansluiting_aanwezig"], 
+				$vo["telefoonaansluiting_inscriptie"], 
 				$vo["nooduitgang_opmerkingen"], 
 				
 				$vo["bunkerbezoek_id"]);
@@ -518,17 +522,21 @@ SQL;
 		$sql .= "   `verluchtingspijpen_aantal_totaal` = ?,"; 
 		$sql .= "   `verluchtingspijpen_aantal_met_roostertje` = ?,"; 
 		$sql .= "   `verluchtingspijpen_aantal_met_shouwtje` = ?,"; 
+		$sql .= "   `verwarmingsbuizen` = ?,"; 
+		$sql .= "   `kacheltjes` = ?,"; 
 		$sql .= "   `verluchtingspijpen_opmerkingen` = ?"; 
 		$sql .= " where";
 		$sql .= "   `bunkerbezoek_id` = ?";
 		
 		if ($stmt = $mysqli->prepare($sql)) {
-			$stmt->bind_param('ssssssi', 
+			$stmt->bind_param('ssssssssi', 
 				$vo["verluchtingspijpen_bekeken"], 
 				$vo["verluchtingspijpen_aanwezig"], 
 				$vo["verluchtingspijpen_aantal_totaal"], 
 				$vo["verluchtingspijpen_aantal_met_roostertje"], 
 				$vo["verluchtingspijpen_aantal_met_shouwtje"], 
+				$vo["verwarmingsbuizen"], 
+				$vo["kacheltjes"], 
 				$vo["verluchtingspijpen_opmerkingen"], 
 				
 				$vo["bunkerbezoek_id"]);

@@ -21,6 +21,8 @@
 				vo.nooduitgang_schotbalken_binnenkant_aanwezig = BindingUtils.aanwezigToString(cb_schotbalken_binnenkant_aanwezig);
 				vo.nooduitgang_schotbalken_buitenkant_aanwezig = BindingUtils.aanwezigToString(cb_schotbalken_buitenkant_aanwezig);
 				vo.nooduitgang_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+				vo.telefoonaansluiting_aanwezig = BindingUtils.aanwezigToString(aanwezig_telefoonaansluiting);
+				vo.telefoonaansluiting_inscriptie = BindingUtils.textinputToString(ti_telefoonaansluiting_inscriptie);
 			}
 		]]>
 	</mx:Script>
@@ -60,12 +62,27 @@
 					id="cb_schotbalken_binnenkant_aanwezig"
 					value="{data.nooduitgang_schotbalken_binnenkant_aanwezig}" />
 			</mx:FormItem>
+			
 			<mx:FormItem label="Schotbalken buitenkant">
 				<components:Aanwezig
 					id="cb_schotbalken_buitenkant_aanwezig"
 					value="{data.nooduitgang_schotbalken_buitenkant_aanwezig}" />
 			</mx:FormItem>
-	
+			
+			<mx:FormItem label="Telefoonaansluiting">
+				<components:Aanwezig
+					id="aanwezig_telefoonaansluiting"
+					value="{data.telefoonaansluiting_aanwezig}" />
+			</mx:FormItem>
+			
+			<mx:FormItem label="Inscriptie">
+				<mx:TextInput
+					id="ti_telefoonaansluiting_inscriptie"
+					enabled="{aanwezig_telefoonaansluiting.value == 'aanwezig'}"
+					width="320"
+					text="{data.telefoonaansluiting_inscriptie}" />
+			</mx:FormItem>
+			
 			<mx:FormItem label="Opmerkingen">
 				<mx:TextArea 
 					id="ta_opmerkingen"
