@@ -9,7 +9,7 @@
 			
 			public function bind(vo: Object) : void {
 				ingangView.bind(vo);
-				binnendeurView.bind(vo);
+				binnendeurenView.bind(vo);
 				buitendeurView.bind(vo);
 				camouflageView.bind(vo);
 				dakplatenView.bind(vo);
@@ -33,7 +33,7 @@
 				<mx:ArrayCollection>
 					<mx:Object label="Ingang" />
 					<mx:Object label="Buitendeur" />
-					<mx:Object label="Binnendeur" />
+					<mx:Object label="Binnendeuren" />
 					<mx:Object label="Afsluitluik pistoolkoker" />
 					<mx:Object label="Nooduitgang" />
 					<mx:Object label="Dakplaten" />
@@ -60,10 +60,10 @@
 				id="buitendeurView"
 				data="{data}" 
 				label="Buitendeur" />
-			<elementen:Binnendeur 
-				id="binnendeurView"
+			<elementen:Binnendeuren
+				id="binnendeurenView"
 				data="{data}" 
-				label="Binnendeur" />
+				label="Binnendeuren" />
 			<elementen:PistoolkokerAfsluitluik 
 				id="pistoolkokerAfsluitluikView"
 				data="{data}" 

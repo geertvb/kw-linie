@@ -17,15 +17,15 @@
 		<![CDATA[
 			import util.BindingUtils;
 			public function bind(vo: Object) : void {
-				vo.binnendeur_bekeken = BindingUtils.bekekenToString(bekeken_binnendeur);
-				vo.binnendeur_aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
-				vo.binnendeur_origineel = BindingUtils.checkboxToBoolean(cb_origineel);
-				vo.binnendeur_replica = BindingUtils.checkboxToBoolean(cb_replica);
-				vo.binnendeur_ander_type = BindingUtils.comboBoxExToString(cb_ander_type);
-				vo.binnendeur_ander_type_andere = BindingUtils.textinputToString(ti_ander_type_andere);
-				vo.binnendeur_toestand = BindingUtils.comboBoxExToString(cb_toestand);
-				vo.binnendeur_scharnieren_aanwezig = BindingUtils.aanwezigToString(cb_scharnieren_aanwezig);
-				vo.binnendeur_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+				vo.bekeken = BindingUtils.bekekenToString(bekeken_binnendeur);
+				vo.aanwezig = BindingUtils.aanwezigToString(cb_aanwezig);
+				vo.origineel = BindingUtils.checkboxToBoolean(cb_origineel);
+				vo.replica = BindingUtils.checkboxToBoolean(cb_replica);
+				vo.ander_type = BindingUtils.comboBoxExToString(cb_ander_type);
+				vo.ander_type_andere = BindingUtils.textinputToString(ti_ander_type_andere);
+				vo.toestand = BindingUtils.comboBoxExToString(cb_toestand);
+				vo.scharnieren_aanwezig = BindingUtils.aanwezigToString(cb_scharnieren_aanwezig);
+				vo.opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
 			}
 		]]>
 	</mx:Script>
@@ -35,7 +35,7 @@
 		<mx:HBox width="100%" horizontalAlign="center">
 			<components:Bekeken
 				id="bekeken_binnendeur"
-				value="{data.binnendeur_bekeken}"/>
+				value="{data.bekeken}"/>
 		</mx:HBox>
 		
 		<mx:Form
@@ -48,19 +48,19 @@
 			<mx:FormItem label="Aanwezig">
 				<components:Aanwezig
 					id="cb_aanwezig"
-					value="{data.binnendeur_aanwezig}"/>
+					value="{data.aanwezig}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Origineel">
 				<mx:CheckBox
 					id="cb_origineel"
-					selected="{data.binnendeur_origineel}"/>
+					selected="{data.origineel}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Replica">
 				<mx:CheckBox
 					id="cb_replica"
-					selected="{data.binnendeur_replica}"/>
+					selected="{data.replica}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Ander type" direction="horizontal">
@@ -69,11 +69,11 @@
 					dataProvider="{dp_ander_type}"
 					labelField="label"
 					valueField="label"
-					selectedValue="{data.binnendeur_ander_type}" />
+					selectedValue="{data.ander_type}" />
 				<mx:TextInput
 					id="ti_ander_type_andere"
 					enabled="{cb_ander_type.selectedValue == 'Andere'}"
-					text="{data.binnendeur_ander_type_andere}"/>
+					text="{data.ander_type_andere}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Toestand">
@@ -82,19 +82,19 @@
 					dataProvider="{dp_toestand}"
 					labelField="label"
 					valueField="label"
-					selectedValue="{data.binnendeur_toestand}"/>
+					selectedValue="{data.toestand}"/>
 			</mx:FormItem>
 	
 			<mx:FormItem label="Scharnieren">
 				<components:Aanwezig
 					id="cb_scharnieren_aanwezig"
-					value="{data.binnendeur_scharnieren_aanwezig}" />
+					value="{data.scharnieren_aanwezig}" />
 			</mx:FormItem>
 	
 			<mx:FormItem label="Opmerkingen">
 				<mx:TextArea
 					id="ta_opmerkingen"
-					text="{data.binnendeur_opmerkingen}" 
+					text="{data.opmerkingen}" 
 					width="320"/>
 			</mx:FormItem>
 	

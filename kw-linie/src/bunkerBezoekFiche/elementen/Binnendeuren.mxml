@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:elementen="bunkerBezoekFiche.elementen.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			public function bind(vo : Object) : void {
+				var a: ArrayCollection = new ArrayCollection();
+				var binnendeur: Object;
+				
+				binnendeur = new Object();
+				binnendeur.binnendeur_nummer = 1;
+				binnendeur1.bind(binnendeur);
+				a.addItem(binnendeur);
+				
+				binnendeur = new Object();
+				binnendeur.binnendeur_nummer = 2;
+				binnendeur2.bind(binnendeur);
+				a.addItem(binnendeur);
+				
+				vo.binnendeuren = a; 
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:ArrayCollection 
+		id="binnendeuren" 
+		source="{data.binnendeuren}" />
+	
+	<mx:VBox horizontalAlign="center">
+		
+		<mx:ToggleButtonBar 
+			dataProvider="{viewstack}" />
+		
+		<mx:ViewStack id="viewstack">
+			<elementen:Binnendeur id="binnendeur1" label="Binnendeur 1" data="{binnendeuren.getItemAt(0)}" />
+			<elementen:Binnendeur id="binnendeur2" label="Binnendeur 2" data="{binnendeuren.getItemAt(1)}" />
+		</mx:ViewStack>
+		
+	</mx:VBox>
+
+</mx:Canvas>
