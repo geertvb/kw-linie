@@ -21,6 +21,8 @@
 				vo.verluchtingspijpen_aantal_met_roostertje = BindingUtils.comboBoxExToString(cb_aantal_met_roostertje);
 				vo.verluchtingspijpen_aantal_met_shouwtje = BindingUtils.comboBoxExToString(cb_aantal_met_shouwtje);
 				vo.verluchtingspijpen_opmerkingen = BindingUtils.textAreaToString(ta_opmerkingen);
+				vo.verwarmingsbuizen = BindingUtils.comboBoxExToString(cb_verwarmingsbuizen);
+				vo.kacheltjes = BindingUtils.comboBoxExToString(cb_kacheltjes);
 			}
 		]]>
 	</mx:Script>
@@ -72,7 +74,25 @@
 					valueField="label"
 					selectedValue="{data.verluchtingspijpen_aantal_met_shouwtje}" />
 			</mx:FormItem>
-	
+			
+			<mx:FormItem label="Verwarmingsbuizen">
+				<components:ComboBoxEx 
+					id="cb_verwarmingsbuizen"
+					dataProvider="{dp_aantal}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.verwarmingsbuizen}" />
+			</mx:FormItem>
+			
+			<mx:FormItem label="Kacheltjes">
+				<components:ComboBoxEx 
+					id="cb_kacheltjes"
+					dataProvider="{dp_aantal}"
+					labelField="label"
+					valueField="label"
+					selectedValue="{data.kacheltjes}" />
+			</mx:FormItem>
+			
 			<mx:FormItem label="Opmerkingen">
 				<mx:TextArea 
 					id="ta_opmerkingen"
