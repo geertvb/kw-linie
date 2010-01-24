@@ -24,7 +24,7 @@
 	<mx:ArrayCollection id="dp_affuit_type">
 		<mx:Object label="" />
 		<mx:Object label="Chardome" />
-		<mx:Object label="Squifflet-opstelling" />
+		<mx:Object label="Hotchkiss" />
 		<mx:Object label="Andere" />
 	</mx:ArrayCollection>
 	
@@ -176,7 +176,7 @@
 						<components:Aanwezig
 							id="cb_haken_petroleumlampen_aanwezig"
 							value="{data.haken_petroleumlampen_aanwezig}" />
-						<mx:FormItem label="Aantal haken">
+						<mx:FormItem label="Aantal">
 							<mx:TextInput 
 								id="ti_haken_petroleumlampen_aantal"
 								text="{data.haken_petroleumlampen_aantal}"
@@ -197,7 +197,7 @@
 						<components:Aanwezig
 							id="cb_metalen_schap_met_haken_aanwezig"
 							value="{data.metalen_schap_met_haken_aanwezig}" />
-						<mx:FormItem label="Aantal haken">
+						<mx:FormItem label="Aantal">
 							<mx:TextInput 
 								id="ti_metalen_schap_met_haken_aantal"
 								text="{data.metalen_schap_met_haken_aantal}"
