@@ -12,7 +12,6 @@
 			}
 		
 			private function click_voeg_toe(event: Event) : void {
-				//FotoUtils.upload(uploadComplete);
 				FotoUtils.multiUpload(uploadComplete);
 			}
 			
