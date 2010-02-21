@@ -55,7 +55,9 @@ package util
 		public static function multiUpload(complete: Function = null) : void {
 			var uploadImages : UploadImages = UploadImages.getInstance();
 			if (complete != null) {
-				uploadImages.complete = function (foto: Object) : void {
+				uploadImages.complete = function (event: DataEvent) : void {
+					var xml: XML = new XML(event.data);
+					var foto: Object = xmlToFoto(xml);
 					complete(foto);
 				}
 			} else {

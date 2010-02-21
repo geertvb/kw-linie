@@ -14,12 +14,9 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.controls.Alert;
-			import mx.core.Application;
 			import mx.managers.PopUpManager;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
+			import mx.core.Application;
+			import mx.collections.ArrayCollection;
 			
 			private static var _instance: UploadImages;
 			
@@ -54,9 +51,9 @@
 				fileReferenceList.browse();
 			}
 			
-			public function readyHandler(uh: UploadHelper, uid: String) : void {
+			public function readyHandler(uh: UploadHelper, event: DataEvent) : void {
 				if (complete != null) {
-					fotoService.findByUid(uid);
+					complete(event);
 				}
 				var i: int = fileRefs.getItemIndex(uh);
 				fileRefs.removeItemAt(i);
@@ -80,25 +77,9 @@
 				}
 			}
 			
-			private function onFault(event: FaultEvent) : void {
-				Alert.show(event.message.toString());
-			}
-			
-			private function result_findByUid(event: ResultEvent) : void {
-				var foto: Object = event.result;
-				complete(foto);
-			}
-			
 		]]>
 	</mx:Script>
 	
-	<mx:RemoteObject 
-		id="fotoService"
-		source="kwl.FotoService" 
-		destination="amfphp"
-		fault="onFault(event)">
-		<mx:method name="findByUid" result="result_findByUid(event)" />
-	</mx:RemoteObject>
 	
 	<mx:List
 		width="640"
