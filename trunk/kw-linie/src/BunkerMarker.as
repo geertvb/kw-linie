@@ -19,8 +19,8 @@ package
 		public var marker: Marker;
 		public var latLng: LatLng;
 		public static var bunkerTypeColors: Object = {
-			"commando 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false, visible: true},
-			"commando 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false, visible: true},
+			"commando 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false, visible: false},
+			"commando 2e lijn": {strokeColor: 0xDDDD88, fillColor: 0x888800, closed: false, visible: false},
 			"connectiekamer": {strokeColor: 0xDDDD88, fillColor: 0x008888, closed: false, visible: false},
 			"bruggenhoofd mechelen": {strokeColor: 0xDDDD88, fillColor: 0x000088, closed: false, visible: true},
 			"verdediging 1e lijn": {strokeColor: 0xDDDD88, fillColor: 0x880000, closed: false, visible: true},
