@@ -14,10 +14,9 @@ package
 	import flash.net.URLVariables;
 	import flash.utils.ByteArray;
 	
-	import mx.controls.Alert;
+	import mx.core.Application;
 	import mx.graphics.codec.JPEGEncoder;
 	import mx.utils.Base64Encoder;
-	import mx.utils.UIDUtil;
 
 	public class UploadHelper {
 		
@@ -57,8 +56,6 @@ package
 		private var _realWidth: int;
 
 		private var _realHeight: int;
-		
-		private var _uid: String;
 		
 		protected function setRealHeight(value: int) : void {
 			_realHeight = value;
@@ -107,14 +104,16 @@ package
 			readyForUpload = true;
 		}
 
-		public function upload_completeHandler(event:Event):void {
+		public function upload_completeDataHandler(event:DataEvent):void {
 			var fileRef :FileReference = FileReference(event.target);
 			done = true;
 			uploading = false;
 			
 			if (onReady != null) {
-				onReady(this, _uid);
+				onReady(this, event);
 			}
+			
+			trace("" + event.data);
 		}
 		
 		public function upload() : void {
@@ -129,15 +128,17 @@ package
 			b64enc.encodeBytes(ba);
 			
 			var urlLoader:URLLoader = new URLLoader();
-			var request:URLRequest = new URLRequest("upload_foto2.php");
+			var request:URLRequest = new URLRequest();
+			
+			var appUrl: String = Application.application.url;
+			var i: int = appUrl.lastIndexOf("/");
+			request.url = appUrl.substring(0,i+1) + "upload_foto2.php";
+			
 			request.method = URLRequestMethod.POST;
 			var data:URLVariables = new URLVariables();	
 			
-			_uid = UIDUtil.createUID();
-			
 			data.width = _realWidth;
 			data.height = _realHeight;
-			data.uid = _uid;
 			
 			data.thumb_content = b64enc.flush();
 			data.thumb_mimetype = "image/jpeg";
@@ -149,18 +150,11 @@ package
 			
 			request.data = data;
 			
-			_fileReference.addEventListener(Event.COMPLETE, upload_completeHandler);
-			//_fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, upload_completeDataHandler);
+			_fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, upload_completeDataHandler);
 			_fileReference.upload(request, "file");
 			uploading = true;
 			readyForUpload = false;
 		}
-		
-		/*
-		public function upload_completeDataHandler(event: DataEvent) : void {
-			Alert.show(event.data);
-		}
-		*/
 
 		public static function resizeBitmapData(bitmapData: BitmapData, maxWidth: int = 128, maxHeight: int = 96) : BitmapData {
 			
