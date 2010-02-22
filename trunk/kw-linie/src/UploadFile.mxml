@@ -49,7 +49,9 @@
 		
 			public function click_voeg_toe(event : Event) : void {
 				var request: URLRequest = new URLRequest();
-				request.url = url;
+				var appUrl: String = Application.application.url;
+				var i: int = appUrl.lastIndexOf("/");
+				request.url = appUrl.substring(0,i+1) + url;
 				request.method = URLRequestMethod.POST;
 				var parameters: URLVariables = new URLVariables();
 				parameters.omschrijving = ti_omschrijving.text;
