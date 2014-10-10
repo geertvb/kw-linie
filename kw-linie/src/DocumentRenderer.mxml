@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="52">
-	<mx:Image width="48" source="{data.icon}" height="48" x="2" y="2"/>
-	<mx:Label x="58" text="{data.omschrijving}" fontWeight="bold" fontSize="12" top="4"/>
-	<mx:Label x="58" text="{data.filename} - {data.size}" bottom="4"/>
-	
-</mx:Canvas>

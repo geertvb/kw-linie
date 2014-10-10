@@ -1,0 +1,17 @@
+{
+    "name": "kwlinie/kw-linie-html5",
+    "version": "1.0.0",
+    "ignore": [
+        "**/.*",
+        "composer.json",
+        "node_modules",
+        "public/components",
+        "vendor",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "angular": "~1.2.26",
+        "angular-route": "~1.2.26"
+    }
+}
