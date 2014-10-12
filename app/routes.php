@@ -20,3 +20,8 @@ Route::group(array('prefix' => 'api/v1'), function() {
     Route::resource('users', 'UserController');
 //    Route::get('users', 'UserController@getIndex');
 });
+
+Route::group(array('prefix' => 'api/v1'), function() {
+    Route::resource('bunkers', 'BunkerController');
+//    Route::get('users', 'UserController@getIndex');
+});
