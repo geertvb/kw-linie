@@ -1,23 +1,26 @@
 'use strict';
 
-angular.module('kwlinie', [
-    'ngRoute'
-])
-    .config(['$routeProvider', function($routeProvider){
-        $routeProvider
-            .when('/', {
-                templateUrl: 'views/welcome.html',
-                controller: 'bunkerController'
-            })
-            .when('/bunkermap', {
-                templateUrl: 'views/bunkermap.html',
-                controller: 'bunkermapController'
-            })
-            .when('/bunkerlist', {
-                templateUrl: 'views/bunkerlist.html',
-                controller: 'bunkerlistController'
-            })
-            .otherwise({
-                redirectTo: '/'
-            });
-    }]);
+var kwlinieApp = angular.module('kwlinieApp', [
+    'ngRoute',
+    'kwlinieServices',
+    'kwlinieControllers'
+]);
+
+kwlinieApp.config(['$routeProvider', function ($routeProvider) {
+    $routeProvider
+        .when('/', {
+            templateUrl: 'views/bunkerView.html',
+            controller: 'bunkerController',
+            resolve: {
+                gemeentes: function (bunkerService) {
+                    return bunkerService.getGemeentes();
+                },
+                deelgemeentes: function (bunkerService) {
+                    return bunkerService.getDeelgemeentes();
+                }
+            }
+        })
+        .otherwise({
+            redirectTo: '/'
+        });
+}]);
