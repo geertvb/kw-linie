@@ -9,6 +9,10 @@ Route::group(array('prefix' => 'api/v1'), function () {
 });
 
 Route::group(array('prefix' => 'api/v1'), function () {
+    Route::resource('verbindingen', 'VerbindingController');
+});
+
+Route::group(array('prefix' => 'api/v1'), function () {
     Route::resource('gemeentes', 'GemeenteController');
 });
 

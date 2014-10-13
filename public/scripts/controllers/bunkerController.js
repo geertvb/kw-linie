@@ -33,9 +33,7 @@ kwlinieControllers.factory('Initializer', function ($window, $q) {
     };
 });
 
-kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes) {
-
-    $scope.bunkers = [];
+kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers) {
 
     $scope.bunkerCodes = [
         {code: "A", label: "A: Kanaal Mechelen - Leuven (1e lijn)"},
@@ -91,27 +89,25 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         {label: "Onbekend", value: ""}
     ];
 
+    $scope.bunkerTypeColors = {
+        "commando 1e lijn": {strokeColor: "#DDDD88", fillColor: "#888800", closed: false, visible: false},
+        "commando 2e lijn": {strokeColor: "#DDDD88", fillColor: "#888800", closed: false, visible: false},
+        "connectiekamer": {strokeColor: "#DDDD88", fillColor: "#008888", closed: false, visible: false},
+        "bruggenhoofd mechelen": {strokeColor: "#DDDD88", fillColor: "#000088", closed: false, visible: true},
+        "verdediging 1e lijn": {strokeColor: "#DDDD88", fillColor: "#880000", closed: false, visible: true},
+        "verdediging 2e lijn": {strokeColor: "#DDDD88", fillColor: "#008800", closed: false, visible: true},
+        "verdediging antitankcentrum": {strokeColor: "#DDDD88", fillColor: "#000000", closed: true, visible: true}
+    };
+
     $scope.gemeentes = gemeentes.data;
 
     $scope.deelgemeentes = deelgemeentes.data;
 
+    $scope.verbindingen = verbindingen.data;
+
+    $scope.bunkers = bunkers.data;
+
     $scope.map;
-
-    $scope.load = function () {
-
-        $http.get("api/v1/users")
-
-            .success(function (data, status, headers, config) {
-                $scope.bunkers = data;
-            })
-
-            .error(function (data, status, headers, config) {
-                alert("AJAX failed!");
-            });
-
-    };
-
-    $scope.load();
 
     Initializer.mapsInitialized
         .then(function () {
@@ -129,6 +125,92 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
             $scope.map = new google.maps.Map(mapElement, mapOptions);
         });
 
+    $scope.drawPoly = function (map, vertices, type) {
+        if (vertices.length > 1 && $scope.bunkerTypeColors[type].visible) {
+            if ($scope.bunkerTypeColors[type].closed) {
+                vertices.push(vertices[0]);
+            }
+            var polyLine = new google.maps.Polyline({
+                map: map,
+                path:vertices,
+                strokeColor: $scope.bunkerTypeColors[type].fillColor,
+                strokeOpacity: 0.5,
+                strokeWeight: 3
+            });
+        }
+    };
+
+    $scope.displaymarkers = function () {
+        var previous;
+        var vertices = [];
+        $scope.bunkerMarkers = [];
+
+        for (var i in $scope.bunkers) {
+            var bunker = $scope.bunkers[i];
+            if (bunker.lat && bunker.lng) {
+                var bunkerMarker = new BunkerMarker($scope.map, bunker);
+                $scope.bunkerMarkers.push(bunkerMarker);
+
+                if (previous && (previous.bunker.type != bunkerMarker.bunker.type
+                    || previous.bunker.code != bunkerMarker.bunker.code)) {
+                    $scope.drawPoly($scope.map, vertices, previous.bunker.type);
+                    vertices = [];
+                }
+
+                vertices.push(bunkerMarker.latLng);
+
+                previous = bunkerMarker;
+            }
+        }
+        $scope.drawPoly($scope.map, vertices, previous.bunker.type);
+        $scope.teken_verbindingen();
+    };
+
+    $scope.teken_verbindingen = function () {
+        var bm1;
+        var bm2;
+        for (var i in $scope.verbindingen) {
+            var v = $scope.verbindingen[i];
+            bm1 = $scope.getBunkerMarker(v.van);
+            bm2 = $scope.getBunkerMarker(v.tot);
+            if (bm1 && bm2) {
+                var polyLine = new google.maps.Polyline({
+                    map: $scope.map,
+                    path:[bm1.latLng, bm2.latLng],
+                    strokeColor: "#008888",
+                    strokeOpacity: 0.5,
+                    strokeWeight: 3
+                });
+            }
+        }
+    };
+
+    $scope.getBunkerMarker = function (nummer) {
+        for (var i in $scope.bunkerMarkers) {
+            var bm = $scope.bunkerMarkers[i];
+            var type = bm.bunker.type;
+            if ((type == "connectiekamer"
+                || type == "commando 1e lijn"
+                || type == "commando 2e lijn")
+
+                && ($scope.normalizenummer(bm.bunker.nummer) == $scope.normalizenummer(nummer))) {
+
+                return bm;
+
+            }
+        }
+        return null;
+    };
+
+    $scope.normalizenummer = function(nummer) {
+        var result = nummer;
+        var pattern = /(\s|\/)/gi;
+
+        result = result.replace(pattern, "");
+        result = result.toLowerCase();
+        return result;
+    };
+
 //        bunkerService.getBunkers().success(function (data) {
 //            $scope.bunkers = data;
 //        });
@@ -141,4 +223,58 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
 //            $scope.gemeentes = data;
 //        });
 
-});
+})
+;
+
+function BunkerMarker(map, bunker) {
+
+    function createMarker(latLng, strokeColor, fillColor, clickListener) {
+        var marker = new google.maps.Marker({
+            map: map,
+            visible: false,
+            position: latLng//,
+//            shape: {
+//                type: "circle",
+//                coords: {
+//                    x1:0,
+//                    y1:0,
+//                    r:4
+//                }
+//            },
+//            strokeStyle: new StrokeStyle({thickness: 1, color: strokeColor}),
+//            fillStyle: new FillStyle({color: fillColor}),
+//            hasShadow: true
+        });
+//        marker.addEventListener(MapMouseEvent.CLICK, clickListener);
+        return marker;
+    }
+
+    var bunkerTypeColors = {
+        "commando 1e lijn": {strokeColor: "#DDDD88", fillColor: "#888800", closed: false, visible: false},
+        "commando 2e lijn": {strokeColor: "#DDDD88", fillColor: "#888800", closed: false, visible: false},
+        "connectiekamer": {strokeColor: "#DDDD88", fillColor: "#008888", closed: false, visible: false},
+        "bruggenhoofd mechelen": {strokeColor: "#DDDD88", fillColor: "#000088", closed: false, visible: true},
+        "verdediging 1e lijn": {strokeColor: "#DDDD88", fillColor: "#880000", closed: false, visible: true},
+        "verdediging 2e lijn": {strokeColor: "#DDDD88", fillColor: "#008800", closed: false, visible: true},
+        "verdediging antitankcentrum": {strokeColor: "#DDDD88", fillColor: "#000000", closed: true, visible: true}
+    };
+
+    this.bunker = bunker;
+    this.latLng = new google.maps.LatLng(bunker.lat, bunker.lng);
+    var strokeColor = bunkerTypeColors[bunker.type].strokeColor;
+    var fillColor = bunkerTypeColors[bunker.type].fillColor;
+    this.marker = createMarker(this.latLng, strokeColor, fillColor, null /* clickListener */);
+//    this.bunkerThumb = new BunkerThumb();
+
+//    function clickListener(event) {
+//        bunkerThumb.bunker = bunker;
+//
+//        marker.openInfoWindow(
+//            new InfoWindowOptions({
+//                customContent: bunkerThumb,
+//                width: w,
+//                drawDefaultFrame: true
+//            }));
+//    }
+
+}

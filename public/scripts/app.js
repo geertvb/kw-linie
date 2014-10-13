@@ -17,6 +17,12 @@ kwlinieApp.config(['$routeProvider', function ($routeProvider) {
                 },
                 deelgemeentes: function (bunkerService) {
                     return bunkerService.getDeelgemeentes();
+                },
+                verbindingen: function (bunkerService) {
+                    return bunkerService.getVerbindingen();
+                },
+                bunkers: function (bunkerService) {
+                    return bunkerService.getBunkers();
                 }
             }
         })
