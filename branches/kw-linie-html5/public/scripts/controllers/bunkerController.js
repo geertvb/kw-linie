@@ -8,7 +8,7 @@ kwlinieControllers.factory('Initializer', function ($window, $q) {
     var mapsDefer = $q.defer();
 
     // Google's url for async maps initialization accepting callback function
-    var asyncUrl = 'https://maps.googleapis.com/maps/api/js?callback=';
+    var asyncUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbPBb7qqn6_CMDqwHzwfaWp4CjbDAXvRo&callback=';
 
     // async loader
     var asyncLoad = function (asyncUrl, callbackName) {
@@ -113,16 +113,18 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         .then(function () {
 
             var mapOptions = {
-                center: { lat: 50.883333, lng: 4.70000},
+                center: { lat: 50.96, lng: 4.56},
                 mapTypeControl: true,
                 panControl: true,
                 zoomControl: true,
-                zoom: 14
+                zoom: 10
             };
 
             var mapElement = document.getElementById('map-canvas');
 
             $scope.map = new google.maps.Map(mapElement, mapOptions);
+
+            $scope.displaymarkers();
         });
 
     $scope.drawPoly = function (map, vertices, type) {
@@ -229,21 +231,15 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
 function BunkerMarker(map, bunker) {
 
     function createMarker(latLng, strokeColor, fillColor, clickListener) {
+        var colorSuffix = fillColor.replace("#", "_");
         var marker = new google.maps.Marker({
             map: map,
-            visible: false,
-            position: latLng//,
-//            shape: {
-//                type: "circle",
-//                coords: {
-//                    x1:0,
-//                    y1:0,
-//                    r:4
-//                }
-//            },
-//            strokeStyle: new StrokeStyle({thickness: 1, color: strokeColor}),
-//            fillStyle: new FillStyle({color: fillColor}),
-//            hasShadow: true
+            visible: true,
+            icon: {
+                anchor:{x:3,y:3},
+                url: "img/measle"+ colorSuffix +".png"
+            },
+            position: latLng
         });
 //        marker.addEventListener(MapMouseEvent.CLICK, clickListener);
         return marker;
