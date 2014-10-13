@@ -7,22 +7,17 @@ class DeelgemeenteController extends BaseController
     {
         try {
             $statusCode = 200;
-            $response = [
-                [
-                    "deelgemeente_id" => "1",
-                    "deelgemeente" => "Aartselaar",
-                    "gemeente" => "Aartselaar",
-                    "kwlinie" => 0
-                ], [
-                    "deelgemeente_id" => "2",
-                    "deelgemeente" => "Antwerpen Kern - Oude stad",
-                    "gemeente" => "Antwerpen",
-                    "kwlinie" => 0
-                ]];
+            $response = DB::table('deelgemeente')
+                ->orderBy('gemeente', 'asc')
+                ->orderBy('deelgemeente', 'asc')
+                ->get();
 
         } catch (Exception $e) {
             $statusCode = 400;
-            $response = [];
+            $response = [
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace()
+            ];
         }
         return Response::json($response, $statusCode);
     }

@@ -7,3 +7,7 @@
     padding-right: 0.25em;
     border: 0px;
 }
+
+.fieldgrouplegend {
+    font-weight: bold;
+}
