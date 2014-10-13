@@ -134,7 +134,7 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
             }
             var polyLine = new google.maps.Polyline({
                 map: map,
-                path:vertices,
+                path: vertices,
                 strokeColor: $scope.bunkerTypeColors[type].fillColor,
                 strokeOpacity: 0.5,
                 strokeWeight: 3
@@ -178,7 +178,7 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
             if (bm1 && bm2) {
                 var polyLine = new google.maps.Polyline({
                     map: $scope.map,
-                    path:[bm1.latLng, bm2.latLng],
+                    path: [bm1.latLng, bm2.latLng],
                     strokeColor: "#008888",
                     strokeOpacity: 0.5,
                     strokeWeight: 3
@@ -204,7 +204,7 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         return null;
     };
 
-    $scope.normalizenummer = function(nummer) {
+    $scope.normalizenummer = function (nummer) {
         var result = nummer;
         var pattern = /(\s|\/)/gi;
 
@@ -213,17 +213,50 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         return result;
     };
 
-//        bunkerService.getBunkers().success(function (data) {
-//            $scope.bunkers = data;
-//        });
-//
-//        bunkerService.getDeelgemeentes().success(function (data) {
-//            $scope.deelgemeentes = data;
-//        });
-//
-//        bunkerService.getGemeentes().success(function (data) {
-//            $scope.gemeentes = data;
-//        });
+    $scope.filterMarkers = function () {
+        for (var i in $scope.bunkerMarkers) {
+            var bunkerMarker = $scope.bunkerMarkers[i];
+            var visible = $scope.filterBunker(bunkerMarker.bunker);
+            bunkerMarker.marker.setVisible(visible);
+        }
+//        bunkerCollection.refresh();
+    };
+
+    $scope.filterBunker = function (bunker) {
+        return $scope.filterTypeMarkers(bunker.type)
+            && $scope.filterAanwezigheid(bunker.aanwezig)
+//            && (codeFilter.selectedIndex <= 0 || (bunker.code == codeFilter.selectedValue))
+//            && (gemeenteFilter.selectedIndex <= 0 || (bunker.gemeente == gemeenteFilter.selectedLabel))
+//            && (deelgemeenteFilter.selectedIndex <= 0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel))
+            ;
+    };
+
+    $scope.cb_bunkerTypes = {
+        "bruggenhoofd mechelen": true,
+        "commando 1e lijn": true,
+        "commando 2e lijn": true,
+        "connectiekamer": true,
+        "verdediging 1e lijn": true,
+        "verdediging 2e lijn": true,
+        "verdediging antitankcentrum": true
+    };
+
+    $scope.filterTypeMarkers = function (type) {
+        return $scope.cb_bunkerTypes[type];
+    };
+
+    $scope.cb_aanwezig = {
+        'aanwezig': true,
+        'afwezig':true,
+        'afgebroken':true,
+        'nooit gebouwd':true,
+        '':true
+    };
+
+    $scope.filterAanwezigheid = function (aanwezig) {
+        return $scope.cb_aanwezig[aanwezig];
+    };
+
 
 })
 ;
@@ -236,8 +269,8 @@ function BunkerMarker(map, bunker) {
             map: map,
             visible: true,
             icon: {
-                anchor:{x:3,y:3},
-                url: "img/measle"+ colorSuffix +".png"
+                anchor: {x: 3, y: 3},
+                url: "img/measle" + colorSuffix + ".png"
             },
             position: latLng
         });

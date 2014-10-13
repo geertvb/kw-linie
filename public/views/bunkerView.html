@@ -7,7 +7,7 @@
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Bunker type:</legend>
             <label ng-repeat="bunkerType in bunkerTypes" class="checkbox" style="margin-left: 2px;">
-                <input type="checkbox" value="{{bunkerType.value}}" name="bunkerType"/>
+                <input type="checkbox" ng-model="cb_bunkerTypes[bunkerType.value]"/>
                 {{bunkerType.label}}
                 <img ng-src="img/measle{{bunkerTypeColors[bunkerType.value].fillColor.replace('#', '_')}}.png" />
                 <br/>
@@ -41,10 +41,12 @@
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Aanwezig:</legend>
             <label ng-repeat="bunkerToestand in bunkerToestanden" class="checkbox" style="margin-left: 2px;">
-                <input type="checkbox" value="{{bunkerToestand.value}}" name="bunkerToestand"/>
+                <input type="checkbox" ng-model="cb_aanwezig[bunkerToestand.value]"/>
                 {{bunkerToestand.label}}<br/>
             </label>
         </fieldset>
+
+        <button ng-click="filterMarkers()">Filter</button>
 
     </div>
 
