@@ -2,12 +2,15 @@
     margin-left: 0px;
     margin-right: 0px;
     padding-top: 0.25em;
-    padding-bottom: 0.25em;
+    padding-bottom: 1em;
     padding-left: 0.25em;
     padding-right: 0.25em;
     border: 0px;
+    color: #ffffff;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
 }
 
 .fieldgrouplegend {
-    font-weight: bold;
+    font-size: 12px;
 }
