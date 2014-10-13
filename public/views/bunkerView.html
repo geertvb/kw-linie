@@ -6,15 +6,17 @@
 
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Bunker type:</legend>
-            <label ng-repeat="bunkerType in bunkerTypes" class="checkbox">
+            <label ng-repeat="bunkerType in bunkerTypes" class="checkbox" style="margin-left: 2px;">
                 <input type="checkbox" value="{{bunkerType.value}}" name="bunkerType"/>
-                {{bunkerType.label}}<br/>
+                {{bunkerType.label}}
+                <img ng-src="img/measle{{bunkerTypeColors[bunkerType.value].fillColor.replace('#', '_')}}.png" />
+                <br/>
             </label>
         </fieldset>
 
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Bunker code:</legend>
-            <select style="width: 100%;" ng-model="selectedBunkerCode"
+            <select style="width: 190px; margin-left: 4px;" ng-model="selectedBunkerCode"
                     ng-options="bunkerCode.label for bunkerCode in bunkerCodes">
                 <option value="">Alle</option>
             </select>
@@ -22,7 +24,7 @@
 
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Gemeente:</legend>
-            <select style="width: 100%;" ng-model="selectedGemeenteId"
+            <select style="width: 190px; margin-left: 4px;" ng-model="selectedGemeenteId"
                     ng-options="gemeente.naam for gemeente in gemeentes">
                 <option value="">Alle</option>
             </select>
@@ -30,15 +32,15 @@
 
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Deelgemeente:</legend>
-            <select style="width: 100%;" ng-model="selectedDeelgemeenteId"
+            <select style="width: 190px; margin-left: 4px;" ng-model="selectedDeelgemeenteId"
                     ng-options="deelgemeente.deelgemeente for deelgemeente in deelgemeentes">
                 <option value="">Alle</option>
             </select>
         </fieldset>
 
         <fieldset class="fieldgroup">
-            <legend class="fieldgrouplegend">Toestand:</legend>
-            <label ng-repeat="bunkerToestand in bunkerToestanden" class="checkbox">
+            <legend class="fieldgrouplegend">Aanwezig:</legend>
+            <label ng-repeat="bunkerToestand in bunkerToestanden" class="checkbox" style="margin-left: 2px;">
                 <input type="checkbox" value="{{bunkerToestand.value}}" name="bunkerToestand"/>
                 {{bunkerToestand.label}}<br/>
             </label>
