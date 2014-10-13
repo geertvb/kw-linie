@@ -6,21 +6,16 @@ class GemeenteController extends BaseController
     public function index()
     {
         try {
+            $response = DB::table('gemeente')
+                ->orderBy('naam', 'asc')
+                ->get();
             $statusCode = 200;
-            $response = [
-                [
-                    "gemeente_id" => "2904",
-                    "naam" => "Aaigem",
-                    "postcode" => "9420"
-                ], [
-                    "gemeente_id" => "2905",
-                    "naam" => "Aalbeke",
-                    "postcode" => "8511"
-                ]];
-
         } catch (Exception $e) {
             $statusCode = 400;
-            $response = [];
+            $response = [
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace()
+            ];
         }
         return Response::json($response, $statusCode);
     }

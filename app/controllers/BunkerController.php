@@ -7,18 +7,14 @@ class BunkerController extends BaseController
     {
         try {
             $statusCode = 200;
-            $response = [
-                [
-                    "id" => "666",
-                    "firstname" => "Geert"
-                ], [
-                    "id" => "665",
-                    "firstname" => "test"
-                ]];
+            $response = DB::table('bunker')->get();
 
         } catch (Exception $e) {
             $statusCode = 400;
-            $response = [];
+            $response = [
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace()
+            ];
         }
         return Response::json($response, $statusCode);
     }

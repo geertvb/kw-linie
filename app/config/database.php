@@ -46,42 +46,43 @@ return array(
 
 	'connections' => array(
 
-		'sqlite' => array(
-			'driver'   => 'sqlite',
-			'database' => __DIR__.'/../database/production.sqlite',
-			'prefix'   => '',
-		),
+//		'sqlite' => array(
+//			'driver'   => 'sqlite',
+//			'database' => __DIR__.'/../database/production.sqlite',
+//			'prefix'   => '',
+//		),
 
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'forge',
-			'username'  => 'forge',
-			'password'  => '',
+			'database'  => 'kwlinie_bak',
+//            'port'      => '3306',
+			'username'  => 'kwlinie',
+			'password'  => 'kwlinie',
 			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'collation' => 'utf8_general_ci',
+			'prefix'    => 'kwl_',
 		),
 
-		'pgsql' => array(
-			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'forge',
-			'username' => 'forge',
-			'password' => '',
-			'charset'  => 'utf8',
-			'prefix'   => '',
-			'schema'   => 'public',
-		),
+//		'pgsql' => array(
+//			'driver'   => 'pgsql',
+//			'host'     => 'localhost',
+//			'database' => 'forge',
+//			'username' => 'forge',
+//			'password' => '',
+//			'charset'  => 'utf8',
+//			'prefix'   => '',
+//			'schema'   => 'public',
+//		),
 
-		'sqlsrv' => array(
-			'driver'   => 'sqlsrv',
-			'host'     => 'localhost',
-			'database' => 'database',
-			'username' => 'root',
-			'password' => '',
-			'prefix'   => '',
-		),
+//		'sqlsrv' => array(
+//			'driver'   => 'sqlsrv',
+//			'host'     => 'localhost',
+//			'database' => 'database',
+//			'username' => 'root',
+//			'password' => '',
+//			'prefix'   => '',
+//		),
 
 	),
 
