@@ -33,7 +33,7 @@ kwlinieControllers.factory('Initializer', function ($window, $q) {
     };
 });
 
-kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers) {
+kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers, $compile) {
 
     $scope.bunkerCodes = [
         {code: "A", label: "A: Kanaal Mechelen - Leuven (1e lijn)"},
@@ -150,7 +150,7 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         for (var i in $scope.bunkers) {
             var bunker = $scope.bunkers[i];
             if (bunker.lat && bunker.lng) {
-                var bunkerMarker = new BunkerMarker($scope.map, bunker);
+                var bunkerMarker = new BunkerMarker($scope.map, bunker, $compile, $scope);
                 $scope.bunkerMarkers.push(bunkerMarker);
 
                 if (previous && (previous.bunker.type != bunkerMarker.bunker.type
@@ -247,10 +247,10 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
 
     $scope.cb_aanwezig = {
         'aanwezig': true,
-        'afwezig':true,
-        'afgebroken':true,
-        'nooit gebouwd':true,
-        '':true
+        'afwezig': true,
+        'afgebroken': true,
+        'nooit gebouwd': true,
+        '': true
     };
 
     $scope.filterAanwezigheid = function (aanwezig) {
@@ -261,9 +261,9 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
 })
 ;
 
-function BunkerMarker(map, bunker) {
+function BunkerMarker(map, bunker, $compile, $scope) {
 
-    function createMarker(latLng, strokeColor, fillColor, clickListener) {
+    function createMarker(latLng, strokeColor, fillColor) {
         var colorSuffix = fillColor.replace("#", "_");
         var marker = new google.maps.Marker({
             map: map,
@@ -274,7 +274,15 @@ function BunkerMarker(map, bunker) {
             },
             position: latLng
         });
-//        marker.addEventListener(MapMouseEvent.CLICK, clickListener);
+        google.maps.event.addListener(marker, 'click', (function( marker ){
+            return function(){
+            $scope.bunker = bunker;
+            var compiled = $compile(contentString)($scope);
+            $scope.$apply();
+            infowindow.setContent( compiled[0].innerHTML );
+            infowindow.open(map, marker);
+            };//return fn()
+        })( marker ));
         return marker;
     }
 
@@ -288,22 +296,25 @@ function BunkerMarker(map, bunker) {
         "verdediging antitankcentrum": {strokeColor: "#DDDD88", fillColor: "#000000", closed: true, visible: true}
     };
 
+    var contentString = '<div id="content">' +
+        '<div id="bodyContent">' +
+        '{{bunker.nummer}}<br>' +
+        '<img src="#" width="128" height="96"><br>' +
+        'Type: {{bunker.type}}<br>' +
+        'Gemeente: {{bunker.gemeente}}<br>' +
+        'Deelgemeente: {{bunker.deelgemeente}}<br>' +
+        'x: {{bunker.x}} y: {{bunker.y}}' +
+        '</div>' +
+        '</div>';
+
+
+
+    var infowindow = new google.maps.InfoWindow();
+
     this.bunker = bunker;
     this.latLng = new google.maps.LatLng(bunker.lat, bunker.lng);
     var strokeColor = bunkerTypeColors[bunker.type].strokeColor;
     var fillColor = bunkerTypeColors[bunker.type].fillColor;
-    this.marker = createMarker(this.latLng, strokeColor, fillColor, null /* clickListener */);
-//    this.bunkerThumb = new BunkerThumb();
-
-//    function clickListener(event) {
-//        bunkerThumb.bunker = bunker;
-//
-//        marker.openInfoWindow(
-//            new InfoWindowOptions({
-//                customContent: bunkerThumb,
-//                width: w,
-//                drawDefaultFrame: true
-//            }));
-//    }
+    this.marker = createMarker(this.latLng, strokeColor, fillColor);
 
 }
