@@ -19,3 +19,9 @@ Route::group(array('prefix' => 'api/v1'), function () {
 Route::group(array('prefix' => 'api/v1'), function () {
     Route::resource('deelgemeentes', 'DeelgemeenteController');
 });
+
+Route::group(array('prefix' => 'api/v1'), function () {
+    Route::get('fotos/{id}/content', 'FotoController@content');
+    Route::get('fotos/{id}/thumbnail', 'FotoController@thumbnail');
+    Route::resource('fotos', 'FotoController');
+});
