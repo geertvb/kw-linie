@@ -23,6 +23,9 @@ kwlinieApp.config(['$routeProvider', function ($routeProvider) {
                 },
                 bunkers: function (bunkerService) {
                     return bunkerService.getBunkers();
+                },
+                bunkerGemeentes: function (bunkerService) {
+                    return bunkerService.getBunkerGemeentes();
                 }
             }
         })
@@ -30,3 +33,16 @@ kwlinieApp.config(['$routeProvider', function ($routeProvider) {
             redirectTo: '/'
         });
 }]);
+
+kwlinieApp.filter('gemeenteIn', function () {
+    return function (items, gemeenteNamen) {
+        var filtered = [];
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if (gemeenteNamen.indexOf(item.naam) >= 0) {
+                filtered.push(item);
+            }
+        }
+        return filtered;
+    };
+});
