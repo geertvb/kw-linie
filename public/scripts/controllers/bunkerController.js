@@ -33,7 +33,9 @@ kwlinieControllers.factory('Initializer', function ($window, $q) {
     };
 });
 
-kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers, $compile) {
+kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers, bunkerGemeentes, $compile) {
+
+    $scope.bunkerGemeentes = bunkerGemeentes.data;
 
     $scope.bunkerCodes = [
         {code: "A", label: "A: Kanaal Mechelen - Leuven (1e lijn)"},

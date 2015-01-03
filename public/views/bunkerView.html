@@ -25,7 +25,7 @@
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Gemeente:</legend>
             <select style="width: 190px; margin-left: 4px;" ng-model="selectedGemeente" ng-change="filterMarkers()"
-                    ng-options="gemeente.naam for gemeente in gemeentes track by gemeente.gemeente_id">
+                    ng-options="gemeente.naam for gemeente in gemeentes | gemeenteIn:bunkerGemeentes track by gemeente.gemeente_id">
                 <option value="">Alle</option>
             </select>
         </fieldset>
