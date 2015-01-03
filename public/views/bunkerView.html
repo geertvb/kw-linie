@@ -24,16 +24,16 @@
 
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Gemeente:</legend>
-            <select style="width: 190px; margin-left: 4px;" ng-model="selectedGemeenteId"
-                    ng-options="gemeente.naam for gemeente in gemeentes">
+            <select style="width: 190px; margin-left: 4px;" ng-model="selectedGemeente" ng-change="filterMarkers()"
+                    ng-options="gemeente.naam for gemeente in gemeentes track by gemeente.gemeente_id">
                 <option value="">Alle</option>
             </select>
         </fieldset>
 
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Deelgemeente:</legend>
-            <select style="width: 190px; margin-left: 4px;" ng-model="selectedDeelgemeenteId"
-                    ng-options="deelgemeente.deelgemeente for deelgemeente in deelgemeentes">
+            <select style="width: 190px; margin-left: 4px;" ng-model="selectedDeelgemeente" ng-change="filterMarkers()"
+                    ng-options="deelgemeente.deelgemeente for deelgemeente in deelgemeentes track by deelgemeente.deelgemeente_id">
                 <option value="">Alle</option>
             </select>
         </fieldset>

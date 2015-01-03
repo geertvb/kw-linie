@@ -71,6 +71,10 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
 
     $scope.selectedBunkerCode = null;
 
+    $scope.selectedGemeente = null;
+
+    $scope.selectedDeelgemeente = null;
+
     $scope.bunkerTypes = [
         {label: "bruggenhoofd mechelen", value: "bruggenhoofd mechelen"},
         {label: "commando 1e lijn", value: "commando 1e lijn"},
@@ -226,8 +230,8 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         return $scope.filterTypeMarkers(bunker.type)
             && $scope.filterAanwezigheid(bunker.aanwezig)
             && ($scope.selectedBunkerCode == null || (bunker.code == $scope.selectedBunkerCode.code))
-//            && (gemeenteFilter.selectedIndex <= 0 || (bunker.gemeente == gemeenteFilter.selectedLabel))
-//            && (deelgemeenteFilter.selectedIndex <= 0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel))
+            && ($scope.selectedGemeente == null || (bunker.gemeente == $scope.selectedGemeente.naam))
+            && ($scope.selectedDeelgemeente == null || (bunker.deelgemeente == $scope.selectedDeelgemeente.deelgemeente))
             ;
     };
 
