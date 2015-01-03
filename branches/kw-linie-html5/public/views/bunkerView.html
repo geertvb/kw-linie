@@ -16,8 +16,8 @@
 
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Bunker code:</legend>
-            <select style="width: 190px; margin-left: 4px;" ng-model="selectedBunkerCode"
-                    ng-options="bunkerCode.label for bunkerCode in bunkerCodes">
+            <select style="width: 190px; margin-left: 4px;" ng-model="selectedBunkerCode" ng-change="filterMarkers()"
+                    ng-options="bunkerCode.label for bunkerCode in bunkerCodes track by bunkerCode.code">
                 <option value="">Alle</option>
             </select>
         </fieldset>
@@ -46,7 +46,7 @@
             </label>
         </fieldset>
 
-        <button ng-click="filterMarkers()">Filter</button>
+        <!--<button ng-click="filterMarkers()">Filter</button>-->
 
     </div>
 
