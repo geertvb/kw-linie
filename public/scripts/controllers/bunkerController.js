@@ -113,7 +113,7 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         .then(function () {
 
             var mapOptions = {
-                center: { lat: 50.96, lng: 4.56},
+                center: {lat: 50.96, lng: 4.56},
                 mapTypeControl: true,
                 panControl: true,
                 zoomControl: true,
@@ -274,15 +274,15 @@ function BunkerMarker(map, bunker, $compile, $scope) {
             },
             position: latLng
         });
-        google.maps.event.addListener(marker, 'click', (function( marker ){
-            return function(){
-            $scope.bunker = bunker;
-            var compiled = $compile(contentString)($scope);
-            $scope.$apply();
-            infowindow.setContent( compiled[0].innerHTML );
-            infowindow.open(map, marker);
+        google.maps.event.addListener(marker, 'click', (function (marker) {
+            return function () {
+                $scope.bunker = bunker;
+                var compiled = $compile(contentString)($scope);
+                $scope.$apply();
+                infowindow.setContent(compiled[0].innerHTML);
+                infowindow.open(map, marker);
             };//return fn()
-        })( marker ));
+        })(marker));
         return marker;
     }
 
@@ -299,14 +299,15 @@ function BunkerMarker(map, bunker, $compile, $scope) {
     var contentString = '<div id="content">' +
         '<div id="bodyContent">' +
         '{{bunker.nummer}}<br>' +
-        '<img src="#" width="128" height="96"><br>' +
+        '<img ng-src="api/v1/fotos/{{bunker.defaultfoto_id ? bunker.defaultfoto_id : -1}}/thumbnail" width="128" height="96"><br>' +
+        '<span style="white-space: nowrap;">' +
         'Type: {{bunker.type}}<br>' +
         'Gemeente: {{bunker.gemeente}}<br>' +
         'Deelgemeente: {{bunker.deelgemeente}}<br>' +
         'x: {{bunker.x}} y: {{bunker.y}}' +
+        '</span>' +
         '</div>' +
         '</div>';
-
 
 
     var infowindow = new google.maps.InfoWindow();
