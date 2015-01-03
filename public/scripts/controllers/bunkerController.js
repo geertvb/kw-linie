@@ -225,7 +225,7 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
     $scope.filterBunker = function (bunker) {
         return $scope.filterTypeMarkers(bunker.type)
             && $scope.filterAanwezigheid(bunker.aanwezig)
-//            && (codeFilter.selectedIndex <= 0 || (bunker.code == codeFilter.selectedValue))
+            && ($scope.selectedBunkerCode == null || (bunker.code == $scope.selectedBunkerCode.code))
 //            && (gemeenteFilter.selectedIndex <= 0 || (bunker.gemeente == gemeenteFilter.selectedLabel))
 //            && (deelgemeenteFilter.selectedIndex <= 0 || (bunker.deelgemeente == deelgemeenteFilter.selectedLabel))
             ;
