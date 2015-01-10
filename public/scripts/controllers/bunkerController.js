@@ -236,6 +236,13 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         $scope.filterMarkers();
     };
 
+    $scope.gemeenteChange = function() {
+        if ($scope.selectedDeelgemeente && $scope.selectedGemeente && $scope.selectedDeelgemeente.gemeente != $scope.selectedGemeente.naam) {
+            $scope.selectedDeelgemeente = null;
+        }
+        $scope.filterMarkers();
+    };
+
     $scope.filterMarkers = function () {
         for (var i in $scope.bunkerMarkers) {
             var bunkerMarker = $scope.bunkerMarkers[i];
