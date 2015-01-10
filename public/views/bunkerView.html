@@ -33,7 +33,7 @@
         <fieldset class="fieldgroup">
             <legend class="fieldgrouplegend">Deelgemeente:</legend>
             <select style="width: 190px; margin-left: 4px;" ng-model="selectedDeelgemeente" ng-change="filterMarkers()"
-                    ng-options="deelgemeente.deelgemeente for deelgemeente in deelgemeentes track by deelgemeente.deelgemeente_id">
+                    ng-options="deelgemeente.deelgemeente for deelgemeente in deelgemeentes | deelgemeenteIn:bunkerDeelgemeentes track by deelgemeente.deelgemeente_id">
                 <option value="">Alle</option>
             </select>
         </fieldset>

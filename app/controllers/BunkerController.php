@@ -37,4 +37,22 @@ class BunkerController extends BaseController
         return Response::json($response, $statusCode);
     }
 
+    public function deelgemeentes() {
+        try {
+            $statusCode = 200;
+            $response = DB::table('bunker')
+                ->whereNotNull('deelgemeente')
+                ->distinct()
+                ->lists('deelgemeente');
+
+        } catch (Exception $e) {
+            $statusCode = 400;
+            $response = [
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace()
+            ];
+        }
+        return Response::json($response, $statusCode);
+    }
+
 }

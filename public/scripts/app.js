@@ -26,6 +26,9 @@ kwlinieApp.config(['$routeProvider', function ($routeProvider) {
                 },
                 bunkerGemeentes: function (bunkerService) {
                     return bunkerService.getBunkerGemeentes();
+                },
+                bunkerDeelgemeentes: function (bunkerService) {
+                    return bunkerService.getBunkerDeelgemeentes();
                 }
             }
         })
@@ -40,6 +43,19 @@ kwlinieApp.filter('gemeenteIn', function () {
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
             if (gemeenteNamen.indexOf(item.naam) >= 0) {
+                filtered.push(item);
+            }
+        }
+        return filtered;
+    };
+});
+
+kwlinieApp.filter('deelgemeenteIn', function () {
+    return function (items, deelgemeenteNamen) {
+        var filtered = [];
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if (deelgemeenteNamen.indexOf(item.deelgemeente) >= 0) {
                 filtered.push(item);
             }
         }

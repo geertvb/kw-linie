@@ -21,6 +21,10 @@ kwlinieServices.service('bunkerService', [ "$http", function ($http) {
         return $http.get("api/v1/bunkers/gemeentes");
     };
 
+    this.getBunkerDeelgemeentes = function () {
+        return $http.get("api/v1/bunkers/deelgemeentes");
+    };
+
     this.getVerbindingen = function () {
         return $http.get("api/v1/verbindingen");
     };

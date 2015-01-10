@@ -6,6 +6,7 @@ Route::group(array('prefix' => 'api/v1'), function () {
 
 Route::group(array('prefix' => 'api/v1'), function () {
     Route::get('bunkers/gemeentes', 'BunkerController@gemeentes');
+    Route::get('bunkers/deelgemeentes', 'BunkerController@deelgemeentes');
     Route::resource('bunkers', 'BunkerController');
 });
 
