@@ -1,5 +1,10 @@
 'use strict';
 
+var altGemeenteNamen = {
+    "Grez-Doiceau": "Graven",
+    "Wavre": "Waver"
+};
+
 var kwlinieApp = angular.module('kwlinieApp', [
     'ngRoute',
     'kwlinieServices',
@@ -42,7 +47,7 @@ kwlinieApp.filter('gemeenteIn', function () {
         var filtered = [];
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
-            if (gemeenteNamen.indexOf(item.naam) >= 0) {
+            if (gemeenteNamen.indexOf(item.naam) >= 0 || (altGemeenteNamen[item.naam] && gemeenteNamen.indexOf(altGemeenteNamen[item.naam]) >= 0)) {
                 filtered.push(item);
             }
         }
@@ -55,7 +60,7 @@ kwlinieApp.filter('deelgemeenteIn', function () {
         var filtered = [];
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
-            if (deelgemeenteNamen.indexOf(item.deelgemeente) >= 0) {
+            if (deelgemeenteNamen.indexOf(item.deelgemeente) >= 0 || (altGemeenteNamen[item.deelgemeente] && deelgemeenteNamen.indexOf(altGemeenteNamen[item.deelgemeente]) >= 0)) {
                 filtered.push(item);
             }
         }
