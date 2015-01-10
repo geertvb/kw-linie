@@ -221,6 +221,21 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         return result;
     };
 
+    $scope.deelgemeenteChange = function() {
+        if ($scope.selectedDeelgemeente && $scope.selectedGemeente && $scope.selectedDeelgemeente.gemeente != $scope.selectedGemeente.naam) {
+            var gemeente = null;
+            var i;
+            for (i in $scope.gemeentes) {
+                if ($scope.gemeentes[i].naam == $scope.selectedDeelgemeente.gemeente) {
+                    gemeente = $scope.gemeentes[i];
+                    break;
+                }
+            }
+            $scope.selectedGemeente = gemeente;
+        }
+        $scope.filterMarkers();
+    };
+
     $scope.filterMarkers = function () {
         for (var i in $scope.bunkerMarkers) {
             var bunkerMarker = $scope.bunkerMarkers[i];
