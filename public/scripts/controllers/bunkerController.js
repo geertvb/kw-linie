@@ -35,6 +35,11 @@ kwlinieControllers.factory('Initializer', function ($window, $q) {
 
 kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers, bunkerGemeentes, bunkerDeelgemeentes, $compile) {
 
+    $scope.altGemeenteNamen = {
+        "Grez-Doiceau": "Graven",
+        "Wavre": "Waver"
+    };
+
     $scope.bunkerGemeentes = bunkerGemeentes.data;
 
     $scope.bunkerDeelgemeentes = bunkerDeelgemeentes.data;
@@ -221,12 +226,20 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         return result;
     };
 
-    $scope.deelgemeenteChange = function() {
-        if ($scope.selectedDeelgemeente && $scope.selectedGemeente && $scope.selectedDeelgemeente.gemeente != $scope.selectedGemeente.naam) {
+    $scope.gemeenteNaam = function(naam) {
+        return $scope.altGemeenteNamen[naam] || naam;
+    };
+
+    $scope.gemeenteNaamEquals = function(naam1, naam2) {
+        return naam1 == naam2 || $scope.gemeenteNaam(naam1) == $scope.gemeenteNaam(naam2);
+    };
+
+    $scope.deelgemeenteChange = function () {
+        if ($scope.selectedDeelgemeente && $scope.selectedGemeente && !$scope.gemeenteNaamEquals($scope.selectedDeelgemeente.gemeente, $scope.selectedGemeente.naam)) {
             var gemeente = null;
             var i;
             for (i in $scope.gemeentes) {
-                if ($scope.gemeentes[i].naam == $scope.selectedDeelgemeente.gemeente) {
+                if ($scope.gemeenteNaamEquals($scope.gemeentes[i].naam, $scope.selectedDeelgemeente.gemeente)) {
                     gemeente = $scope.gemeentes[i];
                     break;
                 }
@@ -236,8 +249,8 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         $scope.filterMarkers();
     };
 
-    $scope.gemeenteChange = function() {
-        if ($scope.selectedDeelgemeente && $scope.selectedGemeente && $scope.selectedDeelgemeente.gemeente != $scope.selectedGemeente.naam) {
+    $scope.gemeenteChange = function () {
+        if ($scope.selectedDeelgemeente && $scope.selectedGemeente && !$scope.gemeenteNaamEquals($scope.selectedDeelgemeente.gemeente, $scope.selectedGemeente.naam)) {
             $scope.selectedDeelgemeente = null;
         }
         $scope.filterMarkers();
@@ -256,7 +269,7 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         return $scope.filterTypeMarkers(bunker.type)
             && $scope.filterAanwezigheid(bunker.aanwezig)
             && ($scope.selectedBunkerCode == null || (bunker.code == $scope.selectedBunkerCode.code))
-            && ($scope.selectedGemeente == null || (bunker.gemeente == $scope.selectedGemeente.naam))
+            && ($scope.selectedGemeente == null || ($scope.gemeenteNaamEquals(bunker.gemeente, $scope.selectedGemeente.naam)))
             && ($scope.selectedDeelgemeente == null || (bunker.deelgemeente == $scope.selectedDeelgemeente.deelgemeente))
             ;
     };
