@@ -35,6 +35,8 @@ kwlinieControllers.factory('Initializer', function ($window, $q) {
 
 kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers, bunkerGemeentes, bunkerDeelgemeentes, $compile) {
 
+    $scope.openInfoWindows = [];
+
     $scope.altGemeenteNamen = {
         "Grez-Doiceau": "Graven",
         "Wavre": "Waver"
@@ -319,11 +321,17 @@ function BunkerMarker(map, bunker, $compile, $scope) {
         });
         google.maps.event.addListener(marker, 'click', (function (marker) {
             return function () {
+                while ($scope.openInfoWindows.length > 0) {
+                    $scope.openInfoWindows.pop().close();
+                }
+
                 $scope.bunker = bunker;
                 var compiled = $compile(contentString)($scope);
                 $scope.$apply();
                 infowindow.setContent(compiled[0].innerHTML);
                 infowindow.open(map, marker);
+
+                $scope.openInfoWindows.push(infowindow);
             };//return fn()
         })(marker));
         return marker;
