@@ -228,11 +228,11 @@ kwlinieControllers.controller('bunkerController', function ($scope, $http, Initi
         return result;
     };
 
-    $scope.gemeenteNaam = function(naam) {
+    $scope.gemeenteNaam = function (naam) {
         return $scope.altGemeenteNamen[naam] || naam;
     };
 
-    $scope.gemeenteNaamEquals = function(naam1, naam2) {
+    $scope.gemeenteNaamEquals = function (naam1, naam2) {
         return naam1 == naam2 || $scope.gemeenteNaam(naam1) == $scope.gemeenteNaam(naam2);
     };
 
@@ -350,7 +350,10 @@ function BunkerMarker(map, bunker, $compile, $scope) {
     var contentString = '<div id="content">' +
         '<div id="bodyContent">' +
         '{{bunker.nummer}}<br>' +
-        '<img ng-src="api/v1/fotos/{{bunker.defaultfoto_id ? bunker.defaultfoto_id : -1}}/thumbnail" width="128" height="96"><br>' +
+        '<a href="api/v1/fotos/{{bunker.defaultfoto_id ? bunker.defaultfoto_id : -1}}/content" target="_blank">' +
+        '<img ng-src="api/v1/fotos/{{bunker.defaultfoto_id ? bunker.defaultfoto_id : -1}}/thumbnail" width="128" height="96">' +
+        '</a>' +
+        '<br>' +
         '<span style="white-space: nowrap;">' +
         'Type: {{bunker.type}}<br>' +
         'Gemeente: {{bunker.gemeente}}<br>' +
