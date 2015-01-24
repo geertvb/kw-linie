@@ -14,3 +14,28 @@
 .fieldgrouplegend {
     font-size: 12px;
 }
+
+.listgroup {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-top: 0.25em;
+    padding-bottom: 1em;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    border: 0px;
+    color: #ffffff;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+}
+
+.listgroup label {
+    width: 100px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 4px;
+}
+
+.listgroup .ycoo {
+    width: auto;
+    padding-left: 12px;
+}
