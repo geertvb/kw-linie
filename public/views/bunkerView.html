@@ -7,7 +7,7 @@
         <div id="map-canvas" ng-show="activeView == 'map'" style="width: 512px; height: 640px;"></div>
         <div id="listview" ng-show="activeView == 'list'" style="width: 512px; height: 640px;overflow-y: scroll;">
             <table>
-                <tr ng-repeat="bunker in bunkers">
+                <tr ng-repeat="bunker in bunkers | filter:filterBunker">
                     <td>
                         <a href="api/v1/fotos/{{bunker.defaultfoto_id ? bunker.defaultfoto_id : -1}}/content"
                            target="_blank">
