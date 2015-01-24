@@ -35,6 +35,8 @@ kwlinieControllers.factory('Initializer', function ($window, $q) {
 
 kwlinieControllers.controller('bunkerController', function ($scope, $http, Initializer, gemeentes, deelgemeentes, verbindingen, bunkers, bunkerGemeentes, bunkerDeelgemeentes, $compile) {
 
+    $scope.activeView = "map";
+
     $scope.openInfoWindows = [];
 
     $scope.altGemeenteNamen = {
