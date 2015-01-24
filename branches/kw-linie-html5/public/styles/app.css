@@ -39,3 +39,34 @@
     width: auto;
     padding-left: 12px;
 }
+
+.radioTab {
+    display: none;
+}
+
+.tabs {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 0;
+    padding-right: 0;
+    border: 0px;
+    color: #ffffff;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.mapTab {
+    background-image: url('../img/pin.png');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    padding-right: 4px;
+}
+
+.listTab {
+    background-image: url('../img/list.png');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    padding-right: 4px;
+}
